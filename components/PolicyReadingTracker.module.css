@@ -1,0 +1,20 @@
+.trackerContainer {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--surface);
+  padding: var(--spacing-2) var(--spacing-4);
+  z-index: var(--z-nav-low);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.progressLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}

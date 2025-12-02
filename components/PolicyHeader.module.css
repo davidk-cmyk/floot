@@ -1,0 +1,77 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.titleContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  font-family: var(--font-family-heading);
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.metaIcon {
+  color: var(--branding-secondary, var(--secondary));
+  flex-shrink: 0;
+}
+
+.userInfoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-4);
+}
+
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.authorInfo div {
+  display: flex;
+  flex-direction: column;
+}
+
+.authorName {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.authorLabel {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}

@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all var(--animation-duration-normal) ease;
+  border: 1px solid transparent;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.text {
+  white-space: nowrap;
+}
+
+.idle {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.saving {
+  background-color: color-mix(in srgb, var(--info) 10%, transparent);
+  color: var(--info);
+  border-color: color-mix(in srgb, var(--info) 20%, transparent);
+}
+
+.saving .icon {
+  animation: spin 1s linear infinite;
+}
+
+.saved {
+  background-color: color-mix(in srgb, var(--success) 10%, transparent);
+  color: var(--success);
+  border-color: color-mix(in srgb, var(--success) 20%, transparent);
+}
+
+.error {
+  background-color: color-mix(in srgb, var(--error) 10%, transparent);
+  color: var(--error);
+  border-color: color-mix(in srgb, var(--error) 20%, transparent);
+}
+
+.offline {
+  background-color: color-mix(in srgb, var(--warning) 10%, transparent);
+  color: var(--warning);
+  border-color: color-mix(in srgb, var(--warning) 20%, transparent);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .container {
+    transition: none;
+  }
+  
+  .saving .icon {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .container {
+    border-width: 2px;
+  }
+}

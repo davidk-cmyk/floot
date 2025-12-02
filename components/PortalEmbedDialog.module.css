@@ -1,0 +1,10 @@
+.dialogContent {
+  max-width: 56rem;
+  width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.content {
+  margin-top: var(--spacing-4);
+}

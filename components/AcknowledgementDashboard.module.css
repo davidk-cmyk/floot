@@ -1,0 +1,207 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+  background-color: var(--background);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.header p {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.tableContainer {
+  background-color: var(--card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  align-items: center;
+}
+
+.searchWrapper {
+  position: relative;
+  flex-grow: 1;
+  min-width: 250px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-left: calc(var(--spacing-3) * 2 + 18px);
+}
+
+.selectFilters {
+  display: flex;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.selectFilters > * {
+  min-width: 180px;
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background-color: var(--muted);
+}
+
+.table th {
+  text-align: left;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-weight: 600;
+  color: var(--foreground);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.tableRow {
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.tableRow:hover {
+  background-color: color-mix(in srgb, var(--card) 95%, var(--primary) 5%);
+}
+
+.table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  color: var(--card-foreground);
+}
+
+.emailCell {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-family: var(--font-family-monospace);
+  font-size: 0.875rem;
+}
+
+.emailIcon {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.policyCell {
+  max-width: 300px;
+}
+
+.policyTitle {
+  font-weight: 500;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portalCell {
+  color: var(--muted-foreground);
+}
+
+.departmentCell {
+  color: var(--muted-foreground);
+}
+
+.statusCell {
+  text-align: center;
+}
+
+.dateCell {
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-16) var(--spacing-4);
+  color: var(--muted-foreground);
+}
+
+.emptyIcon {
+  margin-bottom: var(--spacing-4);
+  color: var(--muted-foreground);
+}
+
+.emptyState h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.emptyState p {
+  margin: 0;
+}
+
+/* Skeleton Styles */
+.cellSkeleton {
+  height: 1rem;
+  width: 100%;
+}

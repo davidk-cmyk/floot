@@ -1,0 +1,88 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.editSection {
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: center;
+}
+
+.editButton {
+  width: 100%;
+}
+
+.portalSection {
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.portalHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.portalIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--muted-foreground);
+}
+
+.portalTitle {
+  font-size: 0.875rem;
+}
+
+.portalButtons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.portalButton {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.acknowledgeSection {
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--warning);
+}
+
+
+.accordion {
+  width: 100%;
+}
+
+.card {
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-top: var(--spacing-2);
+}
+
+.userListCard {
+  margin-top: var(--spacing-4);
+}
+
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-4) 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--border);
+}

@@ -1,0 +1,25 @@
+.container {
+  width: 100%;
+}
+
+.tabContent {
+  padding-top: var(--spacing-6);
+}
+
+.metadata {
+  margin-bottom: var(--spacing-6);
+}
+
+.skeletonContainer {
+  background-color: var(--muted);
+  padding: var(--spacing-8);
+}
+
+.skeletonPage {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-12) var(--spacing-16);
+  min-height: 1123px;
+  width: 794px;
+  margin: 0 auto;
+}

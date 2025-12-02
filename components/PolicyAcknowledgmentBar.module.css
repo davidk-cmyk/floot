@@ -1,0 +1,81 @@
+.bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: color-mix(in srgb, var(--warning) 15%, var(--background));
+  border-top: 2px solid var(--warning);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: var(--z-nav-sticky);
+  padding: var(--spacing-4);
+}
+
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+}
+
+.messageSection {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex: 1;
+}
+
+.warningIcon {
+  color: var(--warning);
+  flex-shrink: 0;
+}
+
+.message {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  flex-shrink: 0;
+}
+
+.acknowledgeButton {
+  background-color: var(--success);
+  border-color: var(--success);
+  color: var(--success-foreground);
+}
+
+.acknowledgeButton:hover {
+  background-color: color-mix(in srgb, var(--success), black 10%);
+  border-color: color-mix(in srgb, var(--success), black 10%);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-3);
+  }
+
+  .messageSection {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .buttonGroup button {
+    width: 100%;
+  }
+}

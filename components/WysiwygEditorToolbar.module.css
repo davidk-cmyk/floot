@@ -1,0 +1,52 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  transition: all var(--animation-duration-normal) ease;
+}
+
+
+
+.toolbarDivider {
+  width: 1px;
+  height: 1.5rem;
+  background-color: var(--border);
+  margin: 0 var(--spacing-1);
+}
+
+.aiFeatureButton {
+  gap: var(--spacing-1);
+  font-weight: 500;
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.aiFeatureButton:hover {
+  background-color: color-mix(in srgb, var(--secondary) 90%, black);
+}
+
+:global(.dark) .aiFeatureButton:hover {
+  background-color: color-mix(in srgb, var(--secondary) 90%, white);
+}
+
+/* Dark mode adjustments */
+.selectedTextButton {
+  background-color: color-mix(in srgb, var(--primary), white 95%) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+:global(.dark) .selectedTextButton {
+  background-color: color-mix(in srgb, var(--primary), black 90%) !important;
+}
+
+/* Dark mode adjustments */
+:global(.dark) .toolbar {
+  background-color: var(--surface);
+  border-bottom-color: var(--border);
+}
+

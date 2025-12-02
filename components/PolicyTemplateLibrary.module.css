@@ -1,0 +1,213 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-left: calc(var(--spacing-3) * 2 + 20px);
+  height: 3rem;
+  font-size: 1rem;
+}
+
+.categoryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.categoryButton {
+  gap: var(--spacing-2);
+}
+
+.library {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+}
+
+.categorySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.categoryTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--foreground);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.templateCard {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  transition:
+    transform var(--animation-duration-normal) ease,
+    box-shadow var(--animation-duration-normal) ease,
+    border-color var(--animation-duration-normal) ease;
+}
+
+.templateCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.templateCardSelected {
+  border-color: var(--primary);
+  border-width: 2px;
+  background-color: color-mix(in srgb, var(--primary) 5%, var(--surface));
+}
+
+.selectionCheckbox {
+  position: absolute;
+  top: var(--spacing-4);
+  right: var(--spacing-4);
+  z-index: var(--z-content-low);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+  margin: 0;
+}
+
+.cardDescription {
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  flex-grow: 1;
+  margin: 0 0 var(--spacing-4);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: var(--spacing-4);
+}
+
+.timeEstimate {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-16) 0;
+  color: var(--muted-foreground);
+}
+
+.emptyState h3 {
+  color: var(--foreground);
+  margin-bottom: var(--spacing-2);
+}
+
+.stickyFooter {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-4) var(--spacing-6);
+  z-index: var(--z-nav-sticky);
+  animation: slideUp var(--animation-duration-normal) ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.footerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-6);
+}
+
+.selectionInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.footerActions {
+  display: flex;
+  gap: var(--spacing-3);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,0 +1,240 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.description {
+  color: var(--muted-foreground);
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.uploadOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.localUploadSection {
+  width: 100%;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--spacing-2) 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.dividerText {
+  padding: 0 var(--spacing-3);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.googleDriveSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+}
+
+.googleDriveButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 16rem;
+  justify-content: center;
+}
+
+.googleDriveDescription {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.uploadingState {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+}
+
+.uploadingHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.uploadingIcon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.uploadingTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.uploadingSubtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  word-break: break-all;
+}
+
+.processingIndicator {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.successState {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  border: 2px solid var(--success);
+  border-radius: var(--radius-md);
+  background-color: color-mix(in srgb, var(--success) 5%, transparent);
+}
+
+.successHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.successIcon {
+  color: var(--success);
+  flex-shrink: 0;
+}
+
+.successTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--success);
+  margin: 0;
+}
+
+.successSubtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  word-break: break-all;
+}
+
+.previewSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.previewTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.previewText {
+  font-size: 0.9375rem;
+  color: var(--foreground);
+  margin: 0;
+  font-weight: 500;
+}
+
+.previewContent {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+  max-height: 8rem;
+  overflow-y: auto;
+  padding: var(--spacing-2);
+  background-color: var(--muted);
+  border-radius: var(--radius-sm);
+}
+
+.successActions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  border: 2px solid var(--error);
+  border-radius: var(--radius-md);
+  background-color: color-mix(in srgb, var(--error) 5%, transparent);
+}
+
+.errorHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+}
+
+.errorIcon {
+  color: var(--error);
+  flex-shrink: 0;
+  margin-top: var(--spacing-1);
+}
+
+.errorTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--error);
+  margin: 0;
+}
+
+.errorMessage {
+  font-size: 0.875rem;
+  color: var(--error);
+  margin: var(--spacing-1) 0 0 0;
+  line-height: 1.5;
+}
+
+.errorActions {
+  display: flex;
+  justify-content: flex-end;
+}

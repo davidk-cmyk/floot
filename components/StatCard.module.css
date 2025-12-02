@@ -1,0 +1,59 @@
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--muted-foreground);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--animation-duration-normal) ease, box-shadow var(--animation-duration-normal) ease, border-left-color var(--animation-duration-normal) ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-left-color: var(--primary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.iconWrapper {
+  color: var(--muted-foreground);
+}
+
+.value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--card-foreground);
+  margin: 0;
+  font-family: var(--font-family-heading);
+}
+
+/* Skeleton styles */
+.titleSkeleton {
+  width: 100px;
+  height: 1rem;
+}
+
+.iconSkeleton {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.valueSkeleton {
+  width: 80px;
+  height: 2.25rem;
+  margin-top: var(--spacing-4);
+}

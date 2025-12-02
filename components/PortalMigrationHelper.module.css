@@ -1,0 +1,134 @@
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  max-width: 600px;
+}
+
+.header h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--surface-foreground);
+  margin: 0;
+}
+
+.header p {
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+  margin: var(--spacing-1) 0 0;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.progressHeader strong {
+  color: var(--surface-foreground);
+  font-weight: 500;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  background-color: color-mix(in srgb, var(--info), white 92%);
+  border: 1px solid color-mix(in srgb, var(--info), white 80%);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+}
+
+.dark .details {
+  background-color: color-mix(in srgb, var(--info), black 85%);
+  border-color: color-mix(in srgb, var(--info), black 70%);
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.detailItem strong {
+  color: var(--surface-foreground);
+  font-weight: 500;
+}
+
+.infoIcon {
+  color: var(--info);
+  flex-shrink: 0;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.footerText {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorState,
+.successState {
+  text-align: center;
+  padding: var(--spacing-8);
+}
+
+.errorState .icon {
+  color: var(--error);
+  margin-bottom: var(--spacing-3);
+}
+
+.successState .icon {
+  color: var(--success);
+  margin-bottom: var(--spacing-3);
+}
+
+.errorState h4,
+.successState h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.errorState p,
+.successState p {
+  color: var(--muted-foreground);
+  margin-top: var(--spacing-1);
+}

@@ -1,0 +1,100 @@
+.filterCount {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  margin-left: var(--spacing-2);
+  line-height: 1;
+}
+
+.filterContent {
+  padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  height: 100%;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.groupTitle {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.statusButtons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-2);
+}
+
+.typeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.dateSelect {
+  margin-bottom: var(--spacing-2);
+}
+
+.datePickerButton {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .filterContent {
+    padding: var(--spacing-3);
+  }
+  
+  .statusButtons {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-1);
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .footer button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .datePickerButton {
+    font-size: 0.875rem;
+  }
+  
+  .checkboxLabel {
+    font-size: 0.875rem;
+  }
+}

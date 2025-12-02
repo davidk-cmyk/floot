@@ -1,0 +1,27 @@
+# REVERT PLAN: Portal-Based Acknowledgment → Policy-Level Acknowledgment
+
+## Purpose
+This document provides step-by-step instructions to revert from the Option A (Pure Portal-Based, Computed) acknowledgment system back to the original policy-level acknowledgment system with manual assignments.
+
+---
+
+## When to Use This Plan
+- Option A is causing issues in production
+- Business requirements change and need per-user assignment flexibility
+- Performance issues with computed queries
+- Need more granular control over assignments
+
+---
+
+## Pre-Revert Checklist
+- [ ] Backup current database (full dump)
+- [ ] Document which portals currently have requires_acknowledgment = true
+- [ ] Export list of all users and their current acknowledged policies
+- [ ] Note any custom modifications made during Option A implementation
+- [ ] Ensure you have access to git history to see original code
+
+---
+
+## PHASE 1: DATABASE RESTORATION
+
+### Step 1: Backup current state before revert

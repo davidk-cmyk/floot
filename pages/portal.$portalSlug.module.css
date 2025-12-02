@@ -1,0 +1,106 @@
+.container {
+  background-color: var(--portal-background);
+  min-height: 100vh;
+}
+
+.loadingContainer {
+  padding: 0;
+  background-color: var(--portal-background);
+  min-height: 100vh;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8);
+}
+
+.sidebar {
+  position: sticky;
+  top: calc(var(--spacing-16) + 60px);
+  align-self: start;
+  height: fit-content;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.paginationContainer {
+  margin-top: var(--spacing-8);
+  display: flex;
+  justify-content: center;
+}
+
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-16);
+  gap: var(--spacing-4);
+  min-height: 400px;
+  color: var(--muted-foreground);
+  background-color: var(--portal-background);
+}
+
+.messageContainer h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.errorIcon {
+  color: var(--error);
+}
+
+.infoIcon {
+  color: var(--info);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  transition: background-color var(--animation-duration-fast) ease;
+  margin-top: var(--spacing-6);
+}
+
+.backLink:hover {
+  background-color: color-mix(in srgb, var(--portal-primary, var(--branding-primary, var(--primary))) 10%, transparent);
+}
+
+.exampleText {
+  font-size: 0.875rem;
+  margin-top: var(--spacing-2);
+}
+
+.exampleText code {
+  background-color: var(--muted);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-monospace);
+  font-size: 0.875em;
+}
+
+@media (max-width: 768px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+    padding: var(--spacing-4);
+  }
+
+  .sidebar {
+    display: none;
+  }
+}

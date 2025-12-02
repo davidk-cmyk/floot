@@ -1,0 +1,94 @@
+# MyPolicyPortal Development Guidelines
+
+---
+
+## 1. Introduction
+
+This document outlines the development standards, best practices, and processes for the MyPolicyPortal project. Its purpose is to ensure we build a high-quality, maintainable, and consistent application. Adhering to these guidelines will help us collaborate effectively and deliver a robust product to our users.
+
+This is a living document. Please feel free to suggest improvements or clarifications.
+
+---
+
+## 2. Technical Quality Improvements
+
+### 2.1. Code Style & Architecture
+- **Framework Conventions**: Adhere strictly to the Floot framework's primitive structure: `pages/`, `components/`, `helpers/`, and `endpoints/`. All directories are flat.
+- **Single Responsibility Principle**: Keep files small and focused. A component should do one thing well. A helper should contain related, reusable logic.
+- **File Naming**: Use PascalCase for components and pages (`PolicyList.tsx`) and camelCase for helpers and endpoints (`usePolicyApi.tsx`).
+- **Type Safety**:
+    - **NO `any` TYPE**: The use of `any` is strictly forbidden. Always define or infer the correct type.
+    - **Schema First**: For endpoints, always define the Zod schema in the `.schema.ts` file first. This provides a typed client for the frontend automatically.
+    - **Reuse Types**: Do not redefine types. Import and reuse types from endpoint schemas or define them in a central helper if they are shared across the frontend. Use `Selectable<TableName>` for database types.
+- **Code Formatting**: Code is automatically formatted on save. Ensure your editor is configured to respect the project's Prettier and ESLint settings.
+
+### 2.2. State Management
+- **Server State**: Use `@tanstack/react-query` for all data fetching, caching, and server-side state management. Use the provided hooks in `helpers/usePolicyApi.tsx` as a reference.
+- **URL State**: For state that should be bookmarkable and shareable (e.g., filters, pagination, tabs), use `react-router-dom`'s `useSearchParams`.
+- **Global UI State**: For non-persistent global state (e.g., auth status, organization context), use React Context. See `helpers/useAuth.tsx` and `helpers/useOrganization.tsx`.
+- **Local Component State**: For all other state confined to a single component, use `useState`.
+
+### 2.3. Performance
+- **Memoization**: Use `useMemo` and `useCallback` to prevent unnecessary re-renders, especially in components that are rendered in lists or receive complex objects as props.
+- **Lazy Loading**: For heavy components or libraries not needed on initial load, consider using `React.lazy` and `Suspense`.
+- **Bundle Size**: Be mindful of adding new dependencies. Analyze their size and impact before including them.
+
+### 2.4. Security
+- **Route Protection**: All pages requiring authentication must be protected. Use `UserRoute` or `AdminRoute` in the corresponding `.pageLayout.tsx` file.
+- **Backend Validation**: All data received by an endpoint MUST be validated against a Zod schema. The backend should never trust the frontend.
+- **Data Exposure**: Endpoints should only return the data necessary for the client. Avoid sending sensitive information like password hashes or internal IDs unless required.
+
+---
+
+## 3. User Experience (UX) Validation
+
+### 3.1. Core Principles
+- **Handle All States**: Every component that fetches data must gracefully handle loading, error, and empty states.
+    - **Loading**: Use the `components/Skeleton.tsx` component to build a layout that mimics the final content. This reduces layout shift and perceived loading time.
+    - **Error**: Display a user-friendly error message with a clear action (e.g., a "Try Again" button).
+    - **Empty**: Display a helpful message explaining why the content is empty and what the user can do next (e.g., "No policies found. Try adjusting your filters or create a new policy.").
+- **Accessibility (WCAG 2.1 AA)**:
+    - Use semantic HTML (`<nav>`, `<main>`, `<button>`).
+    - Ensure all interactive elements are keyboard-navigable and have visible focus states.
+    - Use `aria-` attributes to provide context for screen readers, especially for custom components.
+    - All images must have descriptive `alt` text.
+- **Responsiveness**: All UI must be tested and functional on mobile, tablet, and desktop screen sizes. Use CSS Modules with media queries to handle different breakpoints.
+
+---
+
+## 4. Code Review Process
+
+Code reviews are a critical part of our quality assurance process. Every pull request must be reviewed by at least one other developer before merging.
+
+### 4.1. For the Author
+- **Self-Review First**: Before requesting a review, review your own code. Check for typos, debug statements (`console.log`), and adherence to these guidelines.
+- **Provide Context**: The pull request description should clearly explain *what* the change is, *why* it's being made, and *how* to test it. Link to the relevant task or issue.
+- **Keep PRs Small**: Submit small, focused pull requests. A PR should ideally address a single issue or feature.
+
+### 4.2. For the Reviewer
+- **Be Constructive**: Frame feedback as suggestions or questions, not commands. The goal is to improve the code, not to criticize the author.
+- **Look Beyond the Code**:
+    - **Business Impact**: Does this change align with the product goals? Does it introduce any unintended side effects for the user or the business?
+    - **User Experience**: Is the new UI/UX intuitive? Does it handle all states correctly? Is it accessible?
+    - **Technical Quality**: Does the code follow our guidelines? Is it readable, maintainable, and performant? Does it introduce any security risks?
+- **Test the Changes**: Don't just read the code. Check out the branch and test the functionality as described in the PR.
+
+---
+
+## 5. Business Impact Analysis
+
+Every line of code we write should serve a purpose. Before starting development, and during review, consider the following:
+- **User Value**: How does this feature or change benefit the end-user? Does it solve a real problem?
+- **Business Goals**: How does this align with the overall goals of MyPolicyPortal (e.g., improving user engagement, streamlining policy management, enabling enterprise sales)?
+- **Priority**: Is this the most important thing to be working on right now? Consider the effort vs. impact.
+
+---
+
+## 6. Design System & Consistency
+
+We use a custom component library and a CSS variable-based design system to maintain visual consistency.
+
+- **Reuse Components**: Before building a new component, check `components/` to see if a suitable one already exists. Use `Button`, `Input`, `Select`, `Form`, etc., whenever possible.
+- **Use CSS Variables**: Do not use hard-coded color, font, or spacing values. Use the predefined CSS variables (e.g., `var(--primary)`, `var(--spacing-4)`, `var(--radius)`). This ensures consistency and makes theming easier.
+- **Styling**: Use CSS Modules (`.module.css`) for component-scoped styles. Avoid global CSS.
+- **Icons**: Use icons from the `lucide-react` library for consistency.

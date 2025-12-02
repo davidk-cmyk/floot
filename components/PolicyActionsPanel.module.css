@@ -1,0 +1,111 @@
+.panel {
+  background-color: var(--portal-card-bg, var(--surface));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  position: sticky;
+  top: var(--spacing-4);
+  /* Ensure it doesn't overflow viewport if content is long */
+  max-height: calc(100vh - var(--spacing-8));
+  overflow-y: auto;
+}
+
+.actionsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.downloadButton {
+  width: 100%;
+  justify-content: flex-start;
+  background-color: var(--portal-primary);
+  border-color: var(--portal-primary);
+  color: white;
+}
+
+.downloadButton:hover {
+  background-color: color-mix(in srgb, var(--portal-primary), black 10%);
+  border-color: color-mix(in srgb, var(--portal-primary), black 10%);
+}
+
+.actionButton {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.tocSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.tocHeader {
+  font-family: var(--font-family-base);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tocNav {
+  display: flex;
+  flex-direction: column;
+}
+
+.tocList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.tocItem {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+}
+
+.tocItemH3 {
+  padding-left: var(--spacing-3);
+  font-size: 0.875rem;
+}
+
+.tocLink {
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color var(--animation-duration-fast) ease;
+  display: block;
+  padding: var(--spacing-1) 0;
+}
+
+.tocLink:hover {
+  color: var(--portal-primary);
+}
+
+/* Optional: Active state styling if we implement scroll spy later */
+.tocLinkActive {
+  color: var(--portal-primary);
+  font-weight: 500;
+}
+
+/* Dark mode adjustments */
+:global(.dark) .panel {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+}

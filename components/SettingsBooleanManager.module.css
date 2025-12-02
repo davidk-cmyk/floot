@@ -1,0 +1,76 @@
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+}
+
+.description {
+  font-size: 0.9rem;
+  color: var(--muted-foreground);
+  margin-top: calc(-1 * var(--spacing-3));
+}
+
+.content {
+  margin-top: var(--spacing-2);
+}
+
+.toggleContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4);
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.statusDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.statusBadge {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.enabled {
+  background-color: color-mix(in srgb, var(--success) 15%, transparent);
+  color: var(--success);
+}
+
+.disabled {
+  background-color: color-mix(in srgb, var(--muted-foreground) 15%, transparent);
+  color: var(--muted-foreground);
+}
+
+.skeletonContainer,
+.errorState {
+  padding: var(--spacing-4);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.errorState p {
+  text-align: center;
+  color: var(--error);
+}

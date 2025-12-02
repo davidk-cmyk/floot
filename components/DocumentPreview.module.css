@@ -1,0 +1,121 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  height: 100%;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+}
+
+.toggleGroup {
+  display: flex;
+  gap: var(--spacing-1);
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  padding: var(--spacing-1);
+}
+
+.previewArea {
+  flex-grow: 1;
+  background-color: var(--background);
+  padding: var(--spacing-6);
+  overflow: auto;
+}
+
+.previewFrame {
+  margin: 0 auto;
+  background-color: var(--surface);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius);
+  transition: all var(--animation-duration-normal) ease;
+  overflow: hidden;
+}
+
+.desktop {
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+}
+
+.tablet {
+  width: 768px;
+  height: 1024px;
+  max-height: 100%;
+}
+
+.mobile {
+  width: 375px;
+  height: 667px;
+  max-height: 100%;
+}
+
+.document {
+  height: 100%;
+  overflow-y: auto;
+  color: var(--surface-foreground);
+  font-family: var(--font-family-base);
+  line-height: 1.6;
+}
+
+.section {
+  padding: var(--spacing-4);
+}
+
+.document header {
+  border-bottom: 1px solid var(--border);
+}
+
+.document footer {
+  border-top: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.mainContent {
+  padding: var(--spacing-6);
+}
+
+.mainContent h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-4);
+}
+
+.policyBody {
+  margin-top: var(--spacing-6);
+}
+
+.policyBody h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--spacing-2);
+}
+
+.noTemplate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted-foreground);
+  text-align: center;
+  padding: var(--spacing-8);
+}

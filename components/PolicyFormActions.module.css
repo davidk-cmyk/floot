@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.roleInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  justify-content: flex-end;
+  font-size: 0.875rem;
+}
+
+.roleLabel {
+  color: var(--muted-foreground);
+}
+
+.roleValue {
+  color: var(--foreground);
+  font-weight: 500;
+  text-transform: capitalize;
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--muted);
+  border-radius: var(--radius-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .actions {
+    flex-direction: column;
+  }
+  
+  .roleInfo {
+    justify-content: center;
+  }
+}

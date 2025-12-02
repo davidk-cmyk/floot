@@ -1,0 +1,163 @@
+.container {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.tableHeader {
+  padding: var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.filterInput {
+  max-width: 320px;
+}
+
+.filterInputSkeleton {
+  height: 2.5rem;
+  width: 320px;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background-color: var(--sidebar);
+  border-bottom: 1px solid var(--border);
+}
+
+.table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: var(--muted);
+}
+
+.userCell {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-weight: 500;
+  color: var(--surface-foreground);
+}
+
+.userEmail {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.userDisplayName {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.destructiveItem {
+  color: var(--error);
+}
+
+.destructiveItem:hover,
+.destructiveItem:focus-visible {
+  background-color: var(--error);
+  color: var(--error-foreground);
+}
+
+.errorState {
+  text-align: center;
+  padding: var(--spacing-8);
+  color: var(--muted-foreground);
+}
+
+.dialogBody {
+  margin-top: var(--spacing-4);
+}
+
+.passwordContainer {
+  margin: var(--spacing-4) 0;
+}
+
+.passwordDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: var(--spacing-2);
+}
+
+.password {
+  font-family: var(--font-family-monospace);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  flex: 1;
+  word-break: break-all;
+  user-select: all;
+}
+
+.copyButton {
+  flex-shrink: 0;
+}
+
+.copySuccess {
+  font-size: 0.875rem;
+  color: var(--success);
+  font-weight: 500;
+}
+
+.passwordInstructions {
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  padding: var(--spacing-3);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.passwordInstructions p {
+  margin: 0 0 var(--spacing-2) 0;
+  font-weight: 500;
+}
+
+.passwordInstructions ul {
+  margin: 0;
+  padding-left: var(--spacing-4);
+  list-style-type: disc;
+}
+
+.passwordInstructions li {
+  margin-bottom: var(--spacing-1);
+}
+
+.passwordInstructions li:last-child {
+  margin-bottom: 0;
+}

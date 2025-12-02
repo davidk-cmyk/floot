@@ -1,0 +1,32 @@
+.sortContainer {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+.selectTrigger {
+  min-width: 140px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 767px) {
+  .sortContainer {
+    width: 100%;
+  }
+  
+  .selectTrigger {
+    flex: 1;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sortContainer {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .selectTrigger {
+    width: 100%;
+  }
+}

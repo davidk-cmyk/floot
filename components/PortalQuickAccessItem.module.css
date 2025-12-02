@@ -1,0 +1,70 @@
+.itemRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  transition: background-color var(--animation-duration-fast) ease;
+  min-height: 2.25rem;
+}
+
+.itemRow:hover {
+  background-color: var(--muted);
+}
+
+.statusIcon {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.nameContainer {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-1);
+  min-width: 0;
+  cursor: default;
+}
+
+.portalName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 25ch;
+}
+
+.policyCount {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+  transition: color var(--animation-duration-fast) ease, transform var(--animation-duration-fast) ease;
+}
+
+.actionIcon:hover {
+  color: var(--primary);
+}
+
+.actionIcon:hover svg[class*="lucide-settings"] {
+  transform: rotate(90deg);
+}
+
+.actionIcon:hover svg[class*="lucide-external-link"] {
+  transform: scale(1.1);
+}

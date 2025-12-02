@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  justify-content: center;
+  padding: var(--spacing-4) 0;
+}
+
+.tab {
+  appearance: none;
+  background-color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: all var(--animation-duration-fast) ease;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  background-color: color-mix(in srgb, var(--muted) 90%, black);
+  color: var(--foreground);
+}
+
+.tab.active {
+  background-color: hsl(0, 0%, 20%);
+  color: white;
+  border-color: hsl(0, 0%, 20%);
+}
+
+/* Dark mode adjustments */
+:global(.dark) .tab.active {
+  background-color: hsl(0, 0%, 90%);
+  color: black;
+  border-color: hsl(0, 0%, 90%);
+}

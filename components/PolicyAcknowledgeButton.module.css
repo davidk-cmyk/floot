@@ -1,0 +1,84 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.fullWidth > button {
+  width: 100%;
+}
+
+.acknowledgedButton {
+  background-color: var(--success);
+  color: var(--success-foreground);
+  cursor: default;
+  border-color: var(--success);
+}
+
+.acknowledgedButton:hover {
+  background-color: var(--success);
+  border-color: var(--success);
+  transform: none;
+}
+
+.acknowledgedTimestamp {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  text-align: center;
+  margin: 0;
+  padding-top: var(--spacing-1);
+}
+
+.progressContainer {
+  width: 100%;
+  padding: var(--spacing-4);
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+
+.progressLabel {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-2) 0;
+  font-weight: 500;
+}
+
+.progressPercentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 25%);
+  font-size: 0.75rem;
+  color: var(--primary-foreground);
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dialogIcon {
+  color: var(--warning);
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: var(--spacing-2);
+}

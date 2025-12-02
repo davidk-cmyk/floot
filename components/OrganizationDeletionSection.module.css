@@ -1,0 +1,122 @@
+@layer base {
+  .container {
+    border: 1px solid var(--error);
+    background-color: color-mix(in srgb, var(--error) 5%, transparent);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    color: var(--error);
+  }
+
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .warningText {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--foreground);
+    margin: 0;
+  }
+
+  .warningText strong {
+    font-weight: 600;
+    color: var(--error);
+  }
+
+  .dataListContainer {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-4);
+  }
+
+  .dataListTitle {
+    font-weight: 500;
+    margin: 0 0 var(--spacing-3) 0;
+    color: var(--surface-foreground);
+  }
+
+  .dataList {
+    list-style-type: disc;
+    padding-left: var(--spacing-6);
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-2) var(--spacing-4);
+    color: var(--muted-foreground);
+  }
+
+  .confirmationSteps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    cursor: pointer;
+    font-size: 0.9375rem;
+    user-select: none;
+  }
+
+  .checkbox {
+    width: 1rem;
+    height: 1rem;
+    accent-color: var(--primary);
+  }
+
+  .inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .inputLabel {
+    font-size: 0.9375rem;
+    color: var(--foreground);
+  }
+
+  .orgName {
+    color: var(--error);
+    font-family: var(--font-family-monospace);
+    background-color: color-mix(in srgb, var(--error) 10%, transparent);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .deleteButton {
+    align-self: flex-start;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

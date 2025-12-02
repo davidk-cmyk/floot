@@ -1,0 +1,71 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.variableToggleList {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--spacing-4);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.variableToggleGroup {
+  margin-bottom: var(--spacing-4);
+}
+
+.variableToggleGroup:last-child {
+  margin-bottom: 0;
+}
+
+.variableToggleGroupTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: var(--spacing-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.variableToggleItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--animation-duration-fast);
+}
+
+.variableToggleItem:hover {
+  background-color: var(--muted);
+}
+
+.variableToggleItem label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  cursor: pointer;
+  flex: 1;
+}
+
+.variableToggleLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.variableToggleKey {
+  font-family: var(--font-family-monospace);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}

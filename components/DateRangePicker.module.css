@@ -1,0 +1,97 @@
+.triggerButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 16rem;
+  font-weight: 400;
+  color: var(--foreground);
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+
+.triggerButton:hover {
+  background-color: var(--muted);
+}
+
+.calendarIcon {
+  margin-right: var(--spacing-2);
+  color: var(--muted-foreground);
+}
+
+.dateDisplay {
+  flex-grow: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clearButton {
+  margin-left: var(--spacing-2);
+  color: var(--muted-foreground);
+}
+
+.clearButton:hover {
+  color: var(--foreground);
+  background-color: var(--muted);
+}
+
+.popoverContent {
+  width: auto;
+  min-width: auto;
+  max-width: none;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  background-color: var(--popup);
+}
+
+.container {
+  display: flex;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2);
+  border-right: 1px solid var(--border);
+  width: 9.375rem; /* 150px */
+}
+
+.presetButton {
+  justify-content: flex-start;
+  font-weight: 400;
+  padding: var(--spacing-2) var(--spacing-3);
+  height: auto;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.2;
+  color: var(--foreground);
+}
+
+.presetButton:hover {
+  background-color: var(--muted);
+}
+
+.activePreset {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.activePreset:hover {
+  background-color: color-mix(in srgb, var(--primary) 90%, black);
+  color: var(--primary-foreground);
+}
+
+.calendarContainer {
+  padding: 0;
+}
+
+/* Make calendar styles local to this component to avoid conflicts */
+.calendarContainer :global(.rdp) {
+  margin: 0;
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+  padding: var(--spacing-2);
+}

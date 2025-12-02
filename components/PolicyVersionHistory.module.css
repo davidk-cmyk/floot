@@ -1,0 +1,181 @@
+.container {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-base);
+  container-type: inline-size;
+}
+
+.skeletonHeader {
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-4);
+}
+
+
+
+.versionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.versionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.versionItem:hover {
+  background-color: color-mix(in srgb, var(--background), var(--surface) 50%);
+}
+
+.versionIcon {
+  color: var(--secondary);
+  margin-top: var(--spacing-1);
+}
+
+.versionDetails {
+  flex-grow: 1;
+}
+
+.versionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+}
+
+.versionNumber {
+  font-weight: 600;
+  color: var(--surface-foreground);
+}
+
+.versionMeta {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.changeSummary {
+  font-size: 0.9rem;
+  color: var(--foreground);
+  margin: 0;
+  padding-left: var(--spacing-3);
+  border-left: 2px solid var(--border);
+}
+
+.versionActions {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-1);
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  min-width: 0;
+  margin-top: var(--spacing-1);
+}
+
+/* For narrow containers (like sidebar), stack buttons vertically */
+@container (max-width: 320px) {
+  .versionItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-3);
+  }
+  
+  .versionActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-1);
+    margin-top: 0;
+  }
+}
+
+/* For medium-narrow containers, keep horizontal but tighter spacing */
+@container (min-width: 321px) and (max-width: 500px) {
+  .versionActions {
+    gap: var(--spacing-1);
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .versionItem {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-3);
+  }
+  
+  .versionActions {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 0;
+    gap: var(--spacing-1);
+  }
+  
+  .versionActions > * {
+    flex: 0 0 auto;
+    min-width: fit-content;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .versionActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-1);
+    min-width: fit-content;
+  }
+}
+
+.errorState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-8);
+  color: var(--muted-foreground);
+}
+
+.errorIcon,
+.emptyIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--spacing-4);
+}
+
+.errorIcon {
+  color: var(--error);
+}
+
+.dialogContent {
+  max-width: 48rem;
+}
+
+.dialogContentLarge {
+  max-width: 80vw;
+  width: 72rem;
+}
+
+.versionContentPreview {
+  max-height: 60vh;
+  overflow-y: auto;
+  background-color: var(--background);
+  padding: var(--spacing-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  line-height: 1.6;
+}

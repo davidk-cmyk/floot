@@ -1,0 +1,45 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-family-heading);
+  color: var(--foreground);
+}
+
+.pageDescription {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  max-width: 60ch;
+}
+
+.formContainer {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-8);
+  display: flex;
+  justify-content: center;
+}

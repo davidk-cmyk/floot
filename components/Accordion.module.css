@@ -1,0 +1,79 @@
+.item {
+  border-bottom: 1px solid var(--border);
+}
+
+.item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.header {
+  display: flex;
+}
+
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4) 0;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--foreground);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color var(--animation-duration-fast) ease;
+}
+
+.trigger:hover {
+  color: var(--primary);
+}
+
+.chevron {
+  height: 1.25rem;
+  width: 1.25rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+  transition: transform var(--animation-duration-normal) ease;
+}
+
+.trigger[data-state='open'] > .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  overflow: hidden;
+  transition:
+    max-height var(--animation-duration-normal) ease-out,
+    opacity var(--animation-duration-normal) ease-out;
+}
+
+.content[data-state='open'] {
+  animation: slideDown var(--animation-duration-normal) ease-out;
+}
+
+.content[data-state='closed'] {
+  animation: slideUp var(--animation-duration-normal) ease-out;
+}
+
+.contentInner {
+  padding-bottom: var(--spacing-4);
+}
+
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}

@@ -1,0 +1,27 @@
+.trigger {
+  width: 100%;
+}
+
+.triggerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  overflow: hidden;
+}
+
+.icon {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.noOrgs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+}

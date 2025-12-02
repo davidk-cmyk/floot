@@ -1,0 +1,54 @@
+.container {
+  position: relative;
+  display: inline-flex;
+}
+
+.bellButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: background-color var(--animation-duration-fast) ease, color var(--animation-duration-fast) ease;
+}
+
+.bellButton:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.bellButton:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.bellButton svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1rem;
+  height: 1rem;
+  padding: 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--primary-foreground);
+  background-color: var(--error);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--surface);
+  transform: translate(25%, -25%);
+}

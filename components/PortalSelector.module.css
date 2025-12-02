@@ -1,0 +1,76 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  padding: var(--spacing-3);
+}
+
+.summary {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.portalList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: var(--spacing-2); /* For scrollbar */
+}
+
+.portalItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.portalItem:hover {
+  background-color: var(--muted);
+}
+
+.portalName {
+  font-size: 0.9375rem;
+  color: var(--foreground);
+  flex-grow: 1;
+}
+
+.skeletonItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2);
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--error);
+  font-size: 0.875rem;
+  padding: var(--spacing-4);
+  justify-content: center;
+  text-align: center;
+}
+
+.errorIcon {
+  flex-shrink: 0;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}

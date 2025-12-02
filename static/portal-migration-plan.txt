@@ -1,0 +1,117 @@
+# Migration Plan: Legacy Hardcoded Portals to New Flexible Portal System
+
+**Version:** 1.0
+**Date:** 2024-10-27
+**Author:** Fullstack Developer
+
+## 1. Overview & Goals
+
+### 1.1. Current State
+The current system utilizes a hardcoded approach to differentiate between an "internal" and a "public" portal. This logic is scattered throughout the codebase, making it inflexible, difficult to maintain, and impossible to scale. Adding new types of portals or customizing existing ones requires significant code changes.
+
+### 1.2. Future State
+The new system will be a dynamic, database-driven portal platform. Administrators will be able to create, configure, and manage multiple, distinct portals through a dedicated UI. Each portal can have its own set of policies, access controls (public, password-protected, SSO), and branding.
+
+### 1.3. Goals
+- **Decouple Portal Logic:** Remove all hardcoded portal logic from the application code.
+- **Empower Administrators:** Enable non-technical admins to manage portals without developer intervention.
+- **Enhance Flexibility:** Support various access types and configurations for different audiences.
+- **Improve Scalability:** Easily add new portals as the organization grows.
+- **Centralize Management:** Provide a single interface for all portal-related configurations.
+
+## 2. Migration Phases
+
+The migration is broken down into five distinct phases to ensure a smooth and controlled transition.
+
+### Phase 1: Backend & Database Foundation (Complete)
+This phase involved setting up the necessary database schema and API endpoints to support the new portal system.
+
+- **Task 1.1: Database Schema Design:**
+  - `portals`: Stores core portal information (name, slug, access type, etc.).
+  - `portal_settings`: A key-value store for portal-specific settings like branding.
+  - `policy_portal_assignments`: A join table to link policies to one or more portals.
+- **Task 1.2: Database Migration:**
+  - A migration script was created and run to add the `portals`, `portal_settings`, and `policy_portal_assignments` tables to the database. See `helpers/schema.tsx` for the final schema.
+- **Task 1.3: API Endpoint Development:**
+  - CRUD endpoints for managing portals (`/portals`).
+  - Endpoints for managing policy assignments to portals (`/portals/{portalId}/policies`).
+  - A public-facing endpoint to fetch portal data by slug (`/portals/slug/{portalSlug}`).
+
+### Phase 2: Data Migration
+This phase focuses on migrating the existing implicit portals and their policies into the new database structure.
+
+- **Task 2.1: Identify Legacy Portals & Policies:**
+  - All policies marked with `is_public = true` belong to the legacy "Public Portal".
+  - All other policies belong to the legacy "Internal Portal".
+- **Task 2.2: Create Data Migration Script:**
+  - A one-time script will be executed to perform the following actions:
+    1. Create a "Public Portal" entry in the `portals` table with `slug: 'public'` and `access_type: 'public'`.
+    2. Create an "Internal Portal" entry in the `portals` table with `slug: 'internal'` and `access_type: 'sso'`.
+    3. For every policy where `is_public = true`, create an entry in `policy_portal_assignments` linking it to the new "Public Portal".
+    4. For all other policies, create an entry in `policy_portal_assignments` linking them to the new "Internal Portal".
+    5. After successful migration, the `is_public` column on the `policies` table can be deprecated and later removed.
+- **Task 2.3: Dry Run & Validation:**
+  - The script will be run on a staging environment.
+  - Validation will confirm that all policies are correctly assigned and both portals are accessible with the right policy sets.
+
+### Phase 3: Frontend Refactoring
+This phase involves updating the user interface to use the new dynamic portal system.
+
+- **Task 3.1: Deprecate Legacy Components:**
+  - Identify and remove old components like `PublicPolicyList` or `InternalDashboard`.
+  - Remove any conditional rendering logic based on `is_public`.
+- **Task 3.2: Create Dynamic Portal Page:**
+  - Create a new dynamic page: `pages/[portalSlug].tsx`.
+  - This page will fetch portal data and its assigned policies using the `portalSlug` from the URL.
+  - It will render the portal's content, layout, and policies based on the fetched data.
+- **Task 3.3: Create Portal Management UI (Admin):**
+  - Build a new section in the admin panel for portal management.
+  - Features will include:
+    - A list of all existing portals.
+    - A form to create/edit portals (name, slug, access type).
+    - An interface to assign/unassign policies to a portal.
+- **Task 3.4: Update Navigation & Links:**
+  - All hardcoded links like `/public` or `/dashboard` will be updated to point to the new dynamic routes, e.g., `/public` and `/internal`.
+
+### Phase 4: Testing
+Thorough testing is critical to ensure a seamless transition for users.
+
+- **Task 4.1: Unit & Integration Tests:**
+  - Write tests for the new portal management endpoints.
+  - Write tests for the `[portalSlug]` page component to ensure it handles different portal configurations correctly.
+- **Task 4.2: End-to-End (E2E) Testing:**
+  - **Admin Flow:** Create a new portal, assign policies, and verify it's accessible.
+  - **User Flow:** Access the "Public Portal" as a guest. Log in and access the "Internal Portal". Verify the correct policies are displayed in each case.
+- **Task 4.3: Regression Testing:**
+  - Confirm that core functionalities like policy viewing, searching, and acknowledgment are unaffected.
+
+### Phase 5: Deployment & Go-Live
+A coordinated deployment plan to switch over to the new system.
+
+- **Task 5.1: Pre-deployment:**
+  - Announce a brief maintenance window if necessary.
+  - Perform a final backup of the database.
+- **Task 5.2: Deployment:**
+  - **Step 1:** Deploy the new application code. The application will be in a transitional state where old routes may not work.
+  - **Step 2:** Run the database migration script to add the `is_public` column deprecation notice (or remove it).
+  - **Step 3:** Execute the one-time data migration script to populate the `portals` and `policy_portal_assignments` tables.
+- **Task 5.3: Post-deployment Verification:**
+  - Manually verify that `/public` and `/internal` routes are working correctly in production.
+  - Check the admin panel to ensure the new portal management UI is functional.
+  - Monitor logs for any errors related to the new system.
+
+## 3. Dependencies & Risks
+
+- **Dependencies:**
+  - The backend and database changes (Phase 1) must be complete and stable before frontend work (Phase 3) can be finalized.
+- **Risks:**
+  - **Data Migration Failure:** The data migration script could fail, leaving the system in an inconsistent state. **Mitigation:** The script must be idempotent and wrapped in a transaction. It must be thoroughly tested in a staging environment that mirrors production.
+  - **Broken Links:** Users may have bookmarked old URLs. **Mitigation:** Implement server-side redirects from old hardcoded paths (e.g., `/policies/public`) to the new dynamic paths (e.g., `/public`).
+  - **Performance:** Fetching portal configuration and policies on every page load could be slow. **Mitigation:** Implement appropriate caching strategies for portal data.
+
+## 4. Rollback Plan
+
+In case of a critical failure during or after deployment:
+1. Revert the application code to the previous version.
+2. Restore the database from the pre-deployment backup. This will revert all schema and data changes.
+3. The team will perform a post-mortem to identify the cause of the failure before re-attempting the migration.

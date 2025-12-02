@@ -1,0 +1,124 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.header {
+  padding: 0 var(--spacing-2);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin-top: var(--spacing-2);
+  max-width: 60ch;
+}
+
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.portalSelector {
+  max-width: 500px;
+  margin-bottom: var(--spacing-6);
+}
+
+.portalLabel {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--foreground);
+  margin-bottom: var(--spacing-2);
+  display: block;
+}
+
+.portalDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: var(--spacing-2);
+}
+
+.tabsContainer {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-6);
+}
+
+.spanFull {
+  grid-column: 1 / -1;
+}
+
+.switchItem {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--background);
+  padding: var(--spacing-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.switchLabelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-6);
+  margin-top: var(--spacing-6);
+  border-top: 1px solid var(--border);
+}
+
+.previewWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.infoBox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  background-color: color-mix(in srgb, var(--info) 10%, transparent);
+  color: color-mix(in srgb, var(--info) 100%, black 20%);
+  border: 1px solid color-mix(in srgb, var(--info) 30%, transparent);
+  padding: var(--spacing-3);
+  border-radius: var(--radius);
+}
+
+.infoBox svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.infoBox p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+

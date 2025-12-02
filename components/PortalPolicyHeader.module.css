@@ -1,0 +1,58 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-6);
+  border-bottom: 1px solid var(--border);
+}
+
+.badgesRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: var(--font-family-heading);
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.metaIcon {
+  color: var(--branding-secondary, var(--secondary));
+  flex-shrink: 0;
+}
+
+.version {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--muted);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-left: var(--spacing-2);
+}
+
+.categoryBadge {
+  background-color: var(--portal-accent);
+  color: var(--primary-foreground);
+}

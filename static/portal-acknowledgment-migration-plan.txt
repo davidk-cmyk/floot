@@ -1,0 +1,23 @@
+# PORTAL-BASED ACKNOWLEDGMENT SYSTEM - IMPLEMENTATION PLAN
+
+## Overview
+Migration from policy-level acknowledgment (manual per-user assignment) to portal-level acknowledgment (automatic based on portal membership and roles).
+
+## Current System Problems
+- Manual assignment: Admin must individually assign each policy to each user
+- No batch operations
+- Portals are just "views" - don't drive workflow
+- Tedious for organizations with many users
+
+## New System Benefits
+- Automatic assignment based on portal membership
+- Portals represent audiences (employees, managers, clients, etc.)
+- Simple mental model: "This portal requires acknowledgment" → everyone with access must acknowledge all policies
+- Leverages existing role and access control structures
+
+---
+
+## PHASE 1: DATABASE FOUNDATION (No Breaking Changes)
+
+### Step 1: Add new columns to portals table
+SQL:

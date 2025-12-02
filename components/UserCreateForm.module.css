@@ -1,0 +1,90 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  width: 100%;
+  max-width: 500px;
+}
+
+.nameFields {
+  display: flex;
+  gap: var(--spacing-4);
+  width: 100%;
+}
+
+.formField {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.selectItem {
+  text-transform: capitalize;
+}
+
+.submitButton {
+  margin-top: var(--spacing-4);
+  align-self: flex-start;
+}
+
+/* Dialog Styles */
+.dialogSection {
+  margin-top: var(--spacing-6);
+}
+
+.dialogLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: var(--spacing-2);
+}
+
+.copyableContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 1px solid var(--border);
+}
+
+.passwordText,
+.linkText {
+  font-family: var(--font-family-monospace);
+  color: var(--foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: var(--spacing-2);
+}
+
+.dialogInstruction {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: var(--spacing-2);
+}
+
+.invitationSnippet {
+  position: relative;
+  background-color: var(--muted);
+  border-radius: var(--radius);
+  padding: var(--spacing-3);
+  border: 1px solid var(--border);
+}
+
+.snippetContent {
+  font-family: var(--font-family-base);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-line;
+  padding-right: var(--spacing-8);
+  word-wrap: break-word;
+}
+
+.copyButton {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+}

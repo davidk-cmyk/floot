@@ -1,0 +1,160 @@
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-6);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--surface-foreground);
+}
+
+.errorText {
+  font-size: 0.8rem;
+  color: var(--error);
+}
+
+.helperText {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.logoUploadContainer {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: flex-start;
+}
+
+.logoPreview {
+  width: 128px;
+  height: 128px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.logoPreview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.logoPlaceholder {
+  color: var(--muted-foreground);
+}
+
+.fileDropzone {
+  flex-grow: 1;
+  max-width: none;
+}
+
+.fileDropzone > label {
+  padding: var(--spacing-4);
+  min-height: 128px;
+}
+
+.colorPickerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.colorInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.colorPreview {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius) 0 0 var(--radius);
+  border: 1px solid var(--border);
+  border-right: none;
+  pointer-events: none;
+}
+
+.hexInput {
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding-left: var(--spacing-3);
+}
+
+.dnsInstructions {
+  margin-top: var(--spacing-2);
+  padding: var(--spacing-4);
+  background-color: var(--background);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.dnsInstructions p {
+  margin: 0;
+}
+
+.dnsRecord {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  background-color: var(--surface);
+  padding: var(--spacing-3);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.dnsType {
+  font-weight: 600;
+  font-size: 0.8rem;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+}
+
+.dnsDetails {
+  flex-grow: 1;
+  font-family: var(--font-family-monospace);
+  font-size: 0.8rem;
+  color: var(--surface-foreground);
+}
+
+.dnsDetails p {
+  margin: 0;
+}
+
+.dnsDetails code {
+  background-color: var(--muted);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}

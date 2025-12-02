@@ -1,0 +1,74 @@
+.managerContainer {
+  padding: var(--spacing-8);
+  background-color: var(--background);
+  border-radius: var(--radius-lg);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-8);
+  gap: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  max-width: 60ch;
+}
+
+.portalGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-6);
+}
+
+.emptyState,
+.errorState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background-color: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  padding: var(--spacing-8);
+}
+
+.errorState {
+  color: var(--error);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-8);
+}
+
+.skeletonCard {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skeletonFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-6);
+}

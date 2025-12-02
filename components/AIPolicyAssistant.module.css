@@ -1,0 +1,50 @@
+.container {
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-6);
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerIcon {
+  color: var(--primary);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+  margin: 0;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs :global(.tabsList) {
+  background-color: var(--surface);
+  padding: 0 var(--spacing-4);
+}
+
+.tabs :global(.tabsTrigger) {
+  gap: var(--spacing-2);
+}
+
+.tabContent {
+  padding: var(--spacing-6);
+  background-color: var(--background);
+}
+
+.tabContent[data-state="inactive"] {
+  display: none;
+}

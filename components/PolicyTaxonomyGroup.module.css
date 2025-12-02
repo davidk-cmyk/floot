@@ -1,0 +1,169 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-4);
+}
+
+
+
+.suggestionsContainer {
+  margin-top: var(--spacing-2);
+}
+
+.suggestionTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.suggestionTag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--animation-duration-fast) ease;
+  text-decoration: none;
+  outline: none;
+}
+
+.suggestionTag:hover:not(:disabled) {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.suggestionTag:focus {
+  box-shadow: var(--shadow-focus);
+}
+
+.suggestionTag:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.suggestionTag:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.suggestionTagSelected {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.suggestionTagSelected:hover:not(:disabled) {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  opacity: 0.9;
+}
+
+.expandButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--animation-duration-fast) ease;
+  text-decoration: none;
+  outline: none;
+}
+
+.expandButton:hover:not(:disabled) {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  border-color: var(--secondary);
+  border-style: solid;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+
+.expandButton:focus {
+  box-shadow: var(--shadow-focus);
+}
+
+.expandButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.expandButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.popoverContent {
+  width: 20rem;
+  max-width: 90vw;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .suggestionTags {
+    gap: var(--spacing-1);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .suggestionTag {
+    border-width: 2px;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .suggestionTag,
+  .expandButton {
+    transition: none;
+  }
+  
+  .suggestionTag:hover:not(:disabled),
+  .expandButton:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .suggestionTag:active:not(:disabled),
+  .expandButton:active:not(:disabled) {
+    transform: none;
+  }
+}

@@ -1,0 +1,97 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.header {
+  padding: var(--spacing-4) var(--spacing-8);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--foreground);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  transition: color var(--animation-duration-fast) ease, background-color var(--animation-duration-fast) ease;
+}
+
+.navLink:hover {
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+}
+
+.logoutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  transition: color var(--animation-duration-fast) ease, background-color var(--animation-duration-fast) ease;
+  font-family: var(--font-family-base);
+}
+
+.logoutButton:hover {
+  color: var(--error);
+  background-color: color-mix(in srgb, var(--error) 5%, transparent);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--primary);
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.footer {
+  padding: var(--spacing-6) var(--spacing-8);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface);
+}

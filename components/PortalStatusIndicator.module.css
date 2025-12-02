@@ -1,0 +1,109 @@
+.indicatorContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  cursor: help;
+  width: fit-content;
+}
+
+.healthIcon {
+  flex-shrink: 0;
+}
+
+.good {
+  color: var(--success);
+}
+
+.warning {
+  color: var(--warning);
+}
+
+.info {
+  color: var(--info);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+}
+
+.policyStatus {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-1);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.policyStatus strong {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.separator {
+  font-size: 0.8rem;
+  color: var(--border);
+}
+
+.policyLabel {
+  font-size: 0.75rem;
+  margin-left: var(--spacing-1);
+}
+
+/* Tooltip Styles */
+.tooltipContent {
+  padding: var(--spacing-3);
+  max-width: 320px;
+}
+
+.tooltipHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.tooltipTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.tooltipList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.tooltipDivider {
+  height: 1px;
+  background-color: var(--border);
+  margin: var(--spacing-3) 0;
+}
+
+.tooltipDetail {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.tooltipDetail:not(:last-child) {
+  margin-bottom: var(--spacing-1);
+}
+
+.tooltipDetail strong {
+  color: var(--foreground);
+  font-weight: 500;
+}

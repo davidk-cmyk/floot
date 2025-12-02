@@ -1,0 +1,256 @@
+.printContainer {
+  background-color: var(--muted);
+  padding: var(--spacing-8);
+  font-family: var(--font-family-base);
+  color: var(--foreground);
+}
+
+.page {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-12) var(--spacing-16);
+  min-height: 1123px; /* A4 paper height at 96 DPI */
+  width: 794px; /* A4 paper width at 96 DPI */
+  max-width: 100%; /* Prevents overflow on smaller screens */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header,
+.footer {
+  flex-shrink: 0;
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-4);
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.header {
+  padding-top: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-6);
+}
+
+.footer {
+  padding-top: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+  border-top: 1px solid var(--border);
+  margin-top: var(--spacing-6);
+}
+
+.mainContent {
+  flex-grow: 1;
+}
+
+.policyTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-6);
+  text-align: center;
+  color: var(--foreground);
+}
+
+.metadata {
+  margin-bottom: var(--spacing-8);
+  padding-bottom: var(--spacing-4);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Print-specific styles */
+@media print {
+  .printContainer {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .printContainer * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .page {
+    box-shadow: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: 0.75in 1in 1in 1in !important;
+    margin: 0 !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    background: white !important;
+  }
+
+  .header {
+    position: fixed !important;
+    top: 0.25in !important;
+    left: 1in !important;
+    right: 1in !important;
+    padding: 0.1in 0 !important;
+    font-size: 10pt !important;
+    line-height: 1.3 !important;
+    color: #666 !important;
+    border-bottom: 1px solid #ddd !important;
+    background: white !important;
+    z-index: 1000;
+    white-space: pre-wrap !important;
+  }
+
+  .footer {
+    position: fixed !important;
+    bottom: 0.25in !important;
+    left: 1in !important;
+    right: 1in !important;
+    padding: 0.1in 0 !important;
+    font-size: 10pt !important;
+    line-height: 1.3 !important;
+    color: #666 !important;
+    border-top: 1px solid #ddd !important;
+    background: white !important;
+    z-index: 1000;
+    white-space: pre-wrap !important;
+  }
+
+  .mainContent {
+    padding-top: 0.75in !important;
+    padding-bottom: 0.75in !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+    color: black !important;
+  }
+
+  .policyTitle {
+    font-size: 18pt !important;
+    font-weight: bold !important;
+    margin-bottom: 0.25in !important;
+    color: black !important;
+    text-align: center !important;
+    page-break-after: avoid;
+  }
+
+  .metadata {
+    margin-bottom: 0.25in !important;
+    padding-bottom: 0.125in !important;
+    border-bottom: 1px solid #ccc !important;
+    font-size: 10pt !important;
+    page-break-after: avoid;
+  }
+
+  /* Hide interactive elements that don't make sense in print */
+  .printContainer button,
+  .printContainer .tooltip,
+  .printContainer .dropdown,
+  .printContainer .modal,
+  .printContainer .overlay {
+    display: none !important;
+  }
+
+  /* Optimize text for print */
+  .printContainer h1, 
+  .printContainer h2, 
+  .printContainer h3, 
+  .printContainer h4, 
+  .printContainer h5, 
+  .printContainer h6 {
+    page-break-after: avoid;
+    color: black !important;
+    font-weight: bold !important;
+  }
+
+  .printContainer h1 { font-size: 16pt !important; }
+  .printContainer h2 { font-size: 14pt !important; }
+  .printContainer h3 { font-size: 12pt !important; }
+  .printContainer h4, 
+  .printContainer h5, 
+  .printContainer h6 { font-size: 11pt !important; }
+
+  .printContainer p {
+    margin-bottom: 0.125in !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Table optimization */
+  .printContainer table {
+    page-break-inside: avoid;
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 10pt !important;
+  }
+
+  .printContainer table th,
+  .printContainer table td {
+    border: 1px solid #ccc !important;
+    padding: 0.05in !important;
+    background: transparent !important;
+  }
+
+  .printContainer table th {
+    background: #f5f5f5 !important;
+    font-weight: bold !important;
+  }
+
+  /* List optimization */
+  .printContainer ul, 
+  .printContainer ol {
+    margin-bottom: 0.125in !important;
+  }
+
+  .printContainer li {
+    margin-bottom: 0.05in !important;
+  }
+
+  /* Link styling for print */
+  .printContainer a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+
+  .printContainer a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #666;
+  }
+
+  /* Code blocks */
+  .printContainer pre, 
+  .printContainer code {
+    font-family: 'Courier New', monospace !important;
+    font-size: 9pt !important;
+    background: #f8f8f8 !important;
+    border: 1px solid #ddd !important;
+    padding: 0.05in !important;
+    page-break-inside: avoid;
+  }
+
+  /* Images */
+  .printContainer img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  /* Page break controls */
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .page-break-after {
+    page-break-after: always;
+  }
+
+  .no-page-break {
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,67 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--portal-background);
+  color: var(--foreground);
+}
+
+.header {
+  padding: var(--spacing-3) var(--spacing-6);
+  border-bottom: 1px solid var(--border);
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-nav);
+}
+
+:global(.dark) .header {
+  background-color: var(--surface);
+}
+
+.headerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
+}
+
+.logoImage {
+  max-height: 40px;
+  max-width: 200px;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+}
+
+.logoFallback {
+  flex-shrink: 0;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.footer {
+  padding: var(--spacing-6) var(--spacing-8);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  border-top: 1px solid var(--border);
+  background-color: var(--surface);
+}

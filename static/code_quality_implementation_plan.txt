@@ -1,0 +1,227 @@
+# Code Quality and Technical Debt Implementation Plan
+
+## 1. Executive Summary
+
+This document outlines a strategic plan to address identified code quality issues, technical debt, and architectural improvements within the MyPolicyPortal platform. A recent audit of the codebase has revealed several areas for enhancement that will improve performance, security, maintainability, and scalability.
+
+The key issues identified are:
+- **Performance Bottlenecks**: Inefficient database queries in high-traffic endpoints (e.g., policy listing) and redundant API calls on the frontend.
+- **Architectural Concerns**: Overly large and complex React components (e.g., `PolicyCreateForm`) that hinder maintainability and testability.
+- **Maintainability Issues**: Duplicated logic in both frontend hooks and backend endpoints, leading to potential inconsistencies and increased development overhead.
+- **Security Vulnerabilities**: Lack of granular authorization checks in update/delete operations, relying solely on role-based access which may not be sufficient.
+
+This plan prioritizes fixes based on their impact on user experience, system stability, and security. By systematically addressing these items, we will reduce technical debt, improve developer velocity, and build a more robust and scalable platform for our customers.
+
+---
+
+## 2. High-Priority Fixes (Critical)
+
+### 2.1. Issue: Inefficient Policy List Endpoint (`policies/list_GET`)
+
+**Problem**: The endpoint calculates four separate aggregate counts (`acknowledgedCount`, `assignedCount`, etc.) using correlated subqueries for each policy in the result set. This leads to an N+1 query problem, causing significant performance degradation as the number of policies and users grows.
+
+**Impact**: Slow page loads for the main policy list, poor user experience, and high database load.
+
+**Implementation Steps**:
+1.  **Refactor Query**: Modify the main policy query to use a Common Table Expression (CTE) or a lateral join to calculate statistics for all filtered policies in a single pass before joining them back to the main policy data.
+2.  **Create a Helper Function**: Abstract the query filtering logic into a reusable function that can be applied to both the main data query and the total count query to avoid logic duplication and potential inconsistencies.
+3.  **Add Indexing**: Ensure that `policyId`, `userId`, and `organizationId` columns in `policyAcknowledgments` and `policyAssignments` tables are indexed to speed up joins and lookups.
+
+**Code Example (Before/After Concept)**:
+
+*   **Before (Simplified)**:
+    ```typescript
+    // In endpoints/policies/list_GET.ts
+    query = query.select((eb) => [
+      eb.selectFrom("policyAcknowledgments")
+        .select(eb.fn.countAll<string>().as("count"))
+        .whereRef("policyAcknowledgments.policyId", "=", "policies.id")
+        .as("acknowledgedCount"),
+      // ... other subqueries
+    ]);
+    ```
+
+*   **After (Conceptual Kysely with CTE)**:
+    ```typescript
+    // In endpoints/policies/list_GET.ts
+    let query = db
+      .with('policy_stats', (eb) => eb
+        .selectFrom('policies')
+        .select('policies.id as policyId')
+        // Use left joins and conditional aggregation for counts
+        .leftJoin('policyAssignments as pa', 'pa.policyId', 'policies.id')
+        .select(eb.fn.count('pa.userId').as('assignedCount'))
+        // ... other stats
+        .groupBy('policies.id')
+        // Apply filters here
+      )
+      .selectFrom('policies')
+      .innerJoin('policy_stats', 'policy_stats.policyId', 'policies.id')
+      // ... select all columns and apply final sorting/pagination
+    ```
+
+**Timeline**: 5-8 developer days.
+**Success Metrics**:
+-   API response time for `/_api/policies/list` reduced by >50% under load.
+-   Database CPU utilization decreases during peak usage of the policy list page.
+-   Load testing shows the endpoint scales linearly with data volume, not exponentially.
+
+---
+
+## 3. Medium-Priority Improvements (Important)
+
+### 3.1. Issue: Large Monolithic Component (`PolicyCreateForm`)
+
+**Problem**: The `PolicyCreateForm` component is over 300 lines long and manages multiple concerns: tab state, form logic, data fetching, autosave functionality, and URL parameter parsing. This makes the component difficult to understand, maintain, and test.
+
+**Impact**: High cognitive load for developers, increased risk of introducing bugs, and poor reusability of logic.
+
+**Implementation Steps**:
+1.  **Create Custom Hooks**:
+    -   Extract autosave logic into a `useAutosave(key, data, options)` hook.
+    -   Extract URL parameter parsing and form pre-filling logic into a `useUrlFormLoader(setFormValues)` hook.
+2.  **Break Down UI**:
+    -   The main component will manage the `Tabs` and the core `useForm` state.
+    -   Each `TabsContent` section (`AIPolicyGenerator`, `FileUploadTab`, `ManualEditor`) will receive only the props they need.
+    -   The "Manual Editor" form itself can be a separate component (`ManualPolicyEditorForm`) that receives the `form` object as a prop.
+3.  **Refactor Form Schema**: Move the Zod `formSchema` to a separate helper file (`helpers/policyFormSchema.ts`) to decouple it from the component and improve reusability.
+
+**Code Example (Before/After Structure)**:
+
+*   **Before**:
+    ```tsx
+    // components/PolicyCreateForm.tsx
+    export const PolicyCreateForm = () => {
+      // ... all state and logic for form, autosave, url params ...
+      useEffect(() => { /* autosave logic */ });
+      useEffect(() => { /* url param logic */ });
+      const onSubmit = () => { /* ... */ };
+      return (
+        <Tabs>
+          {/* ... all tab content and form fields ... */}
+        </Tabs>
+      );
+    }
+    ```
+
+*   **After**:
+    ```tsx
+    // helpers/useAutosave.ts
+    export const useAutosave = (key, data) => { /* ... */ };
+
+    // components/PolicyCreateForm.tsx
+    import { useAutosave } from '../helpers/useAutosave';
+    import { ManualPolicyEditorForm } from './ManualPolicyEditorForm';
+    
+    export const PolicyCreateForm = () => {
+      const form = useForm(...);
+      useAutosave('policy-draft', form.values);
+      useUrlFormLoader(form.setValues);
+      // ... state for activeTab ...
+      return (
+        <Tabs>
+          <TabsContent value="manual">
+            <ManualPolicyEditorForm form={form} />
+          </TabsContent>
+          {/* ... other tabs ... */}
+        </Tabs>
+      );
+    }
+    ```
+
+**Timeline**: 4-6 developer days.
+**Success Metrics**:
+-   `PolicyCreateForm.tsx` file size reduced by at least 50%.
+-   New custom hooks (`useAutosave`, `useUrlFormLoader`) are created and are unit-testable in isolation.
+-   No single component file exceeds 150 lines of code.
+
+### 3.2. Issue: Redundant API Calls in `useReviewStats`
+
+**Problem**: The `useReviewStats` hook in `helpers/usePolicyApi.tsx` makes two separate `getReviewPolicies` API calls to calculate total and overdue review counts. This is inefficient and doubles the network latency and server load for fetching these stats.
+
+**Impact**: Slower loading of dashboard stats, unnecessary network traffic.
+
+**Implementation Steps**:
+1.  **Create New Endpoint**: Create a new endpoint, e.g., `endpoints/review-policies/stats_GET.ts`, specifically for fetching aggregated review statistics.
+2.  **Backend Logic**: This new endpoint will perform a single, optimized database query to calculate all required counts (`totalDueForReview`, `totalOverdue`, `dueSoon`, etc.) using conditional aggregation (`COUNT(*) FILTER (WHERE ...)`).
+3.  **Update Frontend Hook**: Refactor the `useReviewStats` hook to call this new, dedicated stats endpoint instead of making multiple calls to the list endpoint.
+
+**Code Example (After)**:
+
+*   **New Endpoint (`endpoints/review-policies/stats_GET.ts`)**:
+    ```typescript
+    // ...
+    const stats = await db.selectFrom('policies')
+      .select(eb => [
+        eb.fn.countAll().as('totalDueForReview'),
+        eb.fn.countAll().filterWhere('reviewDate', '<', new Date()).as('totalOverdue')
+      ])
+      .where('reviewDate', 'is not', null)
+      .where('organizationId', '=', user.organizationId)
+      .executeTakeFirstOrThrow();
+    
+    return new Response(superjson.stringify(stats));
+    ```
+
+*   **Updated Hook (`helpers/usePolicyApi.tsx`)**:
+    ```typescript
+    // ...
+    import { getReviewStats } from '../endpoints/review-policies/stats_GET.schema';
+
+    export const useReviewStats = () => {
+      // ...
+      return useQuery({
+        queryKey: [...REVIEW_POLICIES_QUERY_KEY, "stats", { organizationId }],
+        queryFn: () => getReviewStats(), // Single API call
+        // ...
+      });
+    };
+    ```
+
+**Timeline**: 2-3 developer days.
+**Success Metrics**:
+-   Network inspector shows only one API call for review stats on the dashboard.
+-   Dashboard stats load faster, with a measurable reduction in time-to-display.
+
+---
+
+## 4. Low-Priority Optimizations
+
+### 4.1. Issue: Duplicated Logic in `usePolicies` and `usePolicyFilterMetadata`
+
+**Problem**: Both hooks in `helpers/usePolicyApi.tsx` contain identical logic to check for `publicOnly` mode and conditionally get the `organizationId` from `useOrganization`.
+
+**Impact**: Minor code duplication, violates DRY principle.
+
+**Implementation Steps**:
+1.  Create a new internal custom hook, e.g., `useQueryContext()`, within `usePolicyApi.tsx`.
+2.  This hook will contain the shared logic: check `publicOnly`, call `useOrganization`, and return an object with `organizationId` and an `enabled` flag for `useQuery`.
+3.  Refactor `usePolicies` and `usePolicyFilterMetadata` to use this new hook to simplify their implementation.
+
+**Timeline**: 1 developer day.
+**Success Metrics**:
+-   Shared logic is extracted into `useQueryContext`.
+-   `usePolicies` and `usePolicyFilterMetadata` are simplified and contain no duplicated context logic.
+
+---
+
+## 5. Timeline, Resources, and Testing
+
+### Resource Allocation
+-   **Lead Developer**: 1 (Overseeing implementation, tackling complex refactors)
+-   **Mid-level Developer**: 1 (Handling component breakdowns and endpoint creation)
+
+### Estimated Timeline
+-   **Week 1**: High-Priority Fixes (Policy List Endpoint).
+-   **Week 2**: Medium-Priority (Monolithic Component Refactor).
+-   **Week 3**: Medium-Priority (API Call Optimization) & Low-Priority Fixes.
+-   **Week 4**: Integration testing, regression testing, and deployment.
+
+**Total Estimated Time**: ~15 developer days.
+
+### Testing Strategy
+-   **Unit Tests**: New custom hooks (`useAutosave`, etc.) and backend helper functions will have comprehensive unit tests.
+-   **Integration Tests**: Test the interaction between the refactored frontend hooks and the new/updated backend endpoints.
+-   **End-to-End (E2E) Testing**: Use an automated testing framework to run scripts that simulate user flows (e.g., loading the policy list, creating a new policy) to ensure no regressions have been introduced.
+-   **Performance Testing**: Use tools like Apache JMeter or k6 to load test the `policies/list_GET` endpoint before and after the changes to validate performance improvements.
+-   **Manual QA**: A full regression test of all policy-related features will be conducted before deployment.

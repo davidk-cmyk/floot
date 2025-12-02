@@ -1,0 +1,92 @@
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow var(--animation-duration-normal) ease, transform var(--animation-duration-normal) ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+}
+
+.portalName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+  word-break: break-word;
+}
+
+.statusToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+}
+
+.description {
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-4) 0;
+  flex-grow: 1;
+  line-height: 1.6;
+}
+
+.cardInfo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-3) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-4);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.deleteButton {
+  color: var(--error);
+}
+
+.deleteButton:hover {
+  background-color: color-mix(in srgb, var(--error) 10%, transparent);
+}
+
+.dialogContent {
+  max-width: 48rem;
+}
+
+.dialogFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-6);
+}

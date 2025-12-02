@@ -1,0 +1,55 @@
+.card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+}
+
+.accordion {
+  width: 100%;
+}
+
+.categoryContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-left: var(--spacing-2);
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+}
+
+.variableInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  align-self: center;
+}
+
+.variableName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-family: var(--font-family-monospace);
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.lockIcon {
+  color: var(--muted-foreground);
+}
+
+.systemLabel {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.addButton {
+  margin-top: var(--spacing-2);
+  align-self: flex-start;
+}

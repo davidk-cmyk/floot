@@ -1,0 +1,73 @@
+@layer base {
+  .switch {
+    position: relative;
+    display: inline-flex;
+    width: 2.75rem;
+    height: 1.5rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-full);
+    background-color: var(--muted);
+    cursor: pointer;
+    transition: all var(--animation-duration-normal) ease;
+    outline: none;
+    padding: 0;
+  }
+
+  .switch:hover {
+    border-color: var(--primary);
+    background-color: color-mix(in srgb, var(--muted) 80%, var(--primary) 20%);
+  }
+
+  .switch:focus-visible {
+    box-shadow: var(--shadow-focus);
+    border-color: var(--primary);
+  }
+
+  .switch.checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .switch.checked:hover {
+    background-color: color-mix(in srgb, var(--primary) 90%, black);
+    border-color: color-mix(in srgb, var(--primary) 90%, black);
+  }
+
+  .switch.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--muted);
+    border-color: var(--muted);
+  }
+
+  .thumb {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--background);
+    border-radius: var(--radius-full);
+    transition: transform var(--animation-duration-normal) cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow);
+  }
+
+  .switch.checked .thumb {
+    transform: translateX(1.25rem);
+    background-color: var(--primary-foreground);
+  }
+
+  .switch.disabled .thumb {
+    background-color: var(--muted-foreground);
+    box-shadow: none;
+  }
+
+  /* Animation when switching */
+  .switch:active .thumb {
+    width: 1.25rem;
+  }
+
+  .switch.checked:active .thumb {
+    transform: translateX(1rem);
+  }
+}

@@ -1,0 +1,114 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  max-height: 70vh;
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--spacing-3);
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+
+.searchInput {
+  padding-left: calc(var(--spacing-3) * 2 + 18px);
+}
+
+.policyList {
+  flex-grow: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--spacing-2);
+  background-color: var(--surface);
+  min-height: 200px;
+}
+
+.policyItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.policyItem:hover {
+  background-color: var(--muted);
+}
+
+.policyLabel {
+  font-size: 0.9375rem;
+  color: var(--foreground);
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--border);
+}
+
+.summary {
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  background-color: var(--muted);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--muted-foreground);
+  text-align: center;
+  padding: var(--spacing-4);
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+}
+
+.errorIcon {
+  color: var(--error);
+  flex-shrink: 0;
+}
+
+.errorMessage h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.errorMessage p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.skeletonItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+}

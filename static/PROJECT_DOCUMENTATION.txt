@@ -1,0 +1,156 @@
+# MyPolicyPortal Project Documentation
+
+This document provides a comprehensive overview of the MyPolicyPortal application, its features, architecture, and current development status. It is intended to be a living document for developers working on the project.
+
+---
+
+## 1. Project Overview
+
+**MyPolicyPortal** is an enterprise policy management platform designed to help organizations create, manage, distribute, and track the acknowledgment of their policies. It features a modern, role-based interface and leverages AI to streamline the policy creation process.
+
+**Core Purpose**: To provide a centralized, efficient, and auditable system for the entire policy lifecycle, from authoring to acknowledgment.
+
+---
+
+## 2. User Roles & Permissions
+
+The platform supports a granular, role-based access control system.
+
+-   **Admin**: Full control over the system. Manages users, policies, system settings, branding, and views all analytics and audit logs.
+-   **Editor**: Can create and edit policies. They can submit policies for approval but cannot publish them directly.
+-   **Approver**: Can review policies submitted by Editors and either approve or reject them. (Note: Approval workflow is not yet fully implemented).
+-   **Reader**: The standard user role. Can view and acknowledge policies assigned to them or made public.
+-   **Guest/Public**: Unauthenticated users who can only view policies explicitly marked as "public".
+
+---
+
+## 3. Core Features (Current Status)
+
+### 3.1. Dashboard
+-   **Location**: `/dashboard`
+-   **Description**: The main landing page for authenticated users.
+-   **Functionality**:
+    -   Displays a welcome message.
+    -   Shows key statistics (Total Policies, Pending Approvals, Acknowledgment Rate) via `StatCard` components.
+    -   Features a "Required Policies" widget for users to track mandatory reading.
+    -   Lists recent policies with acknowledgment status.
+    -   Provides quick actions based on user role (e.g., "Create Policy" for Admins/Editors).
+    -   Includes an "Admin Reminder Summary" for pending reminders and overdue assignments.
+
+### 3.2. Policy Management
+-   **Policy Library (`/policies`)**:
+    -   Displays all accessible policies in a responsive grid.
+    -   Features advanced filtering by keyword, status, department, and category.
+    -   URL-based state management for filters and pagination (`useSearchParams`).
+    -   Handles loading, error, and empty states gracefully.
+-   **Policy Creation (`/policies/create`)**:
+    -   A multi-tabbed interface for creating policies:
+        1.  **AI Generator**: Generates policy content based on user prompts. Includes rate limiting (5 attempts per hour).
+        2.  **Document Upload**: Supports `.docx` file uploads, parsing the content directly into the editor.
+        3.  **Manual Editor**: A rich text editor for creating or modifying policy content from scratch.
+    -   Manages policy metadata: effective/expiration dates, department, category, tags.
+    -   Configures policy settings: visibility (public/internal) and acknowledgment requirements.
+    -   Features autosave to local storage every 30 seconds.
+
+### 3.3. User Management
+-   **Location**: `/users`
+-   **Access**: Admin only.
+-   **Functionality**:
+    -   Displays a comprehensive table of all users in the organization using the `UserManagementTable` component.
+    -   Allows admins to view, manage, and assign roles.
+    -   Includes a button to navigate to the user creation page (`/users/create`).
+
+### 3.4. System Settings
+-   **Location**: `/settings`
+-   **Access**: Admin only.
+-   **Functionality**:
+    -   A multi-section page for configuring system-wide settings.
+    -   **Branding**: Manage logo, favicon, colors, and fonts.
+    -   **Policy Management**: Manage taxonomies like categories, departments, and tags.
+    -   **User Access**: Configure whitelisted domains for registration, toggle OAuth visibility, and enable/disable public user signup.
+    -   **Organizations**: View and edit current organization details (name, slug, custom domain).
+
+---
+
+## 4. Technical Architecture
+
+-   **Framework**: Floot (formerly Combini).
+-   **Frontend**:
+    -   **Library**: React 19
+    -   **Language**: TypeScript
+    -   **Routing**: `react-router-dom` v6
+    -   **State Management**: `@tanstack/react-query` for server state, `React.Context` and `useState` for local/global UI state.
+    -   **Styling**: CSS Modules with a CSS variable-based design system for theming.
+-   **Backend**:
+    -   **Runtime**: Floot's serverless endpoint environment (Node.js based).
+    -   **Database**: PostgreSQL.
+    -   **Query Builder**: Kysely for type-safe SQL queries.
+    -   **Authentication**: Cookie-based sessions managed via server-side logic.
+-   **Key Dependencies**:
+    -   `zod`: For schema validation on both frontend and backend.
+    -   `lucide-react`: For icons.
+    -   `react-helmet`: For managing document head metadata.
+    -   `sonner`: For toast notifications.
+    -   `marked`: For converting Markdown from AI generation to HTML.
+
+---
+
+## 5. Project Structure
+
+The codebase is organized into four main primitive types, each in its own flat directory:
+
+-   `pages/`: Contains the main entry point components for each page route. Each page has a `.tsx`, `.module.css`, and `.pageLayout.tsx` file.
+-   `components/`: Reusable React components. Each component has a `.tsx` and `.module.css` file.
+-   `helpers/`: Non-visual code, including React hooks, utility functions, type definitions, and context providers.
+-   `endpoints/`: Backend API handlers. Each endpoint has a `.ts` (handler logic) and a `.schema.ts` (Zod schema and typed fetch client) file.
+-   `static/`: Static assets like images, fonts, and documentation files.
+
+---
+
+## 6. API Endpoints
+
+All endpoints are located under the `/_api/` path.
+
+-   **Authentication**
+    -   `GET /auth/session`: Retrieves the current authenticated user's session data.
+    -   `POST /auth/logout`: Clears the user's session cookie, logging them out.
+
+-   **Policies**
+    -   `GET /policies/list`: Fetches a paginated list of policies with support for searching, filtering, and sorting. Can also return filter metadata.
+    -   `POST /policies/create`: Creates a new policy. Requires Admin or Editor role.
+    -   `POST /policies/update`: Updates an existing policy.
+    -   `POST /policies/delete`: Deletes a policy.
+    -   `POST /policies/acknowledge`: Records a user's acknowledgment of a policy.
+    -   `POST /policies/parse-document`: Accepts a file upload (FormData) and returns extracted title and HTML content.
+
+---
+
+## 7. Key Components & Helpers
+
+-   **Layouts & Navigation**
+    -   `components/DashboardLayout`: The main shell for all authenticated pages, providing the sidebar and header.
+    -   `components/ProtectedRoute`: Higher-order components (`UserRoute`, `AdminRoute`) used in `pageLayout` files to protect routes.
+
+-   **Core Logic (Helpers)**
+    -   `helpers/useAuth`: A hook and provider for accessing the current authentication state (`loading`, `authenticated`, `unauthenticated`) and user object.
+    -   `helpers/useOrganization`: A hook and provider for managing the currently active organization context.
+    -   `helpers/usePolicyApi`: A collection of React Query hooks (`usePolicies`, `useCreatePolicy`, etc.) for interacting with policy endpoints.
+
+-   **UI Components**
+    -   `components/Form`: A custom, type-safe form component suite built around Zod schemas.
+    -   `components/PolicyCard`: Displays a single policy summary in the policy library.
+    -   `components/PolicyList`: Renders a grid of `PolicyCard`s and handles loading/error/empty states.
+    -   `components/StatCard`: A reusable card for displaying key metrics on the dashboard.
+    -   `components/Button`, `components/Input`, `components/Select`, `components/Skeleton`: Core UI building blocks.
+
+---
+
+## 8. Development Workflow
+
+1.  **Understand the Request**: Carefully analyze the user's request and the existing codebase.
+2.  **Identify Primitives**: Determine which files (pages, components, helpers, endpoints) need to be created or modified.
+3.  **Reuse Logic**: Before writing new code, check for existing helpers or components that can be reused (e.g., `usePolicyApi`, `useAuth`, `Button`).
+4.  **Schema First**: When creating a new endpoint, define the Zod schema in the `.schema.ts` file first. This ensures type safety and provides a typed client for the frontend.
+5.  **Break Down Complexity**: For complex UI, create smaller, single-purpose sub-components. For complex logic, extract it into a helper hook or function.
+6.  **Handle All States**: Ensure components gracefully handle loading, error, and empty data states, often using the `Skeleton` component for loading.
+7.  **Protect Routes**: Apply `UserRoute` or `AdminRoute` in the `.pageLayout.tsx` file for pages that require authentication.

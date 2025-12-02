@@ -1,0 +1,136 @@
+.container {
+  font-family: var(--font-family-base);
+  color: var(--foreground);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-6);
+  padding: var(--spacing-4) 0;
+}
+
+.versionHeader {
+  padding: var(--spacing-3);
+  background-color: var(--background);
+  border-radius: var(--radius);
+}
+
+.versionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.versionMeta {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.comparisonSection {
+  margin: var(--spacing-6) 0;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-4) 0;
+  color: var(--foreground);
+}
+
+.metadataGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-3);
+}
+
+.metadataItem {
+  display: grid;
+  grid-template-columns: 150px 1fr 1fr;
+  gap: var(--spacing-6);
+  align-items: center;
+  padding: var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--animation-duration-fast) ease;
+}
+
+.metadataItem.different {
+  background-color: color-mix(in srgb, var(--warning) 10%, transparent);
+}
+
+.metadataLabel {
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.metadataValue {
+  font-size: 0.9rem;
+}
+
+.diffContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.diffPane {
+  max-height: 400px;
+  overflow: auto;
+  padding: var(--spacing-4);
+  background-color: var(--background);
+}
+
+.diffContent {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: var(--font-family-monospace);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.errorMessage {
+  padding: var(--spacing-6);
+  background-color: var(--surface);
+  border: 1px solid var(--error);
+  border-radius: var(--radius);
+  color: var(--error);
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Skeleton styles for loading states */
+.skeletonTitle {
+  height: 1.5rem;
+  width: 80%;
+  margin-bottom: var(--spacing-1);
+}
+
+.skeletonMeta {
+  height: 1rem;
+  width: 60%;
+}
+
+.skeletonSectionTitle {
+  height: 1.25rem;
+  width: 30%;
+  margin-bottom: var(--spacing-4);
+}
+
+.skeletonLabel {
+  height: 1rem;
+  width: 100px;
+}
+
+.skeletonValue {
+  height: 1rem;
+  width: 70%;
+}
+
+.skeletonContent {
+  height: 200px;
+  width: 100%;
+}

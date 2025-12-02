@@ -1,0 +1,243 @@
+.layout {
+  display: flex;
+  height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 260px;
+  background-color: var(--sidebar);
+  border-right: 1px solid var(--border);
+  padding: var(--spacing-6) var(--spacing-4);
+  flex-shrink: 0;
+  transition: width var(--animation-duration-normal) ease;
+}
+
+.collapsedSidebar {
+  width: 80px;
+}
+
+.sidebarTop {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  text-decoration: none;
+  color: var(--foreground);
+  padding: 0 var(--spacing-2);
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.collapsedLogo {
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+  padding-right: var(--spacing-6);
+}
+
+.logoIcon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.logoText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: var(--font-family-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toggleButton {
+  flex-shrink: 0;
+  color: var(--foreground);
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  min-height: 2rem;
+  pointer-events: auto;
+}
+
+.collapsedLogoContainer .toggleButton {
+  position: absolute;
+  right: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+.toggleButton:hover {
+  color: var(--primary);
+  background-color: var(--muted);
+}
+
+.toggleButton svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: background-color var(--animation-duration-fast) ease, color var(--animation-duration-fast) ease;
+  min-height: 2.5rem;
+}
+
+.collapsedNavLink {
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-2);
+  width: 100%;
+}
+
+.navLink:hover {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+.activeLink {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.activeLink:hover {
+  background-color: color-mix(in srgb, var(--primary), black 10%);
+  color: var(--primary-foreground);
+}
+
+.sidebarBottom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.separator {
+  margin: var(--spacing-3) 0;
+}
+
+.userControls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+.collapsedUserControls {
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) 0;
+  align-items: center;
+}
+
+.mainPanel {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.avatarButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1);
+  border-radius: var(--radius);
+}
+
+.collapsedAvatarButton {
+  justify-content: center;
+  gap: 0;
+}
+
+.userName {
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+}
+
+.dropdownContent {
+  width: 220px;
+}
+
+.dropdownHeader {
+  padding: var(--spacing-1) 0;
+}
+
+.dropdownDisplayName {
+  font-weight: 600;
+  color: var(--surface-foreground);
+}
+
+.dropdownEmail {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.content {
+  flex-grow: 1;
+  padding: var(--spacing-8);
+  overflow-y: auto;
+  height: 100%;
+}
+
+.overdueBadge {
+  margin-left: auto;
+  font-size: 0.75rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--spacing-1);
+  font-weight: 600;
+}
+
+.collapsedNavLink .overdueBadge {
+  position: absolute;
+  top: var(--spacing-1);
+  right: var(--spacing-1);
+  margin-left: 0;
+  min-width: 1rem;
+  height: 1rem;
+  font-size: 0.625rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,77 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--spacing-8);
+  align-items: start;
+  width: 100%;
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  min-width: 0; /* Prevents grid overflow */
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  background-color: var(--muted);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+  position: sticky;
+  top: var(--spacing-4);
+  max-height: calc(100vh - var(--spacing-8));
+  overflow-y: auto;
+  align-self: flex-start;
+}
+
+.sidebarHeader {
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--spacing-2);
+}
+
+.sidebarTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+  margin: 0;
+}
+
+/* Scrollbar styling for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--border);
+  border-radius: var(--radius-full);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted-foreground);
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+  
+  .sidebar {
+    position: static;
+    max-height: none;
+    order: 2;
+  }
+  
+  .mainContent {
+    order: 1;
+  }
+}

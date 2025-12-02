@@ -1,0 +1,46 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--primary);
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.sectionDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-left: calc(1.25rem + var(--spacing-3));
+}
+
+:global(.dark) .sectionContent {
+  background-color: transparent;
+}

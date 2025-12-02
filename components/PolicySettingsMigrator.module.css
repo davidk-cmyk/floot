@@ -1,0 +1,91 @@
+.container {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  font-family: var(--font-family-base);
+  max-width: 600px;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--surface-foreground);
+  margin: 0;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.9375rem;
+  padding: var(--spacing-3);
+  border-radius: var(--radius);
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.status svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.successIcon {
+  color: var(--success);
+}
+
+.warningIcon {
+  color: var(--warning);
+}
+
+.counts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--spacing-4);
+}
+
+.countCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+  background-color: var(--background);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.countNumber {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.countLabel {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: var(--spacing-1);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+.info svg {
+  flex-shrink: 0;
+}

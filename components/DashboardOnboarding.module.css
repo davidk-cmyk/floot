@@ -1,0 +1,178 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+/* Welcome Mode Styles */
+.welcomeMode {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-8);
+  box-shadow: var(--shadow-sm);
+}
+
+.welcomeMode .header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+}
+
+.welcomeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-family-heading);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-2) 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+  margin: 0;
+  max-width: 600px;
+}
+
+/* Compact Mode Styles */
+.compactMode {
+  padding: var(--spacing-4) 0;
+}
+
+.compactTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-6) 0;
+}
+
+/* Grid Layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--spacing-6);
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-6);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--animation-duration-normal) ease, box-shadow var(--animation-duration-normal) ease;
+  height: 100%;
+  box-shadow: var(--shadow-md);
+}
+
+/* Only apply hover lift effect if not in welcome mode container (which already has a bg) 
+   OR if in compact mode where cards are standalone */
+.compactMode .card {
+  box-shadow: var(--shadow-md);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.welcomeMode .card {
+  background-color: var(--background); /* Slightly darker than surface to stand out in the container */
+  border: 1px solid transparent;
+}
+
+.welcomeMode .card:hover {
+  background-color: var(--surface);
+  border-color: var(--border);
+}
+
+.completedCard {
+  opacity: 0.8;
+  background-color: var(--muted);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-4);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: var(--primary);
+}
+
+.completedBadge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--success);
+  background-color: color-mix(in srgb, var(--success) 10%, transparent);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.cardContent {
+  flex: 1;
+  margin-bottom: var(--spacing-6);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.cardDescription {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cardFooter {
+  margin-top: auto;
+}
+
+.actionButton {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.arrowIcon {
+  transition: transform var(--animation-duration-fast) ease;
+}
+
+.actionButton:hover .arrowIcon {
+  transform: translateX(4px);
+}
