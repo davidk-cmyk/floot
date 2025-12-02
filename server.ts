@@ -1217,6 +1217,6 @@ app.get("*", async (c, next) => {
   }
   return serveStatic({ path: "./dist/index.html" })(c, next);
 });
-serve({ fetch: app.fetch, port: 3344 });
-console.log("Running at http://localhost:3344")
+serve({ fetch: app.fetch, port: 5000, hostname: "0.0.0.0" });
+console.log("Running at http://0.0.0.0:5000")
       

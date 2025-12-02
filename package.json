@@ -1,5 +1,10 @@
 {
   "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "start": "tsx server.ts"
+  },
   "dependencies": {
     "docx": "9.5.1",
     "jose": "6.0.12",
