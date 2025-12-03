@@ -184,17 +184,17 @@ export const useUpdatePolicy = () => {
         toast.success("Policy updated successfully!");
       }
       
-      // Invalidate policy list queries for this organization
-      queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "filterMetadata"] });
-      // Also invalidate the specific policy details query if a policyId was provided
-      if (variables.policyId) {
-        queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, 'details', variables.policyId] });
-      }
+      // Invalidate ALL policies queries - ensures list, details, and metadata all refresh
+      queryClient.invalidateQueries({
+        queryKey: POLICIES_QUERY_KEY,
+        refetchType: 'all',
+      });
       queryClient.invalidateQueries({ queryKey: ["dashboard", "stats", { organizationId }] });
       // Invalidate review-related queries since policy updates can affect review dates
-      queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "stats"] });
+      queryClient.invalidateQueries({
+        queryKey: [REVIEW_POLICIES_QUERY_KEY],
+        refetchType: 'all',
+      });
     },
     onError: (error: Error) => {
       toast.error(`Failed to update policy: ${error.message}`);
