@@ -26,10 +26,12 @@ export async function handle(request: Request) {
       );
     }
 
+    // SECURITY: Ensure target user belongs to same organization as admin
     const result = await db
       .updateTable("users")
       .set({ role })
       .where("id", "=", userId)
+      .where("organizationId", "=", adminUser.organizationId)
       .executeTakeFirst();
 
     if (result.numUpdatedRows === 0n) {
