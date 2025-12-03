@@ -1,4 +1,4 @@
-import { handle as handleStream } from "../../helpers/handleOpenAIStream";
+import { handle as handleStream } from "../../helpers/handleAIStream";
 import { schema } from "./rewrite-plain-english_POST.schema";
 import { getServerUserSession } from "../../helpers/getServerUserSession";
 import { UserRole } from "../../helpers/schema";

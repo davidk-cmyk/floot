@@ -4,16 +4,23 @@ import { schema } from "./policy-prompt_POST.schema";
 import { getServerUserSession } from "../../helpers/getServerUserSession";
 import { UserRole } from "../../helpers/schema";
 import { db } from "../../helpers/db";
+import Anthropic from "@anthropic-ai/sdk";
 
 const ALLOWED_ROLES: UserRole[] = ["admin", "editor"];
 
-async function getOpenAIKey(): Promise<string> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.error("OPENAI_API_KEY environment variable is not set.");
+function getAnthropicClient(): Anthropic {
+  const apiKey = process.env.AI_INTEGRATIONS_ANTHROPIC_API_KEY;
+  const baseURL = process.env.AI_INTEGRATIONS_ANTHROPIC_BASE_URL;
+  
+  if (!apiKey || !baseURL) {
+    console.error("Anthropic AI Integration environment variables are not set.");
     throw new Error("AI service is not configured.");
   }
-  return apiKey;
+  
+  return new Anthropic({
+    apiKey,
+    baseURL,
+  });
 }
 
 function createErrorResponse(message: string, status: number): Response {
@@ -34,7 +41,6 @@ export async function handle(request: Request) {
     );
   }
 
-  // Get organization variables
   const variables = await db
     .selectFrom("organizationVariables")
     .selectAll()
@@ -63,11 +69,10 @@ Instructions:
 6.  **CRITICAL**: Preserve all literal company-specific details (addresses, phone numbers, emails, names, etc.) exactly as written. Never replace them with variables unless the variable syntax already exists in the original text.${variableContext}`;
 
   try {
-    const apiKey = await getOpenAIKey();
+    const anthropic = getAnthropicClient();
     const json = superjson.parse(await request.text());
     const validatedInput = schema.parse(json);
 
-    // Construct the user message
     const historyMessages = (validatedInput.history || [])
       .map(
         (msg) =>
@@ -90,76 +95,28 @@ Instructions:
 
     const userMessage = userMessageParts.join("\n");
 
-    const openaiPayload = {
-      model: "gpt-4o",
+    const stream = anthropic.messages.stream({
+      model: "claude-sonnet-4-5",
+      max_tokens: 8192,
+      system: systemPrompt,
       messages: [
-        { role: "system", content: systemPrompt },
         { role: "user", content: userMessage },
       ],
-      stream: true,
-      // Note: No response_format here since we want plain text, not JSON
-    };
+    });
 
-    const openaiResponse = await fetch(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify(openaiPayload),
-      }
-    );
-
-    if (!openaiResponse.ok) {
-      const errorBody = await openaiResponse.json();
-      console.error("OpenAI API error:", errorBody);
-      return createErrorResponse(
-        errorBody.error?.message || "Failed to get response from AI service.",
-        openaiResponse.status
-      );
-    }
-
-    // The body is a stream of Server-Sent Events (SSE). We need to parse it.
     const readableStream = new ReadableStream({
       async start(controller) {
-        if (!openaiResponse.body) {
-          controller.close();
-          return;
-        }
-        const reader = openaiResponse.body.getReader();
-        const decoder = new TextDecoder();
-
         try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) {
-              break;
-            }
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split("\n\n");
-
-            for (const line of lines) {
-              if (line.startsWith("data: ")) {
-                const data = line.substring(6);
-                if (data.trim() === "[DONE]") {
-                  break;
-                }
-                try {
-                  const parsed = JSON.parse(data);
-                  const content = parsed.choices[0]?.delta?.content;
-                  if (content) {
-                    controller.enqueue(new TextEncoder().encode(content));
-                  }
-                } catch (e) {
-                  console.error("Error parsing OpenAI stream data:", e, "Data:", data);
-                }
+          for await (const event of stream) {
+            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+              const text = event.delta.text;
+              if (text) {
+                controller.enqueue(new TextEncoder().encode(text));
               }
             }
           }
         } catch (error) {
-          console.error("Error reading OpenAI stream:", error);
+          console.error("Error reading Anthropic stream:", error);
           controller.error(error);
         } finally {
           controller.close();

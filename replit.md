@@ -25,8 +25,13 @@ The application uses a combination of Replit Secrets and `env.json`:
 - `DATABASE_URL` - Automatically mapped to `FLOOT_DATABASE_URL`
 - `SESSION_SECRET` - Automatically mapped to `JWT_SECRET`
 
+### AI Integration (via Replit AI Integrations)
+- `AI_INTEGRATIONS_ANTHROPIC_API_KEY` - Automatically provided by Replit
+- `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` - Automatically provided by Replit
+- Uses Claude claude-sonnet-4-5 model for policy generation and AI features
+- No API key required - charges billed to Replit credits
+
 ### Optional (via env.json)
-- `OPENAI_API_KEY` - OpenAI API key for AI features
 - `RESEND_API_KEY` - Resend API key for email services
 
 The `loadEnv.js` file prioritizes environment variables over env.json values for security.
@@ -69,6 +74,12 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-03**: Switched AI provider from OpenAI to Claude
+  - Migrated from OpenAI API to Replit AI Integrations (Anthropic/Claude)
+  - No API key required - uses Replit's built-in integration
+  - Updated all AI endpoints: generate-policy, policy-prompt, suggest-improvements, rewrite-plain-english, suggest-missing-policies
+  - Using Claude claude-sonnet-4-5 model with 8192 max tokens
+
 - **2024-12-03**: Database schema import from original deployment
   - Imported exact schema from original database dump including all triggers, constraints, and indexes
   - Created 26 tables, 1 view, 2 triggers, 101 indexes, and user_role enum type
