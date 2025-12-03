@@ -129,13 +129,13 @@ export const CreatePolicySchema = z.object({
 
 ## AI Features
 
-The platform includes AI-powered features using OpenAI:
+The platform includes AI-powered features using Claude (Anthropic):
 - Policy generation and rewriting
 - Improvement suggestions
-- Natural language search
-- Change summaries
+- Taxonomy suggestions
+- Missing policy suggestions
 
-When working with AI features, respect rate limits and handle API errors gracefully.
+When working with AI features, respect rate limits and handle API errors gracefully. The AI client is configured via environment variables and uses the `@anthropic-ai/sdk` package.
 
 ## Testing
 
@@ -150,10 +150,11 @@ pnpm vitest --watch
 
 ## Environment Variables
 
-Required in `env.json`:
+Required environment variables (can be set in `env.json` or as process env):
 - `DATABASE_URL`: PostgreSQL connection string
 - `JWT_SECRET`: Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
-- `OPENAI_API_KEY`: For AI features
+- `AI_INTEGRATIONS_ANTHROPIC_API_KEY`: For AI features (Claude)
+- `AI_INTEGRATIONS_ANTHROPIC_BASE_URL`: Anthropic API base URL
 - `RESEND_API_KEY`: For email notifications
 
 ## Destructive Operations
