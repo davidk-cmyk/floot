@@ -40,7 +40,7 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
           toast.success('Policy has been published.');
           // Invalidate both the specific policy and the list
           queryClient.invalidateQueries({
-            queryKey: [POLICIES_QUERY_KEY, 'details', policy.id],
+            queryKey: [...POLICIES_QUERY_KEY, 'details', policy.id],
           });
           queryClient.invalidateQueries({
             queryKey: [...POLICIES_QUERY_KEY, 'list'],
@@ -67,7 +67,7 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
           toast.success('Policy has been unpublished.');
           // Invalidate both the specific policy and the list
           queryClient.invalidateQueries({
-            queryKey: [POLICIES_QUERY_KEY, 'details', policy.id],
+            queryKey: [...POLICIES_QUERY_KEY, 'details', policy.id],
           });
           queryClient.invalidateQueries({
             queryKey: [...POLICIES_QUERY_KEY, 'list'],
