@@ -2,8 +2,32 @@ import "./loadEnv.js";
 import { Hono } from 'hono'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { serve } from '@hono/node-server';
+import { cors } from 'hono/cors';
+import { secureHeaders } from 'hono/secure-headers';
 
 const app = new Hono();
+
+// Security middleware - CORS configuration
+app.use('*', cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ['*'],
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  credentials: true,
+  maxAge: 86400,
+}));
+
+// Security headers middleware
+app.use('*', secureHeaders({
+  xFrameOptions: 'SAMEORIGIN',
+  xXssProtection: '1; mode=block',
+  xContentTypeOptions: 'nosniff',
+  referrerPolicy: 'strict-origin-when-cross-origin',
+  permissionsPolicy: {
+    camera: [],
+    microphone: [],
+    geolocation: [],
+  },
+}));
 
 app.post('_api/users/get',async c => {
   try {

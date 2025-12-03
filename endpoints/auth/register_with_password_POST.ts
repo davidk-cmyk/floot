@@ -8,11 +8,30 @@ import {
 } from "../../helpers/getSetServerSession";
 import { generatePasswordHash } from "../../helpers/generatePasswordHash";
 import { isStringArray } from "../../helpers/jsonTypeGuards";
+import {
+  checkRateLimit,
+  recordRateLimitAttempt,
+  clearRateLimitAttempts,
+} from "../../helpers/rateLimiter";
 
 export async function handle(request: Request) {
   try {
     const json = await request.json();
     const { email, password, displayName, organizationSlug } = schema.parse(json);
+
+    // Rate limiting check based on email to prevent abuse
+    const rateLimitResult = await checkRateLimit(email, 'registration');
+    if (!rateLimitResult.allowed) {
+      return Response.json(
+        {
+          message: `Too many registration attempts. Please try again in ${rateLimitResult.remainingMinutes} minutes.`,
+        },
+        { status: 429 }
+      );
+    }
+
+    // Record the attempt for rate limiting
+    await recordRateLimitAttempt(email, 'registration');
 
     // Check if email already exists
     const existingUser = await db
@@ -146,7 +165,10 @@ export async function handle(request: Request) {
       })
       .execute();
 
-    // Create response with user data  
+    // Clear rate limit attempts on successful registration
+    await clearRateLimitAttempts(email, 'registration');
+
+    // Create response with user data
     const response = Response.json({
       user: {
         id: newUser.id,

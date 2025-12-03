@@ -235,8 +235,8 @@ export async function handle(request: Request) {
     }
 
     if (!tokens.accessToken) {
+      // SECURITY: Don't log token response as it may contain sensitive data
       console.error("No access token received from provider");
-      console.error("Token response was:", tokens);
       const errorMessage: OAuthErrorMessage = {
         type: "OAUTH_ERROR",
         provider: oauthState.provider,

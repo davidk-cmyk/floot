@@ -3,6 +3,11 @@ import { jwtVerify, SignJWT } from "jose";
 const encoder = new TextEncoder();
 const secret = process.env.JWT_SECRET;
 
+// SECURITY: Validate JWT_SECRET is configured
+if (!secret) {
+  throw new Error("JWT_SECRET environment variable is required for authentication");
+}
+
 export const SessionExpirationSeconds = 60 * 60 * 24 * 7; // 1 week
 // Probability to run cleanup (10%)
 export const CleanupProbability = 0.1;

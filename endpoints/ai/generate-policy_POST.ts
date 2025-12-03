@@ -5,7 +5,10 @@ import { db } from "../../helpers/db";
 import { processTemplateContent, OrganizationVariables } from "../../helpers/templateProcessorBackend";
 import superjson from "superjson";
 import Anthropic from "@anthropic-ai/sdk";
-
+import {
+  checkRateLimit,
+  recordRateLimitAttempt,
+} from "../../helpers/rateLimiter";
 
 const ALLOWED_ROLES: UserRole[] = ["admin", "editor"];
 
@@ -69,6 +72,18 @@ export async function handle(request: Request) {
       { status: 403 }
     );
   }
+
+  // Rate limiting for AI requests (per user)
+  const rateLimitResult = await checkRateLimit(String(user.id), 'aiRequest');
+  if (!rateLimitResult.allowed) {
+    return new Response(
+      JSON.stringify({
+        error: `AI request limit reached. Please wait ${rateLimitResult.remainingMinutes} minute(s) before trying again.`,
+      }),
+      { status: 429 }
+    );
+  }
+  await recordRateLimitAttempt(String(user.id), 'aiRequest', true);
 
   const organization = await db
     .selectFrom("organizations")

@@ -157,6 +157,10 @@ Required environment variables (can be set in `env.json` or as process env):
 - `AI_INTEGRATIONS_ANTHROPIC_BASE_URL`: Anthropic API base URL
 - `RESEND_API_KEY`: For email notifications
 
+Optional environment variables:
+- `ALLOWED_ORIGINS`: Comma-separated list of allowed CORS origins (defaults to `*` if not set)
+- `NODE_ENV`: Set to `production` for production deployments (enables HSTS headers)
+
 ## Destructive Operations
 
 Always confirm before:
