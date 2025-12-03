@@ -1,10 +1,7 @@
 import React from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
 import { Rocket, CircleSlash } from 'lucide-react';
 import { useAuth } from '../helpers/useAuth';
 import { useUpdatePolicy } from '../helpers/usePolicyApi';
-import { POLICIES_QUERY_KEY } from '../helpers/policyQueryKeys';
 import { Button } from './Button';
 import { PolicyWithAuthor } from '../endpoints/policies/get_POST.schema';
 import styles from './PolicyStatusActions.module.css';
@@ -16,7 +13,6 @@ interface PolicyStatusActionsProps {
 
 export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsProps) => {
   const { authState } = useAuth();
-  const queryClient = useQueryClient();
   const { mutate: updatePolicy, isPending } = useUpdatePolicy();
 
   const canPerformAction =
@@ -28,52 +24,21 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
   }
 
   const handlePublish = () => {
-    updatePolicy(
-      {
-        policyId: policy.id,
-        status: 'published',
-        publishedAt: new Date(),
-        changeSummary: 'Policy published',
-      },
-      {
-        onSuccess: () => {
-          toast.success('Policy has been published.');
-          // Invalidate all policies queries to ensure list refreshes
-          queryClient.invalidateQueries({
-            queryKey: POLICIES_QUERY_KEY,
-            refetchType: 'all',
-          });
-        },
-        onError: (error) => {
-          console.error('Failed to publish policy:', error);
-          // The hook already shows a generic error toast.
-        },
-      },
-    );
+    updatePolicy({
+      policyId: policy.id,
+      status: 'published',
+      publishedAt: new Date(),
+      changeSummary: 'Policy published',
+    });
   };
 
   const handleUnpublish = () => {
-    updatePolicy(
-      {
-        policyId: policy.id,
-        status: 'draft',
-        publishedAt: null,
-        changeSummary: 'Policy unpublished and returned to draft status',
-      },
-      {
-        onSuccess: () => {
-          toast.success('Policy has been unpublished.');
-          // Invalidate all policies queries to ensure list refreshes
-          queryClient.invalidateQueries({
-            queryKey: POLICIES_QUERY_KEY,
-            refetchType: 'all',
-          });
-        },
-        onError: (error) => {
-          console.error('Failed to unpublish policy:', error);
-        },
-      },
-    );
+    updatePolicy({
+      policyId: policy.id,
+      status: 'draft',
+      publishedAt: null,
+      changeSummary: 'Policy unpublished and returned to draft status',
+    });
   };
 
   const containerClasses = `${styles.container} ${className || ''}`;
