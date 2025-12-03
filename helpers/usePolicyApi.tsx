@@ -141,13 +141,13 @@ export const useUpdatePolicy = () => {
       if (updatedPolicy.portalUrls && updatedPolicy.portalUrls.length > 0) {
         // Show enhanced success message with portal links
         const portalLinks = updatedPolicy.portalUrls.map((url, index) => (
-          <a 
-            key={index} 
-            href={url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            style={{ 
-              color: 'hsl(217 91% 60%)', 
+          <a
+            key={index}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: 'hsl(217 91% 60%)',
               textDecoration: 'underline',
               marginLeft: index > 0 ? '0.5rem' : '0'
             }}
@@ -155,7 +155,7 @@ export const useUpdatePolicy = () => {
             Portal {index + 1}
           </a>
         ));
-        
+
         if (updatedPolicy.portalUrls.length === 1) {
           toast.success(
             <div>
@@ -183,17 +183,29 @@ export const useUpdatePolicy = () => {
         // Fallback to simple success message
         toast.success("Policy updated successfully!");
       }
-      
-      // Invalidate ALL policies queries - ensures list, details, and metadata all refresh
-      queryClient.invalidateQueries({
-        queryKey: POLICIES_QUERY_KEY,
-        refetchType: 'all',
+
+      // Reset ALL policy queries using predicate to ensure complete cache clear
+      // This forces fresh data fetch when navigating to any policy-related page
+      queryClient.resetQueries({
+        predicate: (query) => {
+          const key = query.queryKey;
+          return Array.isArray(key) && key[0] === 'policies';
+        },
       });
-      queryClient.invalidateQueries({ queryKey: ["dashboard", "stats", { organizationId }] });
-      // Invalidate review-related queries since policy updates can affect review dates
+
+      // Also invalidate the specific policy detail that was just updated
       queryClient.invalidateQueries({
-        queryKey: [REVIEW_POLICIES_QUERY_KEY],
-        refetchType: 'all',
+        queryKey: [...POLICIES_QUERY_KEY, "detail", variables.policyId],
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["dashboard", "stats", { organizationId }] });
+
+      // Reset review-related queries since policy updates can affect review dates
+      queryClient.resetQueries({
+        predicate: (query) => {
+          const key = query.queryKey;
+          return Array.isArray(key) && key[0] === REVIEW_POLICIES_QUERY_KEY;
+        },
       });
     },
     onError: (error: Error) => {
