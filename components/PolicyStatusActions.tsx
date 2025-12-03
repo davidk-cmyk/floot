@@ -38,12 +38,10 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
       {
         onSuccess: () => {
           toast.success('Policy has been published.');
-          // Invalidate both the specific policy and the list
+          // Invalidate all policies queries to ensure list refreshes
           queryClient.invalidateQueries({
-            queryKey: [...POLICIES_QUERY_KEY, 'details', policy.id],
-          });
-          queryClient.invalidateQueries({
-            queryKey: [...POLICIES_QUERY_KEY, 'list'],
+            queryKey: POLICIES_QUERY_KEY,
+            refetchType: 'all',
           });
         },
         onError: (error) => {
@@ -65,12 +63,10 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
       {
         onSuccess: () => {
           toast.success('Policy has been unpublished.');
-          // Invalidate both the specific policy and the list
+          // Invalidate all policies queries to ensure list refreshes
           queryClient.invalidateQueries({
-            queryKey: [...POLICIES_QUERY_KEY, 'details', policy.id],
-          });
-          queryClient.invalidateQueries({
-            queryKey: [...POLICIES_QUERY_KEY, 'list'],
+            queryKey: POLICIES_QUERY_KEY,
+            refetchType: 'all',
           });
         },
         onError: (error) => {
