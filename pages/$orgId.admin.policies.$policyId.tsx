@@ -93,11 +93,13 @@ const PolicyDetailPage = () => {
           />
         </div>
         <div className={styles.sidebar}>
-          <PolicyDownloadButton 
-            policyId={policy.id}
-            policyTitle={policy.title}
-            className={styles.downloadButton}
-          />
+          <div className={styles.downloadSection}>
+            <PolicyDownloadButton 
+              policyId={policy.id}
+              policyTitle={policy.title}
+              className={styles.downloadButton}
+            />
+          </div>
           <PolicySidebar
             policy={policy}
             currentUserStatus={currentUserStatus}
