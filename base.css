@@ -76,14 +76,14 @@
 
   --border: hsl(220 13% 88%);
 
-  /* Portal Theme */
-  --portal-primary: hsl(30, 60%, 50%);
-  --portal-secondary: hsl(35, 40%, 85%);
-  --portal-accent: hsl(25, 70%, 40%);
-  --portal-background: hsl(40, 40%, 95%);
-  --portal-hero-bg: hsl(40, 50%, 92%);
+  /* Portal Theme - these are fallback defaults, actual values come from branding */
+  --portal-primary: var(--primary);
+  --portal-secondary: var(--secondary);
+  --portal-accent: var(--portal-primary);
+  --portal-background: hsl(0, 0%, 97%);
+  --portal-hero-bg: hsl(0, 0%, 95%);
   --portal-card-bg: hsl(0, 0%, 100%);
-  --portal-text-muted: hsl(30, 10%, 50%);
+  --portal-text-muted: var(--muted-foreground);
 
   /* Font Families */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -154,14 +154,14 @@
 
   --border: hsl(220 13% 25%);
 
-  /* Portal Theme Dark Mode */
-  --portal-primary: hsl(30, 60%, 60%);
-  --portal-secondary: hsl(35, 20%, 20%);
-  --portal-accent: hsl(25, 70%, 50%);
-  --portal-background: hsl(40, 20%, 12%);
-  --portal-hero-bg: hsl(40, 20%, 15%);
-  --portal-card-bg: hsl(40, 10%, 18%);
-  --portal-text-muted: hsl(30, 10%, 60%);
+  /* Portal Theme Dark Mode - these are fallback defaults, actual values come from branding */
+  --portal-primary: var(--primary);
+  --portal-secondary: var(--secondary);
+  --portal-accent: var(--portal-primary);
+  --portal-background: hsl(0, 0%, 10%);
+  --portal-hero-bg: hsl(0, 0%, 12%);
+  --portal-card-bg: hsl(0, 0%, 15%);
+  --portal-text-muted: var(--muted-foreground);
 
   /* Shadows for Dark Mode */
   --shadow: 0 1px 2px 0 hsl(0 0% 0% / 0.1);

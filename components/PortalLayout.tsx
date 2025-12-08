@@ -30,16 +30,25 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
 
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty('--branding-primary', brandingConfig.primaryColor);
-    root.style.setProperty('--branding-secondary', brandingConfig.secondaryColor);
-    root.style.setProperty('--portal-primary', brandingConfig.primaryColor);
-    root.style.setProperty('--portal-secondary', brandingConfig.secondaryColor);
+    const primary = brandingConfig.primaryColor;
+    const secondary = brandingConfig.secondaryColor;
+    
+    root.style.setProperty('--branding-primary', primary);
+    root.style.setProperty('--branding-secondary', secondary);
+    root.style.setProperty('--portal-primary', primary);
+    root.style.setProperty('--portal-secondary', secondary);
+    root.style.setProperty('--portal-accent', primary);
+    root.style.setProperty('--portal-hero-bg', `color-mix(in srgb, ${primary} 8%, hsl(0, 0%, 97%))`);
+    root.style.setProperty('--portal-background', `color-mix(in srgb, ${primary} 3%, hsl(0, 0%, 98%))`);
     
     return () => {
       root.style.removeProperty('--branding-primary');
       root.style.removeProperty('--branding-secondary');
       root.style.removeProperty('--portal-primary');
       root.style.removeProperty('--portal-secondary');
+      root.style.removeProperty('--portal-accent');
+      root.style.removeProperty('--portal-hero-bg');
+      root.style.removeProperty('--portal-background');
     };
   }, [brandingConfig.primaryColor, brandingConfig.secondaryColor]);
 
@@ -48,6 +57,9 @@ export const PortalLayout: React.FC<PortalLayoutProps> = ({
     '--branding-secondary': brandingConfig.secondaryColor,
     '--portal-primary': brandingConfig.primaryColor,
     '--portal-secondary': brandingConfig.secondaryColor,
+    '--portal-accent': brandingConfig.primaryColor,
+    '--portal-hero-bg': `color-mix(in srgb, ${brandingConfig.primaryColor} 8%, hsl(0, 0%, 97%))`,
+    '--portal-background': `color-mix(in srgb, ${brandingConfig.primaryColor} 3%, hsl(0, 0%, 98%))`,
   } as React.CSSProperties;
 
   const orgName = organizationState.type === 'active' 

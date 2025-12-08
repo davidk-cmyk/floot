@@ -27,14 +27,14 @@
 }
 
 .tab.active {
-  background-color: hsl(0, 0%, 20%);
+  background-color: var(--portal-primary, var(--branding-primary, var(--primary)));
   color: white;
-  border-color: hsl(0, 0%, 20%);
+  border-color: var(--portal-primary, var(--branding-primary, var(--primary)));
 }
 
 /* Dark mode adjustments */
 :global(.dark) .tab.active {
-  background-color: hsl(0, 0%, 90%);
-  color: black;
-  border-color: hsl(0, 0%, 90%);
+  background-color: var(--portal-primary, var(--branding-primary, var(--primary)));
+  color: white;
+  border-color: var(--portal-primary, var(--branding-primary, var(--primary)));
 }

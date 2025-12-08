@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--portal-accent);
+  background-color: var(--portal-primary, var(--branding-primary, var(--primary)));
   color: white;
   font-size: 0.75rem;
   font-weight: 600;
@@ -39,7 +39,7 @@
 
 .description {
   font-size: 1.125rem;
-  color: var(--portal-text-muted);
+  color: var(--muted-foreground);
   max-width: 600px;
   line-height: 1.6;
   margin: 0;

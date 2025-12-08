@@ -53,8 +53,8 @@
 }
 
 .navItem.active {
-  background-color: var(--portal-secondary);
-  color: var(--portal-accent);
+  background-color: color-mix(in srgb, var(--portal-primary, var(--branding-primary, var(--primary))) 15%, transparent);
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
   font-weight: 600;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .navItem.active svg {
-  color: var(--portal-accent);
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
 }
 
 .categoryItem {
@@ -88,8 +88,8 @@
 }
 
 .categoryItem.active {
-  background-color: var(--portal-secondary);
-  color: var(--portal-accent);
+  background-color: color-mix(in srgb, var(--portal-primary, var(--branding-primary, var(--primary))) 15%, transparent);
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
   font-weight: 600;
 }
 
@@ -100,5 +100,5 @@
 }
 
 .activeIndicator {
-  color: var(--portal-accent);
+  color: var(--portal-primary, var(--branding-primary, var(--primary)));
 }

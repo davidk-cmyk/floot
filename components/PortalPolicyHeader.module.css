@@ -38,7 +38,7 @@
 }
 
 .metaIcon {
-  color: var(--branding-secondary, var(--secondary));
+  color: var(--portal-secondary, var(--branding-secondary, var(--secondary)));
   flex-shrink: 0;
 }
 
@@ -53,6 +53,6 @@
 }
 
 .categoryBadge {
-  background-color: var(--portal-accent);
-  color: var(--primary-foreground);
+  background-color: var(--portal-primary, var(--branding-primary, var(--primary)));
+  color: white;
 }
