@@ -74,6 +74,17 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-08**: Replaced Google Drive integration with Replit connector
+  - Replaced custom Google Picker implementation with Replit's Google Drive integration
+  - New file browser UI in FileUploadTab component for selecting files from Google Drive
+  - OAuth is now handled automatically by Replit - no hardcoded API keys
+  - Created new endpoints: `/_api/google-drive/list` and `/_api/google-drive/download-file`
+  - SharePoint integration available but not configured (user dismissed during setup)
+
+- **2024-12-08**: Fixed PDF upload parsing issue
+  - Installed libuuid system dependency
+  - Fixed pdfjs-dist import for Node.js ESM environment
+
 - **2024-12-08**: Fixed organization registration constraint
   - Changed portal slug unique constraint from global to per-organization
   - Dropped `portals_slug_key` (global unique on slug)

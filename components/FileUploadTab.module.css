@@ -238,3 +238,122 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.googleDriveBrowser {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+}
+
+.browserHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.browserHeader h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.notConnectedMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-6);
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.notConnectedMessage p {
+  margin: 0;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.searchBar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  outline: none;
+  color: var(--foreground);
+}
+
+.searchBar input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.loadingFiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.fileList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.noFiles {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: var(--spacing-6);
+  margin: 0;
+}
+
+.fileItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s;
+  width: 100%;
+}
+
+.fileItem:hover {
+  background-color: var(--muted);
+}
+
+.fileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  overflow: hidden;
+}
+
+.fileName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileMeta {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}

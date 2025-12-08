@@ -52,6 +52,7 @@
     "embla-carousel": "^8.5.2",
     "embla-carousel-react": "^8.5.2",
     "file-saver": "2.0.5",
+    "googleapis": "^167.0.0",
     "hono": "^4.7.5",
     "html-to-docx": "1.8.0",
     "htmlparser2": "10.0.0",

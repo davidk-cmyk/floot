@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FileDropzone } from './FileDropzone';
 import { Button } from './Button';
 import { Progress } from './Progress';
 import { Skeleton } from './Skeleton';
-import { FileText, Upload, CheckCircle, AlertCircle, Cloud } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, Cloud, Search, X, File } from 'lucide-react';
 import { postParseDocument } from '../endpoints/policies/parse-document_POST.schema';
-import { useGoogleDrivePicker } from '../helpers/useGoogleDrivePicker';
+import { getGoogleDriveFiles, GoogleDriveFile } from '../endpoints/google-drive/list_GET.schema';
+import { postDownloadGoogleDriveFile } from '../endpoints/google-drive/download-file_POST.schema';
 import styles from './FileUploadTab.module.css';
 
 interface FileUploadTabProps {
@@ -22,24 +23,27 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [extractedContent, setExtractedContent] = useState<{ title: string; content: string } | null>(null);
-
-  const { openPicker, isLoading: isPickerLoading, error: pickerError } = useGoogleDrivePicker();
+  
+  const [showGoogleDriveBrowser, setShowGoogleDriveBrowser] = useState(false);
+  const [googleDriveFiles, setGoogleDriveFiles] = useState<GoogleDriveFile[]>([]);
+  const [googleDriveLoading, setGoogleDriveLoading] = useState(false);
+  const [googleDriveConnected, setGoogleDriveConnected] = useState<boolean | null>(null);
+  const [googleDriveSearch, setGoogleDriveSearch] = useState('');
 
   const handleFileUpload = async (files: File[]) => {
     if (files.length === 0) return;
 
     const file = files[0];
-    await processFile(file);
+    await processLocalFile(file);
   };
 
-  const processFile = async (file: File) => {
+  const processLocalFile = async (file: File) => {
     setUploadedFile(file);
     setUploadState('uploading');
     setErrorMessage(null);
     setUploadProgress(0);
 
     try {
-      // Simulate upload progress
       const progressInterval = setInterval(() => {
         setUploadProgress(prev => Math.min(prev + 10, 90));
       }, 100);
@@ -66,10 +70,57 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
     }
   };
 
-  const handleGoogleDriveImport = () => {
-    openPicker((file) => {
-      processFile(file);
-    });
+  const handleGoogleDriveOpen = async () => {
+    setShowGoogleDriveBrowser(true);
+    setGoogleDriveLoading(true);
+    setErrorMessage(null);
+    
+    try {
+      const result = await getGoogleDriveFiles();
+      setGoogleDriveConnected(result.connected);
+      setGoogleDriveFiles(result.files);
+    } catch (error) {
+      console.error('Google Drive error:', error);
+      setGoogleDriveConnected(false);
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to connect to Google Drive');
+    } finally {
+      setGoogleDriveLoading(false);
+    }
+  };
+
+  const handleGoogleDriveSearch = async () => {
+    setGoogleDriveLoading(true);
+    try {
+      const result = await getGoogleDriveFiles(googleDriveSearch || undefined);
+      setGoogleDriveFiles(result.files);
+    } catch (error) {
+      console.error('Google Drive search error:', error);
+    } finally {
+      setGoogleDriveLoading(false);
+    }
+  };
+
+  const handleGoogleDriveFileSelect = async (file: GoogleDriveFile) => {
+    setShowGoogleDriveBrowser(false);
+    setUploadState('processing');
+    setUploadProgress(50);
+    setErrorMessage(null);
+    
+    try {
+      const result = await postDownloadGoogleDriveFile(file.id);
+      
+      setExtractedContent({
+        title: result.title || 'Untitled Policy',
+        content: result.content,
+      });
+      setUploadState('success');
+      setUploadProgress(100);
+    } catch (error) {
+      console.error('Google Drive file download error:', error);
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to download file from Google Drive');
+      setUploadState('error');
+      setUploadProgress(0);
+    }
   };
 
   const handleUseContent = () => {
@@ -84,15 +135,23 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
     setErrorMessage(null);
     setUploadedFile(null);
     setExtractedContent(null);
+    setShowGoogleDriveBrowser(false);
+    setGoogleDriveFiles([]);
+    setGoogleDriveSearch('');
   };
 
-  // Show picker errors
-  React.useEffect(() => {
-    if (pickerError) {
-      setErrorMessage(pickerError);
-      setUploadState('error');
-    }
-  }, [pickerError]);
+  const formatFileSize = (bytes?: string) => {
+    if (!bytes) return '';
+    const size = parseInt(bytes);
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString();
+  };
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -103,12 +162,12 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
         </p>
       </div>
 
-      {uploadState === 'idle' && (
+      {uploadState === 'idle' && !showGoogleDriveBrowser && (
         <div className={styles.uploadOptions}>
           <div className={styles.localUploadSection}>
             <FileDropzone
               accept=".docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
-              maxSize={20 * 1024 * 1024} // 20MB
+              maxSize={20 * 1024 * 1024}
               onFilesSelected={handleFileUpload}
               icon={<Upload size={48} />}
               title="Drop your .docx or .pdf file here or click to browse"
@@ -122,18 +181,84 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
 
           <div className={styles.googleDriveSection}>
             <Button
-              onClick={handleGoogleDriveImport}
-              disabled={isPickerLoading}
+              onClick={handleGoogleDriveOpen}
               className={styles.googleDriveButton}
               size="lg"
             >
               <Cloud size={20} />
-              {isPickerLoading ? 'Loading...' : 'Import from Google Drive'}
+              Import from Google Drive
             </Button>
             <p className={styles.googleDriveDescription}>
               Select a .docx or .pdf file from your Google Drive
             </p>
           </div>
+        </div>
+      )}
+
+      {showGoogleDriveBrowser && uploadState === 'idle' && (
+        <div className={styles.googleDriveBrowser}>
+          <div className={styles.browserHeader}>
+            <h4>Select a file from Google Drive</h4>
+            <Button variant="ghost" size="sm" onClick={() => setShowGoogleDriveBrowser(false)}>
+              <X size={16} />
+            </Button>
+          </div>
+          
+          {googleDriveConnected === false && (
+            <div className={styles.notConnectedMessage}>
+              <AlertCircle size={24} />
+              <p>Google Drive is not connected. Please connect your Google Drive account in the Replit integrations panel.</p>
+              <Button variant="outline" onClick={() => setShowGoogleDriveBrowser(false)}>
+                Close
+              </Button>
+            </div>
+          )}
+          
+          {googleDriveConnected !== false && (
+            <>
+              <div className={styles.searchBar}>
+                <Search size={16} />
+                <input
+                  type="text"
+                  placeholder="Search files..."
+                  value={googleDriveSearch}
+                  onChange={(e) => setGoogleDriveSearch(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleGoogleDriveSearch()}
+                />
+                <Button size="sm" onClick={handleGoogleDriveSearch}>Search</Button>
+              </div>
+              
+              {googleDriveLoading ? (
+                <div className={styles.loadingFiles}>
+                  <Skeleton style={{ height: '3rem', width: '100%' }} />
+                  <Skeleton style={{ height: '3rem', width: '100%' }} />
+                  <Skeleton style={{ height: '3rem', width: '100%' }} />
+                </div>
+              ) : (
+                <div className={styles.fileList}>
+                  {googleDriveFiles.length === 0 ? (
+                    <p className={styles.noFiles}>No .docx or .pdf files found</p>
+                  ) : (
+                    googleDriveFiles.map((file) => (
+                      <button
+                        key={file.id}
+                        className={styles.fileItem}
+                        onClick={() => handleGoogleDriveFileSelect(file)}
+                      >
+                        <File size={20} />
+                        <div className={styles.fileInfo}>
+                          <span className={styles.fileName}>{file.name}</span>
+                          <span className={styles.fileMeta}>
+                            {formatFileSize(file.size)} • {formatDate(file.modifiedTime)}
+                          </span>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 
@@ -146,7 +271,7 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
                 {uploadState === 'uploading' ? 'Uploading...' : 'Processing document...'}
               </h4>
               <p className={styles.uploadingSubtitle}>
-                {uploadedFile?.name}
+                {uploadedFile?.name || 'Google Drive file'}
               </p>
             </div>
           </div>
@@ -168,7 +293,7 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
             <div>
               <h4 className={styles.successTitle}>Document processed successfully!</h4>
               <p className={styles.successSubtitle}>
-                Content extracted from {uploadedFile?.name}
+                Content extracted from {uploadedFile?.name || 'Google Drive file'}
               </p>
             </div>
           </div>
