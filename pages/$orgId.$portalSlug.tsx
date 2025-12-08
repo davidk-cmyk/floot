@@ -7,6 +7,7 @@ import { usePortalPassword } from "../helpers/usePortalPassword";
 import { Skeleton } from "../components/Skeleton";
 import { PolicyList } from "../components/PolicyList";
 import { PortalHero } from "../components/PortalHero";
+import { PortalLayout } from "../components/PortalLayout";
 import { PortalCategoryTabs } from "../components/PortalCategoryTabs";
 import { PortalSidebar, PortalView } from "../components/PortalSidebar";
 import { fromPortalEndpoint } from "../helpers/policyCardData";
@@ -226,66 +227,86 @@ const PortalPage: React.FC = () => {
 
   if (isFetching && !data) {
     return (
-      <div className={styles.loadingContainer}>
-        <Skeleton style={{ width: "100%", height: "300px", marginBottom: "var(--spacing-8)" }} />
-        <div className={styles.contentGrid}>
-          <aside className={styles.sidebar}>
-            <Skeleton style={{ width: "100%", height: "400px" }} />
-          </aside>
-          <div className={styles.mainContent}>
-            <Skeleton style={{ width: "100%", height: "60px", marginBottom: "var(--spacing-6)" }} />
-            <PolicyList policies={undefined} isLoading={true} error={null} skeletonsCount={POLICIES_PER_PAGE} />
+      <PortalLayout searchTerm={searchTerm} onSearchChange={handleSearchChange} showSearch={true}>
+        <div className={styles.loadingContainer}>
+          <Skeleton style={{ width: "100%", height: "200px", marginBottom: "var(--spacing-8)" }} />
+          <div className={styles.contentGrid}>
+            <aside className={styles.sidebar}>
+              <Skeleton style={{ width: "100%", height: "400px" }} />
+            </aside>
+            <div className={styles.mainContent}>
+              <Skeleton style={{ width: "100%", height: "60px", marginBottom: "var(--spacing-6)" }} />
+              <PolicyList policies={undefined} isLoading={true} error={null} skeletonsCount={POLICIES_PER_PAGE} />
+            </div>
           </div>
         </div>
-      </div>
+      </PortalLayout>
     );
   }
 
   if (error) {
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
     if (errorMessage.includes("password")) {
-      return <PasswordPrompt portalName={data?.portal.name || portalSlug || ""} onSubmit={handlePasswordSubmit} error="Invalid password. Please try again." />;
+      return (
+        <PortalLayout showSearch={false}>
+          <PasswordPrompt portalName={data?.portal.name || portalSlug || ""} onSubmit={handlePasswordSubmit} error="Invalid password. Please try again." />
+        </PortalLayout>
+      );
     }
     if (errorMessage.includes("unauthorized")) {
       return (
-        <div className={styles.messageContainer}>
-          <AlertTriangle size={48} className={styles.errorIcon} />
-          <h1>Access Denied</h1>
-          <p>You do not have permission to view this portal.</p>
-          {authState.type === 'unauthenticated' && (
-            <p>Please <Link to={`/login?redirect=/${orgId}/${portalSlug}`}>log in</Link> to continue.</p>
-          )}
-        </div>
+        <PortalLayout showSearch={false}>
+          <div className={styles.messageContainer}>
+            <AlertTriangle size={48} className={styles.errorIcon} />
+            <h1>Access Denied</h1>
+            <p>You do not have permission to view this portal.</p>
+            {authState.type === 'unauthenticated' && (
+              <p>Please <Link to={`/login?redirect=/${orgId}/${portalSlug}`}>log in</Link> to continue.</p>
+            )}
+          </div>
+        </PortalLayout>
       );
     }
     return (
-      <div className={styles.messageContainer}>
-        <AlertTriangle size={48} className={styles.errorIcon} />
-        <h1>Portal Not Found or Error</h1>
-        <p>{errorMessage}</p>
-        <Link to="/" className={styles.backLink}>
-          <ArrowLeft size={16} /> Back to Home
-        </Link>
-      </div>
+      <PortalLayout showSearch={false}>
+        <div className={styles.messageContainer}>
+          <AlertTriangle size={48} className={styles.errorIcon} />
+          <h1>Portal Not Found or Error</h1>
+          <p>{errorMessage}</p>
+          <Link to="/" className={styles.backLink}>
+            <ArrowLeft size={16} /> Back to Home
+          </Link>
+        </div>
+      </PortalLayout>
     );
   }
 
   if (!data) {
     return (
-      <div className={styles.messageContainer}>
-        <Info size={48} className={styles.infoIcon} />
-        <h1>Portal Not Found</h1>
-        <p>The portal you are looking for does not exist.</p>
-      </div>
+      <PortalLayout showSearch={false}>
+        <div className={styles.messageContainer}>
+          <Info size={48} className={styles.infoIcon} />
+          <h1>Portal Not Found</h1>
+          <p>The portal you are looking for does not exist.</p>
+        </div>
+      </PortalLayout>
     );
   }
 
   if (data.portal.accessType === 'password' && !password) {
-    return <PasswordPrompt portalName={data.portal.name} onSubmit={handlePasswordSubmit} />;
+    return (
+      <PortalLayout showSearch={false}>
+        <PasswordPrompt portalName={data.portal.name} onSubmit={handlePasswordSubmit} />
+      </PortalLayout>
+    );
   }
 
   return (
-    <>
+    <PortalLayout
+      searchTerm={searchTerm}
+      onSearchChange={handleSearchChange}
+      showSearch={true}
+    >
       <Helmet>
         <title>{data.portal.name}</title>
         <meta name="description" content={data.portal.description || `Browse policies in the ${data.portal.name} portal.`} />
@@ -295,8 +316,6 @@ const PortalPage: React.FC = () => {
           portalName={data.portal.name}
           description={data.portal.description}
           portalType="Internal Portal"
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
         />
 
         <div className={styles.contentGrid}>
@@ -330,7 +349,7 @@ const PortalPage: React.FC = () => {
           </main>
         </div>
       </div>
-    </>
+    </PortalLayout>
   );
 };
 

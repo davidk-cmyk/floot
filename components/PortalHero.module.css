@@ -1,21 +1,17 @@
 .hero {
   background-color: var(--portal-hero-bg);
-  padding: 5rem 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  padding: 3rem 2rem;
   width: 100%;
   border-bottom: 1px solid color-mix(in srgb, var(--portal-hero-bg) 90%, black);
 }
 
 .content {
-  max-width: 800px;
-  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-6);
+  align-items: flex-start;
+  gap: var(--spacing-4);
 }
 
 .badge {
@@ -49,50 +45,12 @@
   margin: 0;
 }
 
-.searchContainer {
-  width: 100%;
-  max-width: 600px;
-  margin-top: var(--spacing-4);
-}
-
-.searchWrapper {
-  position: relative;
-  width: 100%;
-}
-
-.searchIcon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--muted-foreground);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.searchInput {
-  height: 50px;
-  padding-left: 3rem;
-  border-radius: var(--radius-full);
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-md);
-  font-size: 1rem;
-  background-color: var(--surface);
-  transition: all var(--animation-duration-normal) ease;
-}
-
-.searchInput:focus {
-  box-shadow: var(--shadow-lg), 0 0 0 2px var(--portal-primary);
-  border-color: var(--portal-primary);
-}
-
-/* Responsive adjustments */
 @media (min-width: 768px) {
   .hero {
-    padding: 6rem 2rem;
+    padding: 4rem 2rem;
   }
 
   .title {
-    font-size: 3.5rem;
+    font-size: 3rem;
   }
 }
