@@ -74,6 +74,13 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-08**: Portal UI redesign to match design specifications
+  - Header: Added search bar to header, added "POLICY PORTAL" subtitle under org name
+  - Hero: Changed to left-aligned layout, removed search bar (moved to header)
+  - Policy cards display in 3-column responsive grid
+  - All render paths (loading, error, password) wrapped in consistent PortalLayout
+  - Updated PortalLayout.tsx, PortalHero.tsx, and portal page components
+
 - **2024-12-08**: Replaced Google Drive integration with Replit connector
   - Replaced custom Google Picker implementation with Replit's Google Drive integration
   - New file browser UI in FileUploadTab component for selecting files from Google Drive
