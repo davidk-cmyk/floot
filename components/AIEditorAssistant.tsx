@@ -15,6 +15,8 @@ type AIEditorAssistantProps = {
   onApplyToSelection: (newText: string) => void;
   /** Callback to apply changes to the entire document. */
   onApplyToFullText: (newText: string) => void;
+  /** Optional callback to close the dialog/popover. */
+  onClose?: () => void;
   /** Optional class name for custom styling. */
   className?: string;
 };
@@ -24,6 +26,7 @@ export const AIEditorAssistant = ({
   fullText,
   onApplyToSelection,
   onApplyToFullText,
+  onClose,
   className,
 }: AIEditorAssistantProps) => {
   const [modifiedText, setModifiedText] = useState('');
@@ -80,11 +83,18 @@ export const AIEditorAssistant = ({
     } else {
       onApplyToFullText(modifiedText);
     }
+    onClose?.();
   };
 
   const handleReset = () => {
     reset();
     setModifiedText('');
+  };
+
+  const handleDiscard = () => {
+    reset();
+    setModifiedText('');
+    onClose?.();
   };
 
   const hasModifiedText = modifiedText.length > 0;

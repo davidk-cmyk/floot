@@ -38,7 +38,6 @@ import {
   Redo
 } from 'lucide-react';
 import { Button } from './Button';
-import { Popover, PopoverContent, PopoverTrigger } from './Popover';
 import { Dialog, DialogContent, DialogTrigger } from './Dialog';
 import { AIEditorAssistant } from './AIEditorAssistant';
 
@@ -520,8 +519,8 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       >
         <FileText size={16} />
       </Button>
-      <Popover open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
-        <PopoverTrigger asChild>
+      <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
+        <DialogTrigger asChild>
           <Button
             type="button"
             variant="secondary"
@@ -532,16 +531,17 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
             <Bot size={16} />
             AI Edit
           </Button>
-        </PopoverTrigger>
-        <PopoverContent removeBackgroundAndPadding align="start">
+        </DialogTrigger>
+        <DialogContent>
           <AIEditorAssistant
             selectedText={selectedText}
             fullText={getFullText()}
             onApplyToSelection={handleApplyToSelection}
             onApplyToFullText={handleApplyToFullText}
+            onClose={() => setIsAIPopoverOpen(false)}
           />
-        </PopoverContent>
-      </Popover>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
         <DialogTrigger asChild>
