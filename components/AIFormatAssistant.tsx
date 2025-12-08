@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { Wand2, Check, RefreshCw } from 'lucide-react';
 import { usePolicyPrompt } from '../helpers/useAIPolicyApi';
 import { Button } from './Button';
@@ -61,7 +62,9 @@ export const AIFormatAssistant = ({
         const { value, done } = await reader.read();
         if (done) break;
         if (typeof value === 'string') {
-          setFormattedText(prev => prev + value);
+          flushSync(() => {
+            setFormattedText(prev => prev + value);
+          });
         }
       }
     } catch (e) {

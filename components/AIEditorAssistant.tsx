@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import { Sparkles, Check, RefreshCw } from 'lucide-react';
 import { usePolicyPrompt } from '../helpers/useAIPolicyApi';
 import { Button } from './Button';
@@ -59,9 +60,10 @@ export const AIEditorAssistant = ({
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        // Assuming the stream chunks are strings
         if (typeof value === 'string') {
-          setModifiedText(prev => prev + value);
+          flushSync(() => {
+            setModifiedText(prev => prev + value);
+          });
         }
       }
     } catch (e) {
