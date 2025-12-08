@@ -74,6 +74,12 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-08**: Fixed organization registration constraint
+  - Changed portal slug unique constraint from global to per-organization
+  - Dropped `portals_slug_key` (global unique on slug)
+  - Added `portals_organization_slug_unique` (unique on organization_id + slug)
+  - This allows each organization to have their own "public" and "internal" portals
+
 - **2024-12-03**: Switched AI provider from OpenAI to Claude
   - Migrated from OpenAI API to Replit AI Integrations (Anthropic/Claude)
   - No API key required - uses Replit's built-in integration
