@@ -49,13 +49,6 @@ export async function sendConfirmationCodeEmail(
   to: string,
   code: string
 ): Promise<void> {
-  const isDemoMode = true;
-
-  if (isDemoMode) {
-    console.log(`[DEMO MODE] Confirmation code for ${to}: ${code}`);
-    return;
-  }
-
   try {
     const { client, fromEmail } = await getUncachableResendClient();
     const from = fromEmail || "MyPolicyPortal <noreply@example.com>";

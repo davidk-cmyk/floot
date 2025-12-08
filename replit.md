@@ -76,9 +76,10 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
-- **2024-12-08**: Email reminder feature for policy acknowledgments
+- **2024-12-08**: Email acknowledgment and reminder system fully enabled
+  - Disabled demo mode: Real 6-digit confirmation codes now generated for policy acknowledgments
+  - Confirmation code emails sent via Replit's Resend connector (automatic API key management)
   - Implemented send reminders API endpoint (`/_api/email-acknowledgment/send-reminders`)
-  - Updated emailService.tsx to use Replit's Resend connector (automatic API key management)
   - Added sendPolicyReminderEmail and sendBulkPolicyReminders functions with HTML templates
   - ReminderManager component now fully functional with Send Reminders button enabled
   - Admins can select pending acknowledgments and send customizable reminder emails

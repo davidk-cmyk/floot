@@ -73,15 +73,8 @@ export async function handle(request: Request) {
       );
     }
 
-        // Demo mode is enabled for demonstration purposes
-  // Change this to false when you want to use real email sending
-  const isDemoMode = true;
-    const code = isDemoMode ? "000000" : randomInt(100000, 999999).toString();
+    const code = randomInt(100000, 999999).toString();
     const expiresAt = addMinutes(new Date(), 15);
-
-    if (isDemoMode) {
-      console.log(`[DEMO MODE] Generated confirmation code for ${lowercasedEmail}: ${code}`);
-    }
 
     await db
       .insertInto("acknowledgmentConfirmationCodes")
