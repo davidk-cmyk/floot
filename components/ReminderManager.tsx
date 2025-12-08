@@ -1,7 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { toast } from 'sonner';
-import { Bell, Mail, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { Bell, Mail, AlertTriangle, CheckCircle, Info, Loader2 } from 'lucide-react';
 import { useEmailAcknowledgmentPending } from '../helpers/useEmailAcknowledgmentApi';
+import { sendReminders } from '../endpoints/email-acknowledgment/send-reminders_POST.schema';
 import { Button } from './Button';
 import { Checkbox } from './Checkbox';
 import { Badge } from './Badge';
@@ -43,14 +44,23 @@ export const ReminderManager = ({ className }: { className?: string }) => {
   const [selectedReminders, setSelectedReminders] = useState<Set<string>>(new Set());
   const [reminderMessage, setReminderMessage] = useState(DEFAULT_REMINDER_MESSAGE);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
-  const { data, isFetching, error } = useEmailAcknowledgmentPending();
+  const { data, isFetching, error, refetch } = useEmailAcknowledgmentPending();
 
   const pendingReminders = useMemo(() => data ?? [], [data]);
 
-  // Generate a unique key for each reminder: email-policyId-portalId
   const getReminderKey = (email: string, policyId: number, portalId: number): string => {
     return `${email}-${policyId}-${portalId}`;
+  };
+
+  const parseReminderKey = (key: string): { email: string; policyId: number; portalId: number } | null => {
+    const parts = key.split('-');
+    if (parts.length < 3) return null;
+    const portalId = parseInt(parts[parts.length - 1], 10);
+    const policyId = parseInt(parts[parts.length - 2], 10);
+    const email = parts.slice(0, -2).join('-');
+    return { email, policyId, portalId };
   };
 
   const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,6 +84,41 @@ export const ReminderManager = ({ className }: { className?: string }) => {
       }
       return newSet;
     });
+  };
+
+  const handleSendReminders = async () => {
+    if (selectedReminders.size === 0) {
+      toast.error('Please select at least one recipient');
+      return;
+    }
+
+    setIsSending(true);
+    try {
+      const remindersList = Array.from(selectedReminders)
+        .map(parseReminderKey)
+        .filter((r): r is NonNullable<typeof r> => r !== null);
+
+      const result = await sendReminders({
+        reminders: remindersList,
+        customMessage: reminderMessage !== DEFAULT_REMINDER_MESSAGE ? reminderMessage : undefined,
+      });
+
+      if (result.sent > 0) {
+        toast.success(`Successfully sent ${result.sent} reminder${result.sent > 1 ? 's' : ''}`);
+      }
+      if (result.failed > 0) {
+        toast.error(`Failed to send ${result.failed} reminder${result.failed > 1 ? 's' : ''}`);
+      }
+
+      setSelectedReminders(new Set());
+      setIsDialogOpen(false);
+      refetch();
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send reminders';
+      toast.error(errorMessage);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   const isAllSelected = pendingReminders.length > 0 && selectedReminders.size === pendingReminders.length;
@@ -156,21 +201,21 @@ export const ReminderManager = ({ className }: { className?: string }) => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button disabled={true}>
+            <Button disabled={selectedReminders.size === 0 || isFetching}>
               <Mail size={16} />
-              Send Reminders (Coming Soon)
+              Send Reminders ({selectedReminders.size})
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Email Reminders</DialogTitle>
+              <DialogTitle>Send Email Reminders</DialogTitle>
               <DialogDescription>
-                The email reminder feature is coming soon. You'll be able to send reminder emails to {selectedReminders.size} recipient(s).
+                Send reminder emails to {selectedReminders.size} recipient{selectedReminders.size !== 1 ? 's' : ''} about pending policy acknowledgements.
               </DialogDescription>
             </DialogHeader>
             <div className={styles.dialogBody}>
               <label htmlFor="reminderMessage" className={styles.label}>
-                Reminder Message Template (Preview)
+                Reminder Message Template
                 <span className={styles.templateInfo}>
                   <Info size={14} />
                   Variables like {'{policyTitle}'} will be replaced automatically.
@@ -181,11 +226,25 @@ export const ReminderManager = ({ className }: { className?: string }) => {
                 value={reminderMessage}
                 onChange={(e) => setReminderMessage(e.target.value)}
                 rows={8}
-                disabled
               />
             </div>
             <DialogFooter>
-              <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>Close</Button>
+              <Button variant="secondary" onClick={() => setIsDialogOpen(false)} disabled={isSending}>
+                Cancel
+              </Button>
+              <Button onClick={handleSendReminders} disabled={isSending}>
+                {isSending ? (
+                  <>
+                    <Loader2 size={16} className={styles.spinningIcon} />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Mail size={16} />
+                    Send Reminders
+                  </>
+                )}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

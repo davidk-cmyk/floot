@@ -1,23 +1,54 @@
 import { Resend } from "resend";
 
-if (!process.env.RESEND_API_KEY) {
-  throw new Error("RESEND_API_KEY environment variable is not set.");
+let connectionSettings: any;
+
+async function getCredentials() {
+  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
+  const xReplitToken = process.env.REPL_IDENTITY
+    ? "repl " + process.env.REPL_IDENTITY
+    : process.env.WEB_REPL_RENEWAL
+    ? "depl " + process.env.WEB_REPL_RENEWAL
+    : null;
+
+  if (!xReplitToken) {
+    throw new Error("X_REPLIT_TOKEN not found for repl/depl");
+  }
+
+  connectionSettings = await fetch(
+    "https://" +
+      hostname +
+      "/api/v2/connection?include_secrets=true&connector_names=resend",
+    {
+      headers: {
+        Accept: "application/json",
+        X_REPLIT_TOKEN: xReplitToken,
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => data.items?.[0]);
+
+  if (!connectionSettings || !connectionSettings.settings.api_key) {
+    throw new Error("Resend not connected");
+  }
+  return {
+    apiKey: connectionSettings.settings.api_key,
+    fromEmail: connectionSettings.settings.from_email,
+  };
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export async function getUncachableResendClient() {
+  const { apiKey, fromEmail } = await getCredentials();
+  return {
+    client: new Resend(apiKey),
+    fromEmail,
+  };
+}
 
-/**
- * Sends a 6-digit confirmation code to a user's email via Resend.
- * In demo mode (when DISABLE_DEMO_MODE is not set to "true"), logs the code instead of sending.
- * @param to The recipient's email address.
- * @param code The 6-digit confirmation code to send.
- */
 export async function sendConfirmationCodeEmail(
   to: string,
   code: string
 ): Promise<void> {
-      // Demo mode is enabled for demonstration purposes
-  // Change this to false when you want to use real email sending
   const isDemoMode = true;
 
   if (isDemoMode) {
@@ -25,12 +56,11 @@ export async function sendConfirmationCodeEmail(
     return;
   }
 
-  // Using Resend's onboarding domain for initial setup
-  // For production, update to your custom domain like: 'MyPolicyPortal <noreply@mpp.ruunis.com>'
-  const from = "MyPolicyPortal <info@mpp.ruunis.com>";
-
   try {
-    const result = await resend.emails.send({
+    const { client, fromEmail } = await getUncachableResendClient();
+    const from = fromEmail || "MyPolicyPortal <noreply@example.com>";
+
+    const result = await client.emails.send({
       from,
       to,
       subject: "Policy Acknowledgment Confirmation Code",
@@ -39,7 +69,10 @@ export async function sendConfirmationCodeEmail(
     });
 
     if (result.error) {
-      console.error("Error sending confirmation code email via Resend:", result.error);
+      console.error(
+        "Error sending confirmation code email via Resend:",
+        result.error
+      );
       throw new Error("Failed to send confirmation email.");
     }
 
@@ -48,4 +81,91 @@ export async function sendConfirmationCodeEmail(
     console.error("Error sending confirmation code email via Resend:", error);
     throw new Error("Failed to send confirmation email.");
   }
+}
+
+export interface PolicyReminderEmailData {
+  recipientEmail: string;
+  policyTitle: string;
+  portalName: string;
+  portalUrl: string;
+  customMessage?: string;
+}
+
+export async function sendPolicyReminderEmail(
+  data: PolicyReminderEmailData
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { client, fromEmail } = await getUncachableResendClient();
+    const from = fromEmail || "MyPolicyPortal <noreply@example.com>";
+
+    const defaultMessage = `This is a friendly reminder that you have an outstanding policy acknowledgement required for "${data.policyTitle}".
+
+Please review and acknowledge this policy at your earliest convenience.
+
+If you have any questions, please contact your administrator.`;
+
+    const message = data.customMessage
+      ? data.customMessage.replace("{policyTitle}", data.policyTitle)
+      : defaultMessage;
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Policy Acknowledgement Required</h2>
+        <p style="color: #666; line-height: 1.6; white-space: pre-wrap;">${message}</p>
+        <div style="margin: 24px 0;">
+          <a href="${data.portalUrl}" 
+             style="background-color: #0066cc; color: white; padding: 12px 24px; 
+                    text-decoration: none; border-radius: 6px; display: inline-block;">
+            View Policy
+          </a>
+        </div>
+        <p style="color: #888; font-size: 12px;">
+          This email was sent from ${data.portalName}. If you believe you received this email in error, 
+          please contact your administrator.
+        </p>
+      </div>
+    `;
+
+    const result = await client.emails.send({
+      from,
+      to: data.recipientEmail,
+      subject: `Action Required: Policy Acknowledgement for "${data.policyTitle}"`,
+      text: `${message}\n\nView the policy here: ${data.portalUrl}`,
+      html: htmlContent,
+    });
+
+    if (result.error) {
+      console.error("Error sending reminder email via Resend:", result.error);
+      return { success: false, error: result.error.message };
+    }
+
+    console.log(`Reminder email sent to ${data.recipientEmail}`);
+    return { success: true };
+  } catch (error) {
+    console.error("Error sending reminder email via Resend:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+export async function sendBulkPolicyReminders(
+  reminders: PolicyReminderEmailData[]
+): Promise<{ sent: number; failed: number; errors: string[] }> {
+  const results = { sent: 0, failed: 0, errors: [] as string[] };
+
+  for (const reminder of reminders) {
+    const result = await sendPolicyReminderEmail(reminder);
+    if (result.success) {
+      results.sent++;
+    } else {
+      results.failed++;
+      results.errors.push(
+        `${reminder.recipientEmail}: ${result.error || "Unknown error"}`
+      );
+    }
+  }
+
+  return results;
 }

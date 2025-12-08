@@ -31,8 +31,10 @@ The application uses a combination of Replit Secrets and `env.json`:
 - Uses Claude claude-sonnet-4-5 model for policy generation and AI features
 - No API key required - charges billed to Replit credits
 
-### Optional (via env.json)
-- `RESEND_API_KEY` - Resend API key for email services
+### Email Integration (via Replit Connectors)
+- Resend connector configured for transactional emails
+- API key and from_email automatically managed by Replit
+- No manual configuration required
 
 The `loadEnv.js` file prioritizes environment variables over env.json values for security.
 
@@ -74,6 +76,14 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-08**: Email reminder feature for policy acknowledgments
+  - Implemented send reminders API endpoint (`/_api/email-acknowledgment/send-reminders`)
+  - Updated emailService.tsx to use Replit's Resend connector (automatic API key management)
+  - Added sendPolicyReminderEmail and sendBulkPolicyReminders functions with HTML templates
+  - ReminderManager component now fully functional with Send Reminders button enabled
+  - Admins can select pending acknowledgments and send customizable reminder emails
+  - Emails include policy title, portal name, and direct link to view policy
+
 - **2024-12-08**: Portal assignment required before publishing
   - Added PortalAssignmentModal component that shows when publishing a draft policy with no assigned portals
   - PolicyStatusActions now checks for portal assignments before allowing publish
