@@ -74,6 +74,21 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-08**: Portal assignment required before publishing
+  - Added PortalAssignmentModal component that shows when publishing a draft policy with no assigned portals
+  - PolicyStatusActions now checks for portal assignments before allowing publish
+  - User must select at least one portal to assign the policy to before it can be published
+  - Modal uses existing PortalSelector component for portal selection
+  - Safeguards prevent bypassing the modal if portals are later removed
+
+- **2024-12-08**: Admin policy detail page button alignment
+  - Standardized all action buttons (Download, Edit, Unpublish) to full-width
+  - Download button now wrapped in card container matching other action sections
+
+- **2024-12-08**: Dynamic portal branding colors
+  - Portal hero background and page background now derived from organization branding colors
+  - All portal UI elements (badges, sidebar, tabs) use branding colors instead of hardcoded values
+
 - **2024-12-08**: Portal UI redesign to match design specifications
   - Header: Added search bar to header, added "POLICY PORTAL" subtitle under org name
   - Hero: Changed to left-aligned layout, removed search bar (moved to header)
