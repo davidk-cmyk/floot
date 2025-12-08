@@ -35,8 +35,25 @@ export const postRegisterOrganization = async (
   });
 
   if (!result.ok) {
-    const errorObject = await result.json().catch(() => ({ message: 'An unknown error occurred' }));
-    throw new Error(errorObject.message || 'Failed to create organization');
+    const responseText = await result.text();
+    let errorMessage = 'Failed to create organization';
+    try {
+      const errorObject = superjson.parse<{ message?: string }>(responseText);
+      if (errorObject.message) {
+        errorMessage = errorObject.message;
+      }
+    } catch {
+      // If superjson parsing fails, try regular JSON
+      try {
+        const plainError = JSON.parse(responseText);
+        if (plainError.message) {
+          errorMessage = plainError.message;
+        }
+      } catch {
+        // Keep default error message
+      }
+    }
+    throw new Error(errorMessage);
   }
 
   return superjson.parse<OutputType>(await result.text());
