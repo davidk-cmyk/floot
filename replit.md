@@ -76,6 +76,12 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-09**: Configurable portal labels
+  - Added `label` field to portals table for customizable badge text
+  - Portal label is now editable in portal settings (Basic Info section)
+  - Portal pages display the configured label instead of hardcoded "Internal Portal"
+  - Labels default to empty (no badge shown) but can be set to any text like "Internal Portal", "Public Portal", "HR Portal", etc.
+
 - **2024-12-08**: Email acknowledgment and reminder system fully enabled
   - Disabled demo mode: Real 6-digit confirmation codes now generated for policy acknowledgments
   - Confirmation code emails sent via Replit's Resend connector (automatic API key management)
