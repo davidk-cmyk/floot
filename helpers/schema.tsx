@@ -285,6 +285,7 @@ export interface Portals {
   description: string | null;
   id: Generated<number>;
   isActive: Generated<boolean>;
+  label: string | null;
   minimumReadingTimeSeconds: Generated<number | null>;
   name: string;
   organizationId: number;
