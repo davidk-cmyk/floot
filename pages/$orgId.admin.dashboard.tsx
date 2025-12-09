@@ -46,8 +46,6 @@ const DashboardPage = () => {
           isFirstTimeUser={isFirstTimeUser}
         />
 
-        <div className={styles.separator} />
-
         <div className={styles.statsGrid}>
           <StatCard
             title="Total Policies"
