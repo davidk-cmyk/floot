@@ -76,6 +76,12 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-09**: Reorganized sidebar navigation
+  - Audit Trail followed by Settings in main navigation
+  - Spacing separates Settings from Portals section
+  - Portals section displays available portals as sub-items
+  - "Coming soon" features (Handbook, FAQ, Assistant) moved below separator line
+
 - **2024-12-09**: Added Handbook Generator promo feature to dashboard
   - HandbookPromo component on admin dashboard showing coming soon feature
   - Displays feature descriptions: generate handbooks for internal/external use from policy collections

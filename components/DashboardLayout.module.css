@@ -107,6 +107,10 @@
   gap: var(--spacing-2);
 }
 
+.navSpacing {
+  height: var(--spacing-4);
+}
+
 .navLink {
   display: flex;
   align-items: center;

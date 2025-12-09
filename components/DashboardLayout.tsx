@@ -140,11 +140,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 {!sidebarCollapsed && <span>Audit Trail</span>}
               </NavLink>
             )}
-            <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
             <NavLink to={buildUrl('/admin/settings')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <Settings size={20} />
               {!sidebarCollapsed && <span>Settings</span>}
             </NavLink>
+            <div className={styles.navSpacing} />
+            <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
             <hr className={styles.navSeparator} />
             <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <FileText size={20} />
