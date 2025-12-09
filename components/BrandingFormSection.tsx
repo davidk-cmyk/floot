@@ -178,41 +178,6 @@ export const BrandingFormSection = ({
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="portalName" className={styles.label}>
-            Default Portal Name
-          </label>
-          <Input
-            id="portalName"
-            {...register("portalName")}
-            placeholder="e.g., Employee Policy Center"
-          />
-          <p className={styles.helperText}>
-            Used as the default name for portals when not customized
-          </p>
-          {errors.portalName && (
-            <span className={styles.errorText}>{errors.portalName.message}</span>
-          )}
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="portalDescription" className={styles.label}>
-            Default Portal Description
-          </label>
-          <Textarea
-            id="portalDescription"
-            {...register("portalDescription")}
-            placeholder="Welcome message shown to portal visitors"
-            rows={3}
-          />
-          <p className={styles.helperText}>
-            This description will appear at the top of portal pages
-          </p>
-          {errors.portalDescription && (
-            <span className={styles.errorText}>{errors.portalDescription.message}</span>
-          )}
-        </div>
-
-        <div className={styles.formGroup}>
           <label htmlFor="primaryColor" className={styles.label}>
             Primary Color
           </label>
