@@ -315,7 +315,7 @@ const PortalPage: React.FC = () => {
         <PortalHero
           portalName={data.portal.name}
           description={data.portal.description}
-          portalType="Internal Portal"
+          portalType={data.portal.label || undefined}
         />
 
         <div className={styles.contentGrid}>

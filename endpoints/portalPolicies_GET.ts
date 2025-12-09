@@ -1,8 +1,10 @@
+import { Selectable } from "kysely";
 import { db } from "../helpers/db";
 import { getServerUserSession } from "../helpers/getServerUserSession";
 import { schema, OutputType, PolicyWithAcknowledgement } from "./portalPolicies_GET.schema";
 import superjson from "superjson";
 import bcrypt from "bcryptjs";
+import { Portals, Users } from "../helpers/schema";
 
 export async function handle(request: Request) {
   try {
@@ -23,7 +25,7 @@ export async function handle(request: Request) {
       return new Response(superjson.stringify({ error: "Portal slug is required." }), { status: 400 });
     }
 
-    let user = null;
+    let user: { id: number; email: string; displayName: string; role: string; organizationId: number } | null = null;
     try {
       const session = await getServerUserSession(request);
       user = session.user;
@@ -32,7 +34,7 @@ export async function handle(request: Request) {
     }
 
     // Find portal with slug, prioritizing user's organization if authenticated
-    let portal = null;
+    let portal: Selectable<Portals> | undefined = undefined;
     
     if (user) {
       // First try to find portal in user's organization
@@ -153,6 +155,7 @@ export async function handle(request: Request) {
         id: portal.id,
         name: portal.name,
         slug: portal.slug,
+        label: portal.label,
         description: portal.description,
         accessType: portal.accessType,
         acknowledgmentMode: portal.acknowledgmentMode,

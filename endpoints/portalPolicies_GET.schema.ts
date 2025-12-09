@@ -24,6 +24,7 @@ export type PublicPortalInfo = {
   id: number;
   name: string;
   slug: string;
+  label: string | null;
   description: string | null;
   accessType: string;
   acknowledgmentMode: string | null;
