@@ -76,6 +76,10 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-09**: Updated Create & Publish Policy button navigation
+  - Changed "Create & Publish Policy" button to navigate to `/admin/policies` (list page) instead of `/admin/policies/create`
+  - Users can now see all policies and create new ones from the list view
+
 - **2024-12-09**: Reorganized sidebar navigation
   - Audit Trail followed by Settings in main navigation
   - Spacing separates Settings from Portals section
