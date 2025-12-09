@@ -140,6 +140,11 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 {!sidebarCollapsed && <span>Audit Trail</span>}
               </NavLink>
             )}
+            <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
+            <NavLink to={buildUrl('/admin/settings')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+              <Settings size={20} />
+              {!sidebarCollapsed && <span>Settings</span>}
+            </NavLink>
             <hr className={styles.navSeparator} />
             <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <FileText size={20} />
@@ -169,14 +174,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               )}
             </NavLink>
           </nav>
-                    <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
         </div>
         <Separator className={styles.separator} />
         <div className={styles.sidebarBottom}>
-          <NavLink to={buildUrl('/admin/settings')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
-            <Settings size={20} />
-            {!sidebarCollapsed && <span>Settings</span>}
-          </NavLink>
           <div className={`${styles.userControls} ${sidebarCollapsed ? styles.collapsedUserControls : ''}`}>
             <NotificationBell />
             {renderUserMenu()}
