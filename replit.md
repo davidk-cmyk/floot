@@ -76,6 +76,10 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-09**: Removed "My Favorites" section from portal sidebar
+  - Portal sidebar now only shows "All Policies" and "Recent Updates"
+  - Removed unused favorites filtering logic from portal pages
+
 - **2024-12-09**: Configurable portal labels
   - Added `label` field to portals table for customizable badge text
   - Portal label is now editable in portal settings (Basic Info section)
