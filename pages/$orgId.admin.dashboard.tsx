@@ -8,7 +8,6 @@ import { Skeleton } from '../components/Skeleton';
 import { Book, CheckSquare, Calendar } from 'lucide-react';
 import { DashboardPageHeader } from '../components/DashboardPageHeader';
 import { DashboardOnboarding } from '../components/DashboardOnboarding';
-import { HandbookPromo } from '../components/HandbookPromo';
 import styles from './$orgId.admin.dashboard.module.css';
 
 
@@ -46,10 +45,6 @@ const DashboardPage = () => {
           stats={stats}
           isFirstTimeUser={isFirstTimeUser}
         />
-
-        <div className={styles.promoSection}>
-          <HandbookPromo />
-        </div>
 
         <div className={styles.separator} />
 
