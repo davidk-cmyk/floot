@@ -88,10 +88,7 @@ const PortalPage: React.FC = () => {
     let filteredPolicies = data.policies;
 
     // Apply view-based filtering
-    if (activeView === "favorites") {
-      // For now, filter to acknowledged policies as a placeholder for favorites
-      filteredPolicies = filteredPolicies.filter(p => p.acknowledged);
-    } else if (activeView === "recent") {
+    if (activeView === "recent") {
       // Filter to policies updated in the last 7 days
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);

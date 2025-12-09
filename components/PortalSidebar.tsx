@@ -1,8 +1,8 @@
 import React from "react";
-import { LayoutGrid, Star, Clock, ChevronRight } from "lucide-react";
+import { LayoutGrid, Clock, ChevronRight } from "lucide-react";
 import styles from "./PortalSidebar.module.css";
 
-export type PortalView = "all" | "favorites" | "recent";
+export type PortalView = "all" | "recent";
 
 interface PortalSidebarProps {
   categories: string[];
@@ -20,7 +20,6 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   className,
 }) => {
   const isAllActive = activeView === "all" && activeCategory === null;
-  const isFavoritesActive = activeView === "favorites";
   const isRecentActive = activeView === "recent";
 
   return (
@@ -35,15 +34,6 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
             >
               <LayoutGrid size={18} />
               <span>All Policies</span>
-            </button>
-          </li>
-          <li>
-            <button
-              className={`${styles.navItem} ${isFavoritesActive ? styles.active : ""}`}
-              onClick={() => onNavigate("favorites", null)}
-            >
-              <Star size={18} />
-              <span>My Favorites</span>
             </button>
           </li>
           <li>
