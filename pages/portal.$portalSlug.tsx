@@ -9,6 +9,7 @@ import { PolicyList } from "../components/PolicyList";
 import { PortalHero } from "../components/PortalHero";
 import { PortalCategoryTabs } from "../components/PortalCategoryTabs";
 import { PortalSidebar, PortalView } from "../components/PortalSidebar";
+import { HandbookPromo } from "../components/HandbookPromo";
 import { fromPortalEndpoint } from "../helpers/policyCardData";
 import {
   Pagination,
@@ -307,23 +308,31 @@ const PortalPage: React.FC = () => {
           </aside>
 
           <main className={styles.mainContent}>
-            <PortalCategoryTabs
-              categories={categories}
-              activeCategory={activeCategory}
-              onCategoryChange={handleCategoryChange}
-            />
+            {activeView === "handbook" ? (
+              <HandbookPromo primaryColor={data?.branding?.primaryColor} />
+            ) : (
+              <>
+                <PortalCategoryTabs
+                  categories={categories}
+                  activeCategory={activeCategory}
+                  onCategoryChange={handleCategoryChange}
+                />
 
-            <PolicyList
-              policies={convertedPolicies}
-              isLoading={isFetching}
-              error={null}
-              skeletonsCount={POLICIES_PER_PAGE}
-              portalSlug={portalSlug}
-            />
+                <PolicyList
+                  policies={convertedPolicies}
+                  isLoading={isFetching}
+                  error={null}
+                  skeletonsCount={POLICIES_PER_PAGE}
+                  portalSlug={portalSlug}
+                />
+              </>
+            )}
             
-            <div className={styles.paginationContainer}>
-              {renderPagination()}
-            </div>
+            {activeView !== "handbook" && (
+              <div className={styles.paginationContainer}>
+                {renderPagination()}
+              </div>
+            )}
           </main>
         </div>
       </div>

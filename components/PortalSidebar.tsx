@@ -1,8 +1,8 @@
 import React from "react";
-import { LayoutGrid, Clock, ChevronRight } from "lucide-react";
+import { LayoutGrid, Clock, ChevronRight, BookOpen, Sparkles } from "lucide-react";
 import styles from "./PortalSidebar.module.css";
 
-export type PortalView = "all" | "recent";
+export type PortalView = "all" | "recent" | "handbook";
 
 interface PortalSidebarProps {
   categories: string[];
@@ -21,6 +21,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 }) => {
   const isAllActive = activeView === "all" && activeCategory === null;
   const isRecentActive = activeView === "recent";
+  const isHandbookActive = activeView === "handbook";
 
   return (
     <nav className={`${styles.sidebar} ${className || ""}`}>
@@ -43,6 +44,19 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
             >
               <Clock size={18} />
               <span>Recent Updates</span>
+            </button>
+          </li>
+          <li>
+            <button
+              className={`${styles.navItem} ${styles.promoItem} ${isHandbookActive ? styles.active : ""}`}
+              onClick={() => onNavigate("handbook", null)}
+            >
+              <BookOpen size={18} />
+              <span>Handbook Generator</span>
+              <span className={styles.comingSoonBadge}>
+                <Sparkles size={12} />
+                New
+              </span>
             </button>
           </li>
         </ul>
