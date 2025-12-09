@@ -210,16 +210,18 @@ const OrganizationDetails = () => {
               </FormItem>
 
               <FormItem name="domain">
-                <FormLabel>Custom Domain (optional)</FormLabel>
+                <FormLabel>
+                  Custom Domain
+                  <span style={{ marginLeft: '8px', fontSize: '0.75rem', padding: '2px 6px', backgroundColor: 'var(--muted)', borderRadius: '4px', color: 'var(--muted-foreground)' }}>Coming Soon</span>
+                </FormLabel>
                 <FormControl>
                   <Input
-                    value={form.values.domain || ''}
-                    onChange={(e) => form.setValues(prev => ({ ...prev, domain: e.target.value }))}
+                    value=""
                     placeholder="example.com"
-                    disabled={updateOrganization.isPending}
+                    disabled={true}
+                    style={{ opacity: 0.5, cursor: 'not-allowed' }}
                   />
                 </FormControl>
-                <FormMessage />
               </FormItem>
 
               <div className={styles.organizationFormActions}>
@@ -251,8 +253,11 @@ const OrganizationDetails = () => {
               <span className={styles.organizationDetailValue}>{currentOrganization.name}</span>
             </div>
             <div className={styles.organizationDetailItem}>
-              <span className={styles.organizationDetailLabel}>Domain</span>
-              <span className={styles.organizationDetailValue}>{currentOrganization.domain || 'Not set'}</span>
+              <span className={styles.organizationDetailLabel}>
+                Custom Domain
+                <span style={{ marginLeft: '8px', fontSize: '0.7rem', padding: '2px 6px', backgroundColor: 'var(--muted)', borderRadius: '4px', color: 'var(--muted-foreground)' }}>Coming Soon</span>
+              </span>
+              <span className={styles.organizationDetailValue} style={{ opacity: 0.5 }}>Not available yet</span>
             </div>
             <div className={styles.organizationDetailItem}>
               <span className={styles.organizationDetailLabel}>Slug</span>
