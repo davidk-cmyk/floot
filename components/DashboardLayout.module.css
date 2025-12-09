@@ -241,3 +241,18 @@
   align-items: center;
   justify-content: center;
 }
+
+.comingSoonBadge {
+  margin-left: auto;
+  font-size: 0.625rem;
+  padding: 0 var(--spacing-1);
+  font-weight: 500;
+}
+
+.navSeparator {
+  margin: var(--spacing-4) 0;
+  height: 1px;
+  width: 100%;
+  background-color: var(--border);
+  border: none;
+}

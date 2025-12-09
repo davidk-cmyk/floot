@@ -37,13 +37,13 @@ export const DashboardOnboarding: React.FC<DashboardOnboardingProps> = ({
 
     const steps = [
     {
-      id: "portal",
-      title: "Create a Portal",
-      description: "Set up a branded portal to host and distribute your policies publicly or internally.",
+      id: "configure",
+      title: "Configure",
+      description: "Customize your organization settings, branding, and portal configuration.",
       icon: Building2,
-      href: "/admin/settings/portals",
-      cta: "Go to Portals",
-      isComplete: false, // We don't track portal count in stats currently
+      href: "/admin/settings",
+      cta: "Go to Settings",
+      isComplete: false,
     },
     {
       id: "policy",

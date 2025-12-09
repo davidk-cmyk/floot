@@ -79,6 +79,12 @@ import Page_37 from "./pages/$orgId.admin.policies.$policyId.edit.tsx";
 import PageLayout_37 from "./pages/$orgId.admin.policies.$policyId.edit.pageLayout.tsx";
 import Page_38 from "./pages/portal.$portalSlug.policies.$policyId.tsx";
 import PageLayout_38 from "./pages/portal.$portalSlug.policies.$policyId.pageLayout.tsx";
+import Page_39 from "./pages/$orgId.admin.handbook.tsx";
+import PageLayout_39 from "./pages/$orgId.admin.handbook.pageLayout.tsx";
+import Page_40 from "./pages/$orgId.admin.faq.tsx";
+import PageLayout_40 from "./pages/$orgId.admin.faq.pageLayout.tsx";
+import Page_41 from "./pages/$orgId.admin.assistant.tsx";
+import PageLayout_41 from "./pages/$orgId.admin.assistant.pageLayout.tsx";
 
 if (!window.requestIdleCallback) {
   window.requestIdleCallback = (cb) => {
@@ -88,7 +94,7 @@ if (!window.requestIdleCallback) {
 
 import "./base.css";
 
-const fileNameToRoute = new Map([["./pages/audit.tsx","/audit"],["./pages/login.tsx","/login"],["./pages/users.tsx","/users"],["./pages/_index.tsx","/"],["./pages/public.tsx","/public"],["./pages/internal.tsx","/internal"],["./pages/policies.tsx","/policies"],["./pages/settings.tsx","/settings"],["./pages/dashboard.tsx","/dashboard"],["./pages/users.create.tsx","/users/create"],["./pages/notifications.tsx","/notifications"],["./pages/organizations.tsx","/organizations"],["./pages/login.$orgSlug.tsx","/login/:orgSlug"],["./pages/policies.create.tsx","/policies/create"],["./pages/acknowledgements.tsx","/acknowledgements"],["./pages/policy-templates.tsx","/policy-templates"],["./pages/settings.portals.tsx","/settings/portals"],["./pages/for-organizations.tsx","/for-organizations"],["./pages/$orgId.$portalSlug.tsx","/:orgId/:portalSlug"],["./pages/$orgId.admin.audit.tsx","/:orgId/admin/audit"],["./pages/$orgId.admin.users.tsx","/:orgId/admin/users"],["./pages/policies.$policyId.tsx","/policies/:policyId"],["./pages/portal.$portalSlug.tsx","/portal/:portalSlug"],["./pages/$orgId.admin.policies.tsx","/:orgId/admin/policies"],["./pages/$orgId.admin.settings.tsx","/:orgId/admin/settings"],["./pages/register-organization.tsx","/register-organization"],["./pages/$orgId.admin.dashboard.tsx","/:orgId/admin/dashboard"],["./pages/policies.$policyId.edit.tsx","/policies/:policyId/edit"],["./pages/$orgId.admin.users.create.tsx","/:orgId/admin/users/create"],["./pages/$orgId.admin.notifications.tsx","/:orgId/admin/notifications"],["./pages/$orgId.$portalSlug.$policyId.tsx","/:orgId/:portalSlug/:policyId"],["./pages/$orgId.admin.policies.create.tsx","/:orgId/admin/policies/create"],["./pages/$orgId.admin.acknowledgements.tsx","/:orgId/admin/acknowledgements"],["./pages/$orgId.admin.policy-templates.tsx","/:orgId/admin/policy-templates"],["./pages/$orgId.admin.settings.portals.tsx","/:orgId/admin/settings/portals"],["./pages/policies.$policyId.acknowledge.tsx","/policies/:policyId/acknowledge"],["./pages/$orgId.admin.policies.$policyId.tsx","/:orgId/admin/policies/:policyId"],["./pages/$orgId.admin.policies.$policyId.edit.tsx","/:orgId/admin/policies/:policyId/edit"],["./pages/portal.$portalSlug.policies.$policyId.tsx","/portal/:portalSlug/policies/:policyId"]]);
+const fileNameToRoute = new Map([["./pages/audit.tsx","/audit"],["./pages/login.tsx","/login"],["./pages/users.tsx","/users"],["./pages/_index.tsx","/"],["./pages/public.tsx","/public"],["./pages/internal.tsx","/internal"],["./pages/policies.tsx","/policies"],["./pages/settings.tsx","/settings"],["./pages/dashboard.tsx","/dashboard"],["./pages/users.create.tsx","/users/create"],["./pages/notifications.tsx","/notifications"],["./pages/organizations.tsx","/organizations"],["./pages/login.$orgSlug.tsx","/login/:orgSlug"],["./pages/policies.create.tsx","/policies/create"],["./pages/acknowledgements.tsx","/acknowledgements"],["./pages/policy-templates.tsx","/policy-templates"],["./pages/settings.portals.tsx","/settings/portals"],["./pages/for-organizations.tsx","/for-organizations"],["./pages/$orgId.$portalSlug.tsx","/:orgId/:portalSlug"],["./pages/$orgId.admin.audit.tsx","/:orgId/admin/audit"],["./pages/$orgId.admin.users.tsx","/:orgId/admin/users"],["./pages/policies.$policyId.tsx","/policies/:policyId"],["./pages/portal.$portalSlug.tsx","/portal/:portalSlug"],["./pages/$orgId.admin.policies.tsx","/:orgId/admin/policies"],["./pages/$orgId.admin.settings.tsx","/:orgId/admin/settings"],["./pages/register-organization.tsx","/register-organization"],["./pages/$orgId.admin.dashboard.tsx","/:orgId/admin/dashboard"],["./pages/$orgId.admin.handbook.tsx","/:orgId/admin/handbook"],["./pages/$orgId.admin.faq.tsx","/:orgId/admin/faq"],["./pages/$orgId.admin.assistant.tsx","/:orgId/admin/assistant"],["./pages/policies.$policyId.edit.tsx","/policies/:policyId/edit"],["./pages/$orgId.admin.users.create.tsx","/:orgId/admin/users/create"],["./pages/$orgId.admin.notifications.tsx","/:orgId/admin/notifications"],["./pages/$orgId.$portalSlug.$policyId.tsx","/:orgId/:portalSlug/:policyId"],["./pages/$orgId.admin.policies.create.tsx","/:orgId/admin/policies/create"],["./pages/$orgId.admin.acknowledgements.tsx","/:orgId/admin/acknowledgements"],["./pages/$orgId.admin.policy-templates.tsx","/:orgId/admin/policy-templates"],["./pages/$orgId.admin.settings.portals.tsx","/:orgId/admin/settings/portals"],["./pages/policies.$policyId.acknowledge.tsx","/policies/:policyId/acknowledge"],["./pages/$orgId.admin.policies.$policyId.tsx","/:orgId/admin/policies/:policyId"],["./pages/$orgId.admin.policies.$policyId.edit.tsx","/:orgId/admin/policies/:policyId/edit"],["./pages/portal.$portalSlug.policies.$policyId.tsx","/portal/:portalSlug/policies/:policyId"]]);
 const fileNameToComponent = new Map([
     ["./pages/audit.tsx", Page_0],
 ["./pages/login.tsx", Page_1],
@@ -129,6 +135,9 @@ const fileNameToComponent = new Map([
 ["./pages/$orgId.admin.policies.$policyId.tsx", Page_36],
 ["./pages/$orgId.admin.policies.$policyId.edit.tsx", Page_37],
 ["./pages/portal.$portalSlug.policies.$policyId.tsx", Page_38],
+["./pages/$orgId.admin.handbook.tsx", Page_39],
+["./pages/$orgId.admin.faq.tsx", Page_40],
+["./pages/$orgId.admin.assistant.tsx", Page_41],
   ]);
 
 function makePageRoute(filename: string) {
@@ -248,6 +257,9 @@ export function App() {
 "./pages/$orgId.admin.policies.$policyId.tsx": PageLayout_36,
 "./pages/$orgId.admin.policies.$policyId.edit.tsx": PageLayout_37,
 "./pages/portal.$portalSlug.policies.$policyId.tsx": PageLayout_38,
+"./pages/$orgId.admin.handbook.tsx": PageLayout_39,
+"./pages/$orgId.admin.faq.tsx": PageLayout_40,
+"./pages/$orgId.admin.assistant.tsx": PageLayout_41,
 }), fileNameToRoute, makePageRoute })} 
           <Route path="*" element={<NotFound />} />
         </Routes>

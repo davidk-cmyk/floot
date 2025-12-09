@@ -10,7 +10,7 @@ import { UserAvatar } from './UserAvatar';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
 import { NotificationBell } from './NotificationBell';
 import { Separator } from './Separator';
-import { LogOut, LayoutDashboard, BookOpen, Shield, Users, Settings, History, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
+import { LogOut, LayoutDashboard, BookOpen, Shield, Users, Settings, History, ChevronLeft, ChevronRight, CheckCircle, FileText, HelpCircle, MessageCircleQuestion } from 'lucide-react';
 import { PortalQuickAccessList } from './PortalQuickAccessList';
 import styles from './DashboardLayout.module.css';
 import {
@@ -140,6 +140,34 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 {!sidebarCollapsed && <span>Audit Trail</span>}
               </NavLink>
             )}
+            <hr className={styles.navSeparator} />
+            <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+              <FileText size={20} />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Handbook</span>
+                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                </>
+              )}
+            </NavLink>
+            <NavLink to={buildUrl('/admin/faq')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+              <HelpCircle size={20} />
+              {!sidebarCollapsed && (
+                <>
+                  <span>FAQ</span>
+                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                </>
+              )}
+            </NavLink>
+            <NavLink to={buildUrl('/admin/assistant')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+              <MessageCircleQuestion size={20} />
+              {!sidebarCollapsed && (
+                <>
+                  <span>Assistant</span>
+                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                </>
+              )}
+            </NavLink>
           </nav>
                     <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
         </div>
