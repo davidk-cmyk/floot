@@ -76,11 +76,11 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
-- **2024-12-09**: Added Handbook Generator promo feature to portal sidebar
-  - New "Handbook Generator" button with BookOpen icon and "New" badge in sidebar
-  - Clicking shows a "Coming Soon" promo page explaining the feature
-  - Feature will generate internal/external handbooks from policy collections
-  - HandbookPromo component displays feature descriptions and placeholder "Notify Me" button
+- **2024-12-09**: Added Handbook Generator promo feature to dashboard
+  - HandbookPromo component on admin dashboard showing coming soon feature
+  - Displays feature descriptions: generate handbooks for internal/external use from policy collections
+  - Shows feature cards explaining internal handbooks, external handbooks, and AI-powered formatting
+  - Includes placeholder "Notify Me When Available" button
 
 - **2024-12-09**: Removed "My Favorites" section from portal sidebar
   - Portal sidebar now only shows "All Policies" and "Recent Updates"

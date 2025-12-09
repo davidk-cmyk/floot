@@ -102,22 +102,3 @@
 .activeIndicator {
   color: var(--portal-primary, var(--branding-primary, var(--primary)));
 }
-
-.promoItem {
-  position: relative;
-}
-
-.comingSoonBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  margin-left: auto;
-  padding: 2px 6px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  color: white;
-  border-radius: 9999px;
-}
