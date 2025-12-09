@@ -50,7 +50,7 @@ export const DashboardOnboarding: React.FC<DashboardOnboardingProps> = ({
       title: "Create & Publish Policy",
       description: "Draft a new policy using our AI assistant or upload your existing documents.",
       icon: FileText,
-      href: "/admin/policies/create",
+      href: "/admin/policies",
       cta: "Draft Policy",
       isComplete: (stats?.totalPolicies || 0) > 0,
     },
