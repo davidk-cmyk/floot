@@ -276,34 +276,20 @@ export const BrandingFormSection = ({
             </span>
           )}
         </div>
-        <div className={styles.formGroup}>
+        <div className={styles.formGroup} style={{ opacity: 0.5 }}>
           <label htmlFor="customDomain" className={styles.label}>
             Custom Domain
+            <span style={{ marginLeft: '8px', fontSize: '0.75rem', padding: '2px 8px', backgroundColor: 'var(--muted)', borderRadius: '4px', color: 'var(--muted-foreground)', fontWeight: 'normal' }}>Coming Soon</span>
           </label>
           <Input
             id="customDomain"
-            {...register("customDomain")}
             placeholder="e.g., policies.yourcompany.com"
+            disabled={true}
+            style={{ cursor: 'not-allowed' }}
           />
-          {errors.customDomain && (
-            <span className={styles.errorText}>{errors.customDomain.message}</span>
-          )}
-          <div className={styles.dnsInstructions}>
-            <p>
-              To use a custom domain, create the following DNS records with your
-              provider:
-            </p>
-            <DnsRecord
-              type="A"
-              name="@ (or your subdomain)"
-              value="76.76.21.21"
-            />
-            <DnsRecord
-              type="TXT"
-              name="@ (or your subdomain)"
-              value="mypolicyportal-verification=12345abcde"
-            />
-          </div>
+          <p style={{ fontSize: '0.875rem', color: 'var(--muted-foreground)', marginTop: '0.5rem' }}>
+            Custom domain support is coming soon. You'll be able to use your own domain for your policy portal.
+          </p>
         </div>
       </div>
     </div>
