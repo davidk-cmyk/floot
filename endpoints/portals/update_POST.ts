@@ -75,6 +75,7 @@ export async function handle(request: Request) {
       .set({
         name: input.name,
         slug: input.slug,
+        label: input.label,
         description: input.description,
         accessType: input.accessType,
         ...(passwordHash !== undefined && { passwordHash }),

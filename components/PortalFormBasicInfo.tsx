@@ -74,6 +74,21 @@ export const PortalFormBasicInfo: React.FC<PortalFormBasicInfoProps> = ({
           <FormMessage />
         </FormItem>
 
+        <FormItem name="label">
+          <FormLabel>Portal Label</FormLabel>
+          <FormControl>
+            <Input
+              placeholder="e.g., Internal Portal, Public Portal, HR Portal"
+              value={values.label ?? ''}
+              onChange={e => setValues((prev: PortalFormData) => ({ ...prev, label: e.target.value }))}
+            />
+          </FormControl>
+          <FormDescription>
+            A short label displayed as a badge above the portal name (e.g., "Internal Portal").
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+
         <FormItem name="description">
           <FormLabel>Description</FormLabel>
           <FormControl>

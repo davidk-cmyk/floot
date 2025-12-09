@@ -61,6 +61,7 @@ export async function handle(request: Request) {
         organizationId: user.organizationId,
         name: input.name,
         slug: input.slug,
+        label: input.label ?? null,
         description: input.description,
         accessType: input.accessType,
         passwordHash: passwordHash,

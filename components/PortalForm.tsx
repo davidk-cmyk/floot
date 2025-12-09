@@ -26,6 +26,7 @@ export const PortalForm: React.FC<PortalFormProps> = ({ portal, onSuccess, class
     defaultValues: {
       name: portal?.name ?? '',
       slug: portal?.slug ?? '',
+      label: portal?.label ?? '',
       description: portal?.description ?? '',
       accessType: (portal?.accessType as 'public' | 'password' | 'authenticated' | 'role_based') ?? 'public',
       password: '',
@@ -48,6 +49,7 @@ export const PortalForm: React.FC<PortalFormProps> = ({ portal, onSuccess, class
       setValues({
         name: portal.name,
         slug: portal.slug,
+        label: portal.label ?? '',
         description: portal.description ?? '',
         accessType: portal.accessType as 'public' | 'password' | 'authenticated' | 'role_based',
         password: '',
@@ -79,6 +81,7 @@ export const PortalForm: React.FC<PortalFormProps> = ({ portal, onSuccess, class
       const updateData: any = { portalId: portal.id };
       if (data.name !== portal.name) updateData.name = data.name;
       if (data.slug !== portal.slug) updateData.slug = data.slug;
+      if (data.label !== portal.label) updateData.label = data.label;
       if (data.description !== portal.description) updateData.description = data.description;
       if (data.accessType !== portal.accessType) updateData.accessType = data.accessType;
       if (data.password) updateData.password = data.password;

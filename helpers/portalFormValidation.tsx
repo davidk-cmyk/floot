@@ -12,6 +12,7 @@ export const portalFormSchema = z
         /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
         "Slug can only contain lowercase letters, numbers, and hyphens."
       ),
+    label: z.string().max(100, "Label must be at most 100 characters.").optional(),
     description: z.string().optional(),
     accessType: z.enum(['public', 'password', 'authenticated', 'role_based']),
     password: z.string().optional(),

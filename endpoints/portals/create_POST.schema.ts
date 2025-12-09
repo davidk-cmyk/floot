@@ -14,6 +14,7 @@ export const schema = z
         /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
         "Slug can only contain lowercase letters, numbers, and hyphens."
       ),
+    label: z.string().max(100, "Label must be at most 100 characters.").optional(),
     description: z.string().optional(),
     accessType: PortalAccessTypeSchema,
     password: z.string().optional(),
