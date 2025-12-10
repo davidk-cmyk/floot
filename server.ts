@@ -1283,6 +1283,16 @@ app.get("*", async (c, next) => {
   }
   return serveStatic({ path: "./dist/index.html" })(c, next);
 });
-serve({ fetch: app.fetch, port: 5000, hostname: "0.0.0.0" });
-console.log("Running at http://0.0.0.0:5000")
+const port = parseInt(process.env.PORT || "5000", 10);
+
+serve({ 
+  fetch: app.fetch, 
+  port, 
+  hostname: "0.0.0.0",
+  onError: (error) => {
+    console.error("Server error:", error);
+  }
+});
+
+console.log(`Running at http://0.0.0.0:${port}`);
       
