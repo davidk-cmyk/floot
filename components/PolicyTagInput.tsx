@@ -1,10 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { z } from "zod";
 import { AutoComplete, Option } from "./AutoComplete";
-import { useSettings, useUpdateSettings } from "../helpers/useSettingsApi";
+import { usePolicyTaxonomies } from "../helpers/globalPolicyTaxonomies";
+import { useUpdateCustomTaxonomies } from "../helpers/useSettingsApi";
 import styles from "./PolicyTagInput.module.css";
-
-const tagsSchema = z.array(z.string());
 
 type PolicyTagInputProps = {
   value?: string;
@@ -27,23 +25,16 @@ export const PolicyTagInput = ({
 }: PolicyTagInputProps) => {
   const [inputValue, setInputValue] = useState(value || "");
 
-  const { data: settings, isFetching } = useSettings(settingKey);
-  const { mutate: updateSettings, isPending: isUpdating } =
-    useUpdateSettings();
+  const { combinedCategories, combinedDepartments, isLoading } = usePolicyTaxonomies();
+  const {
+    addCustomCategory,
+    addCustomDepartment,
+    isLoading: isUpdating,
+  } = useUpdateCustomTaxonomies();
 
   const existingTags = useMemo(() => {
-    if (settings?.settingValue) {
-      const parsed = tagsSchema.safeParse(settings.settingValue);
-      if (parsed.success) {
-        return parsed.data;
-      }
-      console.error(
-        `Failed to parse settings for ${settingKey}:`,
-        parsed.error,
-      );
-    }
-    return [];
-  }, [settings, settingKey]);
+    return settingKey === "categories" ? combinedCategories : combinedDepartments;
+  }, [settingKey, combinedCategories, combinedDepartments]);
 
   const options: Option[] = useMemo(
     () => existingTags.map((tag) => ({ value: tag, label: tag })),
@@ -70,11 +61,12 @@ export const PolicyTagInput = ({
         (tag) => tag.toLowerCase() === trimmedValue.toLowerCase(),
       )
     ) {
-      const newTags = [...existingTags, trimmedValue];
-      updateSettings({
-        settingKey,
-        settingValue: newTags,
-      });
+      // Persist new custom item
+      if (settingKey === "categories") {
+        addCustomCategory(trimmedValue);
+      } else {
+        addCustomDepartment(trimmedValue);
+      }
     }
     // Ensure form state is updated on blur, even if it's an existing tag
     if (value !== trimmedValue) {
@@ -92,7 +84,7 @@ export const PolicyTagInput = ({
         onInputValueChange={setInputValue}
         placeholder={placeholder}
         emptyMessage="No matching tags found."
-        isLoading={isFetching || isUpdating}
+        isLoading={isLoading || isUpdating}
         disabled={disabled}
         allowFreeForm
       />
