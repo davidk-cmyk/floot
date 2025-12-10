@@ -9,6 +9,7 @@ import { PolicyVersionComparison } from './PolicyVersionComparison';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './Dialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from './Tooltip';
 import { PolicyVersionInfo } from '../endpoints/policies/versions_GET.schema';
+import { RollbackPreviewModal } from './RollbackPreviewModal';
 
 interface PolicyVersionHistoryProps {
   policyId: number;
@@ -43,13 +44,19 @@ const PolicyVersionHistorySkeleton = () => (
 export const PolicyVersionHistory: React.FC<PolicyVersionHistoryProps> = ({ policyId, className }) => {
   const [compareVersions, setCompareVersions] = useState<[PolicyVersionInfo, PolicyVersionInfo] | null>(null);
   const [selectedToCompare, setSelectedToCompare] = useState<PolicyVersionInfo | null>(null);
+  const [rollbackPreviewVersion, setRollbackPreviewVersion] = useState<PolicyVersionInfo | null>(null);
 
   const { data: versions, isFetching, error } = usePolicyVersions({ policyId });
   const { mutate: rollback, isPending: isRollingBack } = useRollbackPolicy();
 
-  const handleRollback = (versionNumber: number) => {
-    if (window.confirm('Are you sure you want to roll back to this version? This will create a new version based on the selected one.')) {
-      rollback({ policyId, versionNumber });
+  const handleRollback = (version: PolicyVersionInfo) => {
+    setRollbackPreviewVersion(version);
+  };
+
+  const handleConfirmRollback = () => {
+    if (rollbackPreviewVersion) {
+      rollback({ policyId, versionNumber: rollbackPreviewVersion.versionNumber });
+      setRollbackPreviewVersion(null);
     }
   };
 
@@ -155,7 +162,7 @@ export const PolicyVersionHistory: React.FC<PolicyVersionHistoryProps> = ({ poli
                     <Button
                       variant="secondary"
                       size="icon-sm"
-                      onClick={() => handleRollback(version.versionNumber)}
+                      onClick={() => handleRollback(version)}
                       disabled={isRollingBack}
                     >
                       <RotateCcw size={16} />
@@ -182,6 +189,13 @@ export const PolicyVersionHistory: React.FC<PolicyVersionHistoryProps> = ({ poli
           </DialogContent>
         </Dialog>
       )}
+      <RollbackPreviewModal
+        open={!!rollbackPreviewVersion}
+        onOpenChange={(open) => !open && setRollbackPreviewVersion(null)}
+        version={rollbackPreviewVersion}
+        onConfirm={handleConfirmRollback}
+        isLoading={isRollingBack}
+      />
     </div>
   );
 };
