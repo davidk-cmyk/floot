@@ -23,20 +23,22 @@ type PortalPolicyAssignmentProps = {
 const PolicyItem = memo<{
   policy: Selectable<Policies>;
   isSelected: boolean;
-  onToggle: (policyId: number) => void;
+  onToggle: (policyId: number, checked: boolean) => void;
 }>(({ policy, isSelected, onToggle }) => {
-  const handleChange = () => {
-    onToggle(policy.id);
+  const checkboxId = `policy-${policy.id}`;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onToggle(policy.id, e.target.checked);
   };
 
   return (
     <div className={styles.policyItem}>
       <Checkbox
-        id={`policy-${policy.id}`}
+        id={checkboxId}
         checked={isSelected}
         onChange={handleChange}
       />
-      <label htmlFor={`policy-${policy.id}`} className={styles.policyLabel}>
+      <label htmlFor={checkboxId} className={styles.policyLabel}>
         {policy.title}
       </label>
     </div>
@@ -104,14 +106,14 @@ export const PortalPolicyAssignment: React.FC<PortalPolicyAssignmentProps> = ({ 
     );
   }, [allPoliciesData, searchTerm, policiesError]);
 
-  // Optimized toggle handler
-  const handleTogglePolicy = useMemo(() => (policyId: number) => {
+  // Optimized toggle handler - uses checked parameter to avoid toggle issues
+  const handleTogglePolicy = useMemo(() => (policyId: number, checked: boolean) => {
     setSelectedPolicyIds(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(policyId)) {
-        newSet.delete(policyId);
-      } else {
+      if (checked) {
         newSet.add(policyId);
+      } else {
+        newSet.delete(policyId);
       }
       return newSet;
     });
