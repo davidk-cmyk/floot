@@ -25,6 +25,11 @@ const CreatePolicyPage = () => {
     navigate(buildUrl(`/admin/policies/${policyId}`));
   };
 
+  const handleBulkSuccess = (policies: Array<{id: number; title: string}>) => {
+    toast.success(`${policies.length} ${policies.length === 1 ? 'policy' : 'policies'} created successfully!`);
+    navigate(buildUrl('/admin/policies'));
+  };
+
   return (
     <>
       <Helmet>
@@ -58,7 +63,7 @@ const CreatePolicyPage = () => {
           </Breadcrumb>
         </div>
         <main className={styles.main}>
-          <PolicyCreateForm onSuccess={handleSuccess} />
+          <PolicyCreateForm onSuccess={handleSuccess} onBulkSuccess={handleBulkSuccess} />
         </main>
       </div>
     </>

@@ -3,22 +3,25 @@ import { FileDropzone } from './FileDropzone';
 import { Button } from './Button';
 import { Progress } from './Progress';
 import { Skeleton } from './Skeleton';
-import { FileText, Upload, CheckCircle, AlertCircle, Cloud, Search, X, File } from 'lucide-react';
+import { FileText, Upload, CheckCircle, AlertCircle, Cloud, Search, X, File, Files } from 'lucide-react';
 import { postParseDocument } from '../endpoints/policies/parse-document_POST.schema';
+import { postBulkCreatePolicies } from '../endpoints/policies/bulk-create_POST.schema';
 import { getGoogleDriveFiles, GoogleDriveFile } from '../endpoints/google-drive/list_GET.schema';
 import { postDownloadGoogleDriveFile } from '../endpoints/google-drive/download-file_POST.schema';
 import styles from './FileUploadTab.module.css';
 
 interface FileUploadTabProps {
   onContentExtracted: (title: string, content: string) => void;
+  onBulkUploadComplete?: (policies: Array<{id: number; title: string}>) => void;
   className?: string;
 }
 
 export const FileUploadTab: React.FC<FileUploadTabProps> = ({
   onContentExtracted,
+  onBulkUploadComplete,
   className,
 }) => {
-  const [uploadState, setUploadState] = useState<'idle' | 'uploading' | 'processing' | 'success' | 'error'>('idle');
+  const [uploadState, setUploadState] = useState<'idle' | 'uploading' | 'processing' | 'success' | 'error' | 'bulk-processing' | 'bulk-success'>('idle');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -30,11 +33,26 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
   const [googleDriveConnected, setGoogleDriveConnected] = useState<boolean | null>(null);
   const [googleDriveSearch, setGoogleDriveSearch] = useState('');
 
+  const [bulkUploadProgress, setBulkUploadProgress] = useState<{
+    total: number;
+    completed: number;
+    failed: number;
+    currentFile: string;
+  }>({ total: 0, completed: 0, failed: 0, currentFile: '' });
+
+  const [bulkResults, setBulkResults] = useState<{
+    created: Array<{id: number; title: string}>;
+    failed: Array<{fileName: string; error: string}>;
+  } | null>(null);
+
   const handleFileUpload = async (files: File[]) => {
     if (files.length === 0) return;
 
-    const file = files[0];
-    await processLocalFile(file);
+    if (files.length === 1) {
+      await processLocalFile(files[0]);
+    } else {
+      await processBulkUpload(files);
+    }
   };
 
   const processLocalFile = async (file: File) => {
@@ -67,6 +85,67 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
       setErrorMessage(error instanceof Error ? error.message : 'Failed to parse document');
       setUploadState('error');
       setUploadProgress(0);
+    }
+  };
+
+  const processBulkUpload = async (files: File[]) => {
+    setUploadState('bulk-processing');
+    setBulkUploadProgress({ total: files.length, completed: 0, failed: 0, currentFile: '' });
+    setErrorMessage(null);
+    setBulkResults(null);
+
+    const parsedDocuments: Array<{title: string; content: string}> = [];
+    const failures: Array<{fileName: string; error: string}> = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      setBulkUploadProgress(prev => ({ 
+        ...prev, 
+        currentFile: file.name,
+      }));
+
+      try {
+        const formData = new FormData();
+        formData.append('document', file);
+        const result = await postParseDocument(formData);
+        
+        parsedDocuments.push({
+          title: result.title || file.name.replace(/\.(pdf|docx)$/i, ''),
+          content: result.content,
+        });
+        
+        setBulkUploadProgress(prev => ({ 
+          ...prev, 
+          completed: prev.completed + 1 
+        }));
+      } catch (error) {
+        failures.push({
+          fileName: file.name,
+          error: error instanceof Error ? error.message : 'Parse failed',
+        });
+        setBulkUploadProgress(prev => ({ 
+          ...prev, 
+          failed: prev.failed + 1 
+        }));
+      }
+    }
+
+    if (parsedDocuments.length > 0) {
+      try {
+        const createdPolicies = await postBulkCreatePolicies({ policies: parsedDocuments });
+        
+        setBulkResults({
+          created: createdPolicies.map(p => ({ id: p.id, title: p.title })),
+          failed: failures,
+        });
+        setUploadState('bulk-success');
+      } catch (error) {
+        setErrorMessage('Failed to create policies: ' + (error instanceof Error ? error.message : 'Unknown error'));
+        setUploadState('error');
+      }
+    } else {
+      setErrorMessage(`All ${files.length} files failed to parse`);
+      setUploadState('error');
     }
   };
 
@@ -138,6 +217,14 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
     setShowGoogleDriveBrowser(false);
     setGoogleDriveFiles([]);
     setGoogleDriveSearch('');
+    setBulkUploadProgress({ total: 0, completed: 0, failed: 0, currentFile: '' });
+    setBulkResults(null);
+  };
+
+  const handleViewAllPolicies = () => {
+    if (bulkResults && onBulkUploadComplete) {
+      onBulkUploadComplete(bulkResults.created);
+    }
   };
 
   const formatFileSize = (bytes?: string) => {
@@ -156,9 +243,10 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
   return (
     <div className={`${styles.container} ${className || ''}`}>
       <div className={styles.header}>
-        <h3 className={styles.title}>Upload Policy Document</h3>
+        <h3 className={styles.title}>Upload Policy Documents</h3>
         <p className={styles.description}>
-          Upload a .docx or .pdf file from your computer or import from Google Drive to automatically extract and populate the policy content.
+          Upload .docx or .pdf files from your computer or import from Google Drive. 
+          Upload one file to edit it directly, or upload multiple files to create them all as draft policies.
         </p>
       </div>
 
@@ -167,11 +255,12 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
           <div className={styles.localUploadSection}>
             <FileDropzone
               accept=".docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+              maxFiles={10}
               maxSize={20 * 1024 * 1024}
               onFilesSelected={handleFileUpload}
               icon={<Upload size={48} />}
-              title="Drop your .docx or .pdf file here or click to browse"
-              subtitle="Maximum file size: 20MB"
+              title="Drop your files here or click to browse"
+              subtitle="Up to 10 files, 20MB each. Supports .docx and .pdf"
             />
           </div>
 
@@ -314,6 +403,88 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
           <div className={styles.successActions}>
             <Button onClick={handleUseContent}>
               Use This Content
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {uploadState === 'bulk-processing' && (
+        <div className={styles.bulkProcessingState}>
+          <div className={styles.bulkHeader}>
+            <Files size={24} className={styles.uploadingIcon} />
+            <div>
+              <h4 className={styles.uploadingTitle}>
+                Processing {bulkUploadProgress.total} documents...
+              </h4>
+              <p className={styles.uploadingSubtitle}>
+                {bulkUploadProgress.currentFile || 'Preparing...'}
+              </p>
+            </div>
+          </div>
+          <Progress 
+            value={((bulkUploadProgress.completed + bulkUploadProgress.failed) / bulkUploadProgress.total) * 100} 
+          />
+          <div className={styles.bulkStats}>
+            <span className={styles.completedCount}>
+              Completed: {bulkUploadProgress.completed}
+            </span>
+            {bulkUploadProgress.failed > 0 && (
+              <span className={styles.failedCount}>
+                Failed: {bulkUploadProgress.failed}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {uploadState === 'bulk-success' && bulkResults && (
+        <div className={styles.bulkSuccessState}>
+          <div className={styles.successHeader}>
+            <CheckCircle size={24} className={styles.successIcon} />
+            <div>
+              <h4 className={styles.successTitle}>
+                {bulkResults.created.length} {bulkResults.created.length === 1 ? 'policy' : 'policies'} created successfully!
+              </h4>
+              {bulkResults.failed.length > 0 && (
+                <p className={styles.failedNote}>
+                  {bulkResults.failed.length} file(s) failed to process
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <div className={styles.createdList}>
+            <h5 className={styles.listTitle}>Created Policies:</h5>
+            <ul className={styles.policyList}>
+              {bulkResults.created.map(p => (
+                <li key={p.id} className={styles.policyItem}>
+                  <FileText size={16} />
+                  {p.title}
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          {bulkResults.failed.length > 0 && (
+            <div className={styles.failedList}>
+              <h5 className={styles.listTitle}>Failed to process:</h5>
+              <ul className={styles.errorList}>
+                {bulkResults.failed.map((f, i) => (
+                  <li key={i} className={styles.errorItem}>
+                    <AlertCircle size={16} />
+                    {f.fileName}: {f.error}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          <div className={styles.bulkActions}>
+            <Button onClick={handleViewAllPolicies}>
+              View All Policies
+            </Button>
+            <Button variant="outline" onClick={handleReset}>
+              Upload More
             </Button>
           </div>
         </div>

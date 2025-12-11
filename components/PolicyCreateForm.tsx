@@ -17,10 +17,11 @@ import styles from './PolicyCreateForm.module.css';
 
 interface PolicyCreateFormProps {
   onSuccess?: (policyId: number) => void;
+  onBulkSuccess?: (policies: Array<{id: number; title: string}>) => void;
   className?: string;
 }
 
-export const PolicyCreateForm: React.FC<PolicyCreateFormProps> = ({ onSuccess, className }) => {
+export const PolicyCreateForm: React.FC<PolicyCreateFormProps> = ({ onSuccess, onBulkSuccess, className }) => {
   const { authState } = useAuth();
   const titleInputRef = useRef<HTMLInputElement>(null) as React.RefObject<HTMLInputElement>;
   
@@ -134,7 +135,10 @@ export const PolicyCreateForm: React.FC<PolicyCreateFormProps> = ({ onSuccess, c
         </TabsContent>
 
         <TabsContent value="upload" className={styles.tabContent} role="tabpanel">
-          <FileUploadPolicyTab onContentExtracted={handleFileContentExtracted} />
+          <FileUploadPolicyTab 
+            onContentExtracted={handleFileContentExtracted} 
+            onBulkUploadComplete={onBulkSuccess}
+          />
         </TabsContent>
 
         <TabsContent value="manual" className={styles.tabContent} role="tabpanel">
