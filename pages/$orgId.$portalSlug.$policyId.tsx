@@ -163,22 +163,15 @@ const PortalPolicyDetailPage: React.FC = () => {
   if (isError) {
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred.";
 
-    if (errorMessage.includes("Password required")) {
+    if (errorMessage.includes("Password required") || errorMessage.includes("Invalid password")) {
+      const promptError = password 
+        ? "The password you entered is incorrect. Please try again."
+        : "This portal is password protected.";
       return (
         <PasswordPrompt
           portalName={data?.portal.name || portalSlug}
           onSubmit={handlePasswordSubmit}
-          error={passwordError || "This portal is password protected."}
-        />
-      );
-    }
-
-    if (errorMessage.includes("Invalid password") && password) {
-      return (
-        <PasswordPrompt
-          portalName={data?.portal.name || portalSlug}
-          onSubmit={handlePasswordSubmit}
-          error="The password you entered is incorrect. Please try again."
+          error={passwordError || promptError}
         />
       );
     }
