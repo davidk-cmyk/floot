@@ -24,3 +24,12 @@
   gap: var(--spacing-3);
   align-items: center;
 }
+
+.viewToggle {
+  display: flex;
+  gap: var(--spacing-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--spacing-1);
+  background-color: var(--surface);
+}

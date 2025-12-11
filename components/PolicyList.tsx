@@ -1,5 +1,6 @@
 import React from "react";
 import { PolicyCard, PolicyCardSkeleton } from "./PolicyCard";
+import { PolicyListView, PolicyListRowSkeleton } from "./PolicyListView";
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Frown, AlertCircle } from "lucide-react";
 import styles from "./PolicyList.module.css";
@@ -11,6 +12,7 @@ interface PolicyListProps {
   skeletonsCount?: number;
   className?: string;
   portalSlug?: string;
+  viewMode?: "grid" | "list";
 }
 
 export const PolicyList: React.FC<PolicyListProps> = ({
@@ -20,7 +22,23 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   skeletonsCount = 12,
   className,
   portalSlug,
+  viewMode = "grid",
 }) => {
+  // For list view, delegate to PolicyListView
+  if (viewMode === "list") {
+    return (
+      <PolicyListView
+        policies={policies}
+        isLoading={isLoading}
+        error={error}
+        skeletonsCount={skeletonsCount}
+        className={className}
+        portalSlug={portalSlug}
+      />
+    );
+  }
+
+  // Grid view (original behavior)
   if (isLoading) {
     return (
       <div className={`${styles.grid} ${className || ""}`}>

@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { PlusCircle, FileText } from "lucide-react";
+import { PlusCircle, FileText, Grid3X3, List } from "lucide-react";
 import { useAuth } from "../helpers/useAuth";
 import { useDebounce } from "../helpers/useDebounce";
 import { usePolicies, useReviewPolicies } from "../helpers/usePolicyApi";
@@ -32,6 +32,15 @@ const PoliciesPage: React.FC = () => {
   const { authState } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const { buildUrl } = useOrgNavigation();
+  const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
+    const saved = localStorage.getItem("policy-list-view-mode");
+    return (saved as "grid" | "list") || "grid";
+  });
+
+  // Save view mode preference
+  useEffect(() => {
+    localStorage.setItem("policy-list-view-mode", viewMode);
+  }, [viewMode]);
 
   const canCreatePolicy =
     authState.type === "authenticated" &&
@@ -266,6 +275,24 @@ const PoliciesPage: React.FC = () => {
                 {canDownloadPolicies && (
                   <BulkPolicyDownload policyIds={currentPolicyIds} />
                 )}
+                <div className={styles.viewToggle}>
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "outline"}
+                    size="icon"
+                    onClick={() => setViewMode("grid")}
+                    title="Card view"
+                  >
+                    <Grid3X3 size={18} />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "outline"}
+                    size="icon"
+                    onClick={() => setViewMode("list")}
+                    title="List view"
+                  >
+                    <List size={18} />
+                  </Button>
+                </div>
                 {canCreatePolicy && (
                   <>
                     <Button variant="outline" asChild>
@@ -306,6 +333,7 @@ const PoliciesPage: React.FC = () => {
             isLoading={isFetching}
             error={error}
             skeletonsCount={POLICIES_PER_PAGE}
+            viewMode={viewMode}
           />
           <div className={styles.paginationContainer}>
             {renderPagination()}
