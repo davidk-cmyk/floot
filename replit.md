@@ -76,6 +76,14 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-11**: Bulk policy selection and portal assignment feature
+  - Added checkboxes to PolicyCard (grid view) and PolicyListView (list view) for multi-select
+  - Created BulkActionsBar floating component that appears when policies are selected
+  - Created BulkPortalAssignModal for assigning multiple policies to multiple portals
+  - New API endpoint POST `/_api/policies/bulk-assign-portals` with admin/editor authorization
+  - Selection automatically clears when filters or pagination changes
+  - Feature only available to admins and editors
+
 - **2024-12-09**: Updated Create & Publish Policy button navigation
   - Changed "Create & Publish Policy" button to navigate to `/admin/policies` (list page) instead of `/admin/policies/create`
   - Users can now see all policies and create new ones from the list view
