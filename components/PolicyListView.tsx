@@ -100,14 +100,6 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
     );
   }
 
-  const handleCheckboxClick = (e: React.MouseEvent, policyId: number) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onSelectionChange) {
-      onSelectionChange(policyId, !selectedPolicyIds.includes(policyId));
-    }
-  };
-
   return (
     <div className={`${styles.listContainer} ${className || ""}`}>
       <div className={`${styles.listHeader} ${isSelectable ? styles.withCheckbox : ""}`}>
@@ -135,7 +127,13 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
             className={`${styles.row} ${isSelectable ? styles.withCheckbox : ""} ${isSelected ? styles.selected : ""}`}
           >
             {isSelectable && (
-              <div className={styles.checkboxCol} onClick={(e) => handleCheckboxClick(e, policy.id)}>
+              <div 
+                className={styles.checkboxCol}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
                 <Checkbox
                   checked={isSelected}
                   onChange={(e) => {

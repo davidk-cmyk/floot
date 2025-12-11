@@ -76,6 +76,13 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-11**: Fixed bulk policy selection checkbox event handling
+  - Resolved double-triggering bug where both wrapper onClick and Checkbox onChange were firing
+  - Now only Checkbox onChange handles selection (no more race conditions)
+  - Checkboxes now properly toggle selection and count on single click
+  - Selection state accurately reflects visible checkmarks
+  - Clicking checkbox no longer navigates away from policy list
+
 - **2024-12-11**: Bulk policy selection and portal assignment feature
   - Added checkboxes to PolicyCard (grid view) and PolicyListView (list view) for multi-select
   - Created BulkActionsBar floating component that appears when policies are selected

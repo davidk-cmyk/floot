@@ -80,14 +80,6 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     e.stopPropagation();
   };
 
-  const handleCheckboxClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (onSelectionChange) {
-      onSelectionChange(policy.id, !isSelected);
-    }
-  };
-
   // Determine the target URL based on context
   // If portalSlug is provided, we are in a portal context
   // Otherwise, default to admin policy view
@@ -103,7 +95,13 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
       className={`${styles.card} ${isSelected ? styles.selected : ""} ${className || ""}`}
     >
       {isSelectable && (
-        <div className={styles.checkboxContainer} onClick={handleCheckboxClick}>
+        <div 
+          className={styles.checkboxContainer}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           <Checkbox
             checked={isSelected}
             onChange={(e) => {
