@@ -8,7 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./Select";
-import { Search } from "lucide-react";
+import { Search, Grid3X3, List } from "lucide-react";
+import { Button } from "./Button";
 import styles from "./PolicyFilters.module.css";
 
 interface PolicyFiltersProps {
@@ -27,6 +28,8 @@ interface PolicyFiltersProps {
   publicOnly?: boolean;
   showReviewFilter?: boolean;
   isReviewMode?: boolean;
+  viewMode?: "grid" | "list";
+  onViewModeChange?: (mode: "grid" | "list") => void;
 }
 
 export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
@@ -42,25 +45,49 @@ export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
   publicOnly = false,
   showReviewFilter = false,
   isReviewMode = false,
+  viewMode = "grid",
+  onViewModeChange,
 }) => {
   const { data: metadata, isLoading } = usePolicyFilterMetadata();
 
   return (
     <div className={`${styles.filtersContainer} ${className || ""}`}>
-      <div className={styles.searchWrapper}>
-        <Search className={styles.searchIcon} size={20} />
-        <Input
-          type="text"
-          placeholder={
-            isReviewMode 
-              ? "Search policies by title..." 
-              : "Search policies by title or content..."
-          }
-          value={searchTerm}
-          onChange={onSearchChange}
-          className={styles.searchInput}
-          disabled={isReviewMode}
-        />
+      <div className={styles.filterHeader}>
+        <div className={styles.searchWrapper}>
+          <Search className={styles.searchIcon} size={20} />
+          <Input
+            type="text"
+            placeholder={
+              isReviewMode 
+                ? "Search policies by title..." 
+                : "Search policies by title or content..."
+            }
+            value={searchTerm}
+            onChange={onSearchChange}
+            className={styles.searchInput}
+            disabled={isReviewMode}
+          />
+        </div>
+        {onViewModeChange && (
+          <div className={styles.viewToggle}>
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => onViewModeChange("grid")}
+              title="Card view"
+            >
+              <Grid3X3 size={18} />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => onViewModeChange("list")}
+              title="List view"
+            >
+              <List size={18} />
+            </Button>
+          </div>
+        )}
       </div>
       <div className={styles.selectsWrapper}>
         {showReviewFilter && (

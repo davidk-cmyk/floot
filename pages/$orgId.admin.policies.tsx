@@ -281,24 +281,6 @@ const PoliciesPage: React.FC = () => {
                 {canDownloadPolicies && (
                   <BulkPolicyDownload policyIds={currentPolicyIds} />
                 )}
-                <div className={styles.viewToggle}>
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("grid")}
-                    title="Card view"
-                  >
-                    <Grid3X3 size={18} />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("list")}
-                    title="List view"
-                  >
-                    <List size={18} />
-                  </Button>
-                </div>
                 {canCreatePolicy && (
                   <>
                     <Button variant="outline" asChild>
@@ -331,6 +313,8 @@ const PoliciesPage: React.FC = () => {
           onFilterChange={(key, value) => handleFilterChange(key, value)}
           showReviewFilter={isAuthenticated}
           isReviewMode={isReviewMode}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
 
         <main className={styles.mainContent}>
