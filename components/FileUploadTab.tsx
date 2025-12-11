@@ -255,12 +255,12 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
           <div className={styles.localUploadSection}>
             <FileDropzone
               accept=".docx,.pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
-              maxFiles={10}
+              maxFiles={50}
               maxSize={20 * 1024 * 1024}
               onFilesSelected={handleFileUpload}
               icon={<Upload size={48} />}
               title="Drop your files here or click to browse"
-              subtitle="Up to 10 files, 20MB each. Supports .docx and .pdf"
+              subtitle="Up to 50 files, 20MB each. Supports .docx and .pdf"
             />
           </div>
 
