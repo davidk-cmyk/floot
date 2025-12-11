@@ -5,7 +5,8 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(grep:*)",
-      "Bash(pnpm vite build:*)"
+      "Bash(pnpm vite build:*)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

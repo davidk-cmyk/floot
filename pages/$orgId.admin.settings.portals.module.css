@@ -8,35 +8,6 @@
   margin-bottom: var(--spacing-8);
 }
 
-.breadcrumbs {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  margin-bottom: var(--spacing-4);
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-}
-
-.breadcrumbLink {
-  color: var(--muted-foreground);
-  text-decoration: none;
-  transition: color var(--animation-duration-fast) ease;
-}
-
-.breadcrumbLink:hover {
-  color: var(--foreground);
-  text-decoration: underline;
-}
-
-.breadcrumbSeparator {
-  color: var(--border);
-}
-
-.breadcrumbCurrent {
-  font-weight: 500;
-  color: var(--foreground);
-}
-
 .title {
   font-size: 2rem;
   font-weight: 700;

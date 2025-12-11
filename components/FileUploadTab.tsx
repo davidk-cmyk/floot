@@ -315,9 +315,6 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
             <Button onClick={handleUseContent}>
               Use This Content
             </Button>
-            <Button variant="outline" onClick={handleReset}>
-              Upload Different File
-            </Button>
           </div>
         </div>
       )}
