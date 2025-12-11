@@ -111,3 +111,84 @@
   padding: var(--spacing-2) var(--spacing-3);
   border-radius: var(--radius-sm);
 }
+
+/* Print styles - optimize content for printing */
+@media print {
+  .container {
+    width: 100% !important;
+  }
+
+  .contentBody {
+    padding-top: 0.125in !important;
+    line-height: 1.5 !important;
+    color: black !important;
+  }
+
+  .contentBody h1 {
+    font-size: 16pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .contentBody h2 {
+    font-size: 14pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .contentBody h3 {
+    font-size: 12pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .contentBody h4,
+  .contentBody h5,
+  .contentBody h6 {
+    font-size: 11pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .contentBody p {
+    font-size: 11pt !important;
+    color: black !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .contentBody ul,
+  .contentBody ol {
+    font-size: 11pt !important;
+    color: black !important;
+  }
+
+  .contentBody a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+
+  .contentBody table {
+    page-break-inside: avoid;
+    border-collapse: collapse !important;
+    font-size: 10pt !important;
+  }
+
+  .contentBody table td,
+  .contentBody table th {
+    border: 1px solid #ccc !important;
+    padding: 0.05in !important;
+  }
+
+  .contentBody blockquote {
+    border-left: 3px solid #999 !important;
+    color: #333 !important;
+  }
+
+  .contentBody :global(.policy-callout),
+  .contentBody :global(.executive-summary) {
+    border-left: 3px solid #666 !important;
+    background-color: #f5f5f5 !important;
+    page-break-inside: avoid;
+  }
+}

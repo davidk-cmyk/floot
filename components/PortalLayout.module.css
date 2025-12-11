@@ -128,3 +128,23 @@
     width: 100%;
   }
 }
+
+/* Print styles - hide header and footer */
+@media print {
+  .header {
+    display: none !important;
+  }
+
+  .footer {
+    display: none !important;
+  }
+
+  .layout {
+    background-color: white !important;
+    min-height: auto !important;
+  }
+
+  .main {
+    padding: 0.5in !important;
+  }
+}

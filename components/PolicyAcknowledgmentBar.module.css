@@ -79,3 +79,10 @@
     width: 100%;
   }
 }
+
+/* Hide acknowledgment bar in print */
+@media print {
+  .bar {
+    display: none !important;
+  }
+}

@@ -144,3 +144,111 @@
     padding: var(--spacing-4);
   }
 }
+
+/* Print styles - clean document view for printing */
+@media print {
+  .pageWrapper {
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .threeColumnLayout {
+    display: block !important;
+    grid-template-columns: none !important;
+  }
+
+  .leftSidebar,
+  .rightPanel {
+    display: none !important;
+  }
+
+  .backLink {
+    display: none !important;
+  }
+
+  .mainContent {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Typography optimization for print */
+  .mainContent h1 {
+    font-size: 18pt !important;
+    text-align: center !important;
+    color: black !important;
+    margin-bottom: 0.25in !important;
+    page-break-after: avoid;
+  }
+
+  .mainContent h2 {
+    font-size: 14pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .mainContent h3 {
+    font-size: 12pt !important;
+    color: black !important;
+    page-break-after: avoid;
+  }
+
+  .mainContent p {
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    color: black !important;
+    orphans: 3;
+    widows: 3;
+  }
+
+  .mainContent ul,
+  .mainContent ol {
+    font-size: 11pt !important;
+    color: black !important;
+  }
+
+  .mainContent table {
+    page-break-inside: avoid;
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 10pt !important;
+  }
+
+  .mainContent table th,
+  .mainContent table td {
+    border: 1px solid #ccc !important;
+    padding: 0.05in !important;
+    background: transparent !important;
+  }
+
+  .mainContent a {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+
+  /* Error container - hide in print */
+  .errorContainer {
+    display: none !important;
+  }
+
+  /* Hide all interactive elements globally */
+  button,
+  [role="button"],
+  .tooltip,
+  .modal,
+  .dropdown,
+  input,
+  select,
+  textarea {
+    display: none !important;
+  }
+
+  /* Hide any badges or chips */
+  [class*="badge"],
+  [class*="Badge"],
+  [class*="chip"] {
+    display: none !important;
+  }
+}

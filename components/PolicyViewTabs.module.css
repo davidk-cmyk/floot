@@ -23,3 +23,14 @@
   width: 794px;
   margin: 0 auto;
 }
+
+/* Print styles - show only content without tabs */
+@media print {
+  .container {
+    width: 100% !important;
+  }
+
+  .tabContent {
+    padding-top: 0 !important;
+  }
+}

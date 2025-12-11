@@ -109,3 +109,10 @@
   background-color: var(--card);
   border: 1px solid var(--border);
 }
+
+/* Hide action panel in print */
+@media print {
+  .panel {
+    display: none !important;
+  }
+}

@@ -56,3 +56,40 @@
   background-color: var(--portal-primary, var(--branding-primary, var(--primary)));
   color: white;
 }
+
+/* Print styles - optimize header for printing */
+@media print {
+  .header {
+    border-bottom: 1px solid #ccc !important;
+    padding-bottom: 0.25in !important;
+    margin-bottom: 0.25in !important;
+  }
+
+  .badgesRow {
+    display: none !important;
+  }
+
+  .title {
+    font-size: 18pt !important;
+    text-align: center !important;
+    color: black !important;
+  }
+
+  .metaRow {
+    justify-content: center !important;
+    font-size: 10pt !important;
+    color: #666 !important;
+  }
+
+  .metaItem {
+    color: #666 !important;
+  }
+
+  .metaIcon {
+    color: #666 !important;
+  }
+
+  .version {
+    display: none !important;
+  }
+}
