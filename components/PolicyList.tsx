@@ -13,6 +13,9 @@ interface PolicyListProps {
   className?: string;
   portalSlug?: string;
   viewMode?: "grid" | "list";
+  isSelectable?: boolean;
+  selectedPolicyIds?: number[];
+  onSelectionChange?: (id: number, selected: boolean) => void;
 }
 
 export const PolicyList: React.FC<PolicyListProps> = ({
@@ -23,8 +26,10 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   className,
   portalSlug,
   viewMode = "grid",
+  isSelectable = false,
+  selectedPolicyIds = [],
+  onSelectionChange,
 }) => {
-  // For list view, delegate to PolicyListView
   if (viewMode === "list") {
     return (
       <PolicyListView
@@ -34,6 +39,9 @@ export const PolicyList: React.FC<PolicyListProps> = ({
         skeletonsCount={skeletonsCount}
         className={className}
         portalSlug={portalSlug}
+        isSelectable={isSelectable}
+        selectedPolicyIds={selectedPolicyIds}
+        onSelectionChange={onSelectionChange}
       />
     );
   }
@@ -77,7 +85,14 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   return (
     <div className={`${styles.grid} ${className || ""}`}>
       {policies.map((policy) => (
-        <PolicyCard key={policy.id} policy={policy} portalSlug={portalSlug} />
+        <PolicyCard
+          key={policy.id}
+          policy={policy}
+          portalSlug={portalSlug}
+          isSelectable={isSelectable}
+          isSelected={selectedPolicyIds.includes(policy.id)}
+          onSelectionChange={onSelectionChange}
+        />
       ))}
     </div>
   );

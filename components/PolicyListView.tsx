@@ -5,6 +5,7 @@ import { FileText, Edit, CheckCircle, Circle } from "lucide-react";
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
+import { Checkbox } from "./Checkbox";
 import { Skeleton } from "./Skeleton";
 import { useAuth } from "../helpers/useAuth";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
@@ -18,6 +19,9 @@ interface PolicyListViewProps {
   skeletonsCount?: number;
   className?: string;
   portalSlug?: string;
+  isSelectable?: boolean;
+  selectedPolicyIds?: number[];
+  onSelectionChange?: (id: number, selected: boolean) => void;
 }
 
 const getStatusVariant = (
@@ -55,6 +59,9 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
   skeletonsCount = 12,
   className,
   portalSlug,
+  isSelectable = false,
+  selectedPolicyIds = [],
+  onSelectionChange,
 }) => {
   const { authState } = useAuth();
   const { buildUrl } = useOrgNavigation();
@@ -93,9 +100,18 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
     );
   }
 
+  const handleCheckboxClick = (e: React.MouseEvent, policyId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onSelectionChange) {
+      onSelectionChange(policyId, !selectedPolicyIds.includes(policyId));
+    }
+  };
+
   return (
     <div className={`${styles.listContainer} ${className || ""}`}>
-      <div className={styles.listHeader}>
+      <div className={`${styles.listHeader} ${isSelectable ? styles.withCheckbox : ""}`}>
+        {isSelectable && <div className={styles.checkboxCol}></div>}
         <div className={styles.titleCol}>Policy</div>
         <div className={styles.statusCol}>Status</div>
         <div className={styles.categoryCol}>Category</div>
@@ -110,13 +126,27 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
         const updatedAt = policy.updatedAt
           ? formatDistanceToNow(new Date(policy.updatedAt), { addSuffix: true })
           : "N/A";
+        const isSelected = selectedPolicyIds.includes(policy.id);
 
         return (
           <Link
             key={policy.id}
             to={policyUrl}
-            className={styles.row}
+            className={`${styles.row} ${isSelectable ? styles.withCheckbox : ""} ${isSelected ? styles.selected : ""}`}
           >
+            {isSelectable && (
+              <div className={styles.checkboxCol} onClick={(e) => handleCheckboxClick(e, policy.id)}>
+                <Checkbox
+                  checked={isSelected}
+                  onChange={(e) => {
+                    e.stopPropagation();
+                    if (onSelectionChange) {
+                      onSelectionChange(policy.id, !isSelected);
+                    }
+                  }}
+                />
+              </div>
+            )}
             <div className={styles.titleCol}>
               <div className={styles.titleContent}>
                 <FileText className={styles.icon} />

@@ -19,6 +19,16 @@
   letter-spacing: 0.5px;
 }
 
+.listHeader.withCheckbox {
+  grid-template-columns: 40px 2fr 1fr 1fr 1fr 240px;
+}
+
+.checkboxCol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 240px;
@@ -29,6 +39,14 @@
   text-decoration: none;
   color: inherit;
   transition: background-color var(--animation-duration-normal) ease;
+}
+
+.row.withCheckbox {
+  grid-template-columns: 40px 2fr 1fr 1fr 1fr 240px;
+}
+
+.row.selected {
+  background-color: color-mix(in srgb, var(--portal-primary, var(--branding-primary, var(--primary))) 8%, var(--background));
 }
 
 .row:hover {
@@ -191,6 +209,11 @@
     grid-template-columns: 1.5fr 1fr 1fr 150px;
   }
 
+  .listHeader.withCheckbox,
+  .row.withCheckbox {
+    grid-template-columns: 40px 1.5fr 1fr 1fr 150px;
+  }
+
   .categoryCol {
     display: none;
   }
@@ -200,6 +223,11 @@
   .listHeader,
   .row {
     grid-template-columns: 1.5fr 100px;
+  }
+
+  .listHeader.withCheckbox,
+  .row.withCheckbox {
+    grid-template-columns: 40px 1.5fr 100px;
   }
 
   .statusCol,

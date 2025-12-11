@@ -30,6 +30,10 @@ interface PolicyFiltersProps {
   isReviewMode?: boolean;
   viewMode?: "grid" | "list";
   onViewModeChange?: (mode: "grid" | "list") => void;
+  selectedCount?: number;
+  totalCount?: number;
+  onSelectAll?: () => void;
+  onClearSelection?: () => void;
 }
 
 export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
@@ -47,6 +51,10 @@ export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
   isReviewMode = false,
   viewMode = "grid",
   onViewModeChange,
+  selectedCount = 0,
+  totalCount = 0,
+  onSelectAll,
+  onClearSelection,
 }) => {
   const { data: metadata, isLoading } = usePolicyFilterMetadata();
 

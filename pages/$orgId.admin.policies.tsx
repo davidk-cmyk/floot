@@ -8,6 +8,8 @@ import { usePolicies, useReviewPolicies } from "../helpers/usePolicyApi";
 import { PolicyList } from "../components/PolicyList";
 import { PolicyFilters } from "../components/PolicyFilters";
 import { BulkPolicyDownload } from "../components/BulkPolicyDownload";
+import { BulkActionsBar } from "../components/BulkActionsBar";
+import { BulkPortalAssignModal } from "../components/BulkPortalAssignModal";
 import { fromListEndpoint, fromReviewEndpoint } from "../helpers/policyCardData";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
 
@@ -33,10 +35,11 @@ const PoliciesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { buildUrl } = useOrgNavigation();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [selectedPolicyIds, setSelectedPolicyIds] = useState<number[]>([]);
+  const [showAssignModal, setShowAssignModal] = useState(false);
 
   // Load and save view mode preference
   useEffect(() => {
-    // Load from localStorage on mount
     const saved = localStorage.getItem("policy-list-view-mode");
     if (saved === "list") {
       setViewMode("list");
@@ -44,11 +47,14 @@ const PoliciesPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Save to localStorage when view mode changes
     localStorage.setItem("policy-list-view-mode", viewMode);
   }, [viewMode]);
 
   const canCreatePolicy =
+    authState.type === "authenticated" &&
+    (authState.user.role === "admin" || authState.user.role === "editor");
+
+  const canBulkEdit =
     authState.type === "authenticated" &&
     (authState.user.role === "admin" || authState.user.role === "editor");
 
@@ -133,6 +139,10 @@ const PoliciesPage: React.FC = () => {
     return convertedPolicies?.map(policy => policy.id) || [];
   }, [convertedPolicies]);
 
+  useEffect(() => {
+    setSelectedPolicyIds([]);
+  }, [debouncedSearch, status, department, category, portal, reviewFilter]);
+
   const handleFilterChange = (
     key: "search" | "status" | "department" | "category" | "portal" | "reviewFilter",
     value: string
@@ -161,6 +171,21 @@ const PoliciesPage: React.FC = () => {
     newParams.set("page", String(newPage));
     setSearchParams(newParams);
     window.scrollTo(0, 0);
+    setSelectedPolicyIds([]);
+  };
+
+  const handleSelectionChange = (id: number, selected: boolean) => {
+    setSelectedPolicyIds((prev) =>
+      selected ? [...prev, id] : prev.filter((pId) => pId !== id)
+    );
+  };
+
+  const handleClearSelection = () => {
+    setSelectedPolicyIds([]);
+  };
+
+  const handleBulkAssignSuccess = () => {
+    setSelectedPolicyIds([]);
   };
 
   const renderPagination = () => {
@@ -324,11 +349,29 @@ const PoliciesPage: React.FC = () => {
             error={error}
             skeletonsCount={POLICIES_PER_PAGE}
             viewMode={viewMode}
+            isSelectable={canBulkEdit}
+            selectedPolicyIds={selectedPolicyIds}
+            onSelectionChange={handleSelectionChange}
           />
           <div className={styles.paginationContainer}>
             {renderPagination()}
           </div>
         </main>
+
+        {canBulkEdit && (
+          <BulkActionsBar
+            selectedCount={selectedPolicyIds.length}
+            onClearSelection={handleClearSelection}
+            onAssignToPortal={() => setShowAssignModal(true)}
+          />
+        )}
+
+        <BulkPortalAssignModal
+          isOpen={showAssignModal}
+          onClose={() => setShowAssignModal(false)}
+          selectedPolicyIds={selectedPolicyIds}
+          onSuccess={handleBulkAssignSuccess}
+        />
       </div>
     </>
   );

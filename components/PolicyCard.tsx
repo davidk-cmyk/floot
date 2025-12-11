@@ -5,6 +5,7 @@ import { CheckCircle, Circle, FileText, Edit, Calendar, User, Clock } from "luci
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
+import { Checkbox } from "./Checkbox";
 import { Skeleton } from "./Skeleton";
 import { useAuth } from "../helpers/useAuth";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
@@ -16,6 +17,9 @@ interface PolicyCardProps {
   className?: string;
   portalSlug?: string;
   showDescription?: boolean;
+  isSelectable?: boolean;
+  isSelected?: boolean;
+  onSelectionChange?: (id: number, selected: boolean) => void;
 }
 
 const getStatusVariant = (
@@ -56,6 +60,9 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
   className,
   portalSlug,
   showDescription = true,
+  isSelectable = false,
+  isSelected = false,
+  onSelectionChange,
 }) => {
   const { authState } = useAuth();
   const { buildUrl } = useOrgNavigation();
@@ -73,6 +80,14 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     e.stopPropagation();
   };
 
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onSelectionChange) {
+      onSelectionChange(policy.id, !isSelected);
+    }
+  };
+
   // Determine the target URL based on context
   // If portalSlug is provided, we are in a portal context
   // Otherwise, default to admin policy view
@@ -85,8 +100,21 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
   return (
     <Link
       to={policyUrl}
-      className={`${styles.card} ${className || ""}`}
+      className={`${styles.card} ${isSelected ? styles.selected : ""} ${className || ""}`}
     >
+      {isSelectable && (
+        <div className={styles.checkboxContainer} onClick={handleCheckboxClick}>
+          <Checkbox
+            checked={isSelected}
+            onChange={(e) => {
+              e.stopPropagation();
+              if (onSelectionChange) {
+                onSelectionChange(policy.id, !isSelected);
+              }
+            }}
+          />
+        </div>
+      )}
       {policy.status && (
         <div className={styles.statusBadge}>
           <Badge variant={getStatusVariant(policy.status)}>{policy.status}</Badge>
