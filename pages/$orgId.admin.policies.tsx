@@ -32,13 +32,19 @@ const PoliciesPage: React.FC = () => {
   const { authState } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const { buildUrl } = useOrgNavigation();
-  const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
-    const saved = localStorage.getItem("policy-list-view-mode");
-    return (saved as "grid" | "list") || "grid";
-  });
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Save view mode preference
+  // Load and save view mode preference
   useEffect(() => {
+    // Load from localStorage on mount
+    const saved = localStorage.getItem("policy-list-view-mode");
+    if (saved === "list") {
+      setViewMode("list");
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save to localStorage when view mode changes
     localStorage.setItem("policy-list-view-mode", viewMode);
   }, [viewMode]);
 
