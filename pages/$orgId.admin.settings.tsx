@@ -318,28 +318,26 @@ const SettingsPage = () => {
         return (
           <section id="user-access" className={styles.section}>
             <h2 className={styles.sectionTitle}>User Access</h2>
-            <div className={styles.grid}>
-              <SettingsListManager
-                title="Whitelisted Domains"
-                description="Manage email domains allowed for user registration."
-                settingKey="whitelisted_domains"
-                noun="domain"
-                placeholder="e.g., yourcompany.com"
-              />
-              <SettingsBooleanManager
-                title="OAuth Authentication"
-                description="Control the visibility of OAuth login/signup buttons (e.g., Google login) on authentication forms."
-                settingKey="oauth_enabled"
-                enabledLabel="Visible"
-                disabledLabel="Hidden"
-              />
-              <SettingsBooleanManager
-                title="User Signup"
-                description="Control whether new users can self-register or if all user creation must go through admin-created accounts."
-                settingKey="user_signup_enabled"
-                enabledLabel="Enabled"
-                disabledLabel="Disabled"
-              />
+            <div className={styles.comingSoonContainer}>
+              <Info size={32} className={styles.comingSoonIcon} />
+              <h3 className={styles.comingSoonTitle}>Coming Soon</h3>
+              <p className={styles.comingSoonDescription}>
+                User access settings are under development and will be available soon.
+              </p>
+            </div>
+          </section>
+        );
+
+      case '#acknowledgment-settings':
+        return (
+          <section id="acknowledgment-settings" className={styles.section}>
+            <h2 className={styles.sectionTitle}>Policy Acknowledgment</h2>
+            <div className={styles.comingSoonContainer}>
+              <Info size={32} className={styles.comingSoonIcon} />
+              <h3 className={styles.comingSoonTitle}>Coming Soon</h3>
+              <p className={styles.comingSoonDescription}>
+                Policy acknowledgment settings are under development and will be available soon.
+              </p>
             </div>
           </section>
         );
