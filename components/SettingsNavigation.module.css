@@ -49,4 +49,35 @@
 .navLabel {
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.navLinkDisabled {
+  cursor: not-allowed;
+  color: var(--muted-foreground);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.navLinkDisabled:hover {
+  background-color: transparent !important;
+  color: var(--muted-foreground) !important;
+}
+
+.soonBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  margin-left: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
