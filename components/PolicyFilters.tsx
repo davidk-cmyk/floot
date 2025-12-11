@@ -71,7 +71,7 @@ export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
         {onViewModeChange && (
           <div className={styles.viewToggle}>
             <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
+              variant={viewMode === "grid" ? "primary" : "outline"}
               size="icon"
               onClick={() => onViewModeChange("grid")}
               title="Card view"
@@ -79,7 +79,7 @@ export const PolicyFilters: React.FC<PolicyFiltersProps> = ({
               <Grid3X3 size={18} />
             </Button>
             <Button
-              variant={viewMode === "list" ? "default" : "outline"}
+              variant={viewMode === "list" ? "primary" : "outline"}
               size="icon"
               onClick={() => onViewModeChange("list")}
               title="List view"
