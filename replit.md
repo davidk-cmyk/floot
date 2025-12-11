@@ -79,6 +79,7 @@ Note: The build step is automatically executed during deployment. For local deve
 - **2024-12-11**: Fixed bulk policy selection checkbox event handling
   - Resolved double-triggering bug where both wrapper onClick and Checkbox onChange were firing
   - Now only Checkbox onChange handles selection (no more race conditions)
+  - Fixed stale closure issue: now using e.target.checked instead of !isSelected
   - Checkboxes now properly toggle selection and count on single click
   - Selection state accurately reflects visible checkmarks
   - Clicking checkbox no longer navigates away from policy list
