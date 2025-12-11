@@ -139,7 +139,7 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
                   onChange={(e) => {
                     e.stopPropagation();
                     if (onSelectionChange) {
-                      onSelectionChange(policy.id, !isSelected);
+                      onSelectionChange(policy.id, e.target.checked);
                     }
                   }}
                 />

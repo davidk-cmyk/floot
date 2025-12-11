@@ -107,7 +107,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
             onChange={(e) => {
               e.stopPropagation();
               if (onSelectionChange) {
-                onSelectionChange(policy.id, !isSelected);
+                onSelectionChange(policy.id, e.target.checked);
               }
             }}
           />
