@@ -262,23 +262,41 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
 
   // Handle applying AI changes to selected text
   const handleApplyToSelection = useCallback((newText: string) => {
-    editor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        // Parse the HTML and create nodes
-        const parser = new DOMParser();
-        const dom = parser.parseFromString(newText, 'text/html');
-        const nodes = $generateNodesFromDOM(editor, dom);
+    // Use IIFE to handle async markdown conversion while keeping handler synchronous
+    (async () => {
+      try {
+        // Convert markdown to HTML (async, must be outside editor.update)
+        const html = await markdownToHtml(newText);
         
-        if (nodes.length > 0) {
-          selection.insertNodes(nodes);
-        } else {
-          // Fallback to plain text
-          const textNode = $createTextNode(newText);
-          selection.insertNodes([textNode]);
-        }
+        editor.update(() => {
+          const selection = $getSelection();
+          if ($isRangeSelection(selection)) {
+            // Parse the HTML and create nodes
+            const parser = new DOMParser();
+            const dom = parser.parseFromString(html, 'text/html');
+            const nodes = $generateNodesFromDOM(editor, dom);
+            
+            if (nodes.length > 0) {
+              selection.insertNodes(nodes);
+            } else {
+              // Fallback to plain text
+              const textNode = $createTextNode(newText);
+              selection.insertNodes([textNode]);
+            }
+          }
+        });
+      } catch (error) {
+        console.error('Error converting markdown to HTML for AI selection:', error);
+        // Fallback to treating as plain text
+        editor.update(() => {
+          const selection = $getSelection();
+          if ($isRangeSelection(selection)) {
+            const textNode = $createTextNode(newText);
+            selection.insertNodes([textNode]);
+          }
+        });
       }
-    });
+    })();
     setIsAIPopoverOpen(false);
   }, [editor]);
 
@@ -369,28 +387,47 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
 
   // Handle applying AI changes to full document
   const handleApplyToFullText = useCallback((newText: string) => {
-    editor.update(() => {
-      const root = $getRoot();
-      root.clear();
-      
-      // Parse the HTML and create nodes
-      const parser = new DOMParser();
-      const dom = parser.parseFromString(newText, 'text/html');
-      const nodes = $generateNodesFromDOM(editor, dom);
-      
-      if (nodes.length > 0) {
-        const normalizedNodes = normalizeNodesForRoot(nodes);
-        root.append(...normalizedNodes);
-      } else {
-        // Fallback to paragraph with text
-        const paragraph = $createParagraphNode();
-        const textNode = $createTextNode(newText);
-        paragraph.append(textNode);
-        root.append(paragraph);
+    // Use IIFE to handle async markdown conversion while keeping handler synchronous
+    (async () => {
+      try {
+        // Convert markdown to HTML (async, must be outside editor.update)
+        const html = await markdownToHtml(newText);
+        
+        editor.update(() => {
+          const root = $getRoot();
+          root.clear();
+          
+          // Parse the HTML and create nodes
+          const parser = new DOMParser();
+          const dom = parser.parseFromString(html, 'text/html');
+          const nodes = $generateNodesFromDOM(editor, dom);
+          
+          if (nodes.length > 0) {
+            const normalizedNodes = normalizeNodesForRoot(nodes);
+            root.append(...normalizedNodes);
+          } else {
+            // Fallback to paragraph with text
+            const paragraph = $createParagraphNode();
+            const textNode = $createTextNode(newText);
+            paragraph.append(textNode);
+            root.append(paragraph);
+          }
+        });
+      } catch (error) {
+        console.error('Error converting markdown to HTML for AI full text:', error);
+        // Fallback to treating as plain text
+        editor.update(() => {
+          const root = $getRoot();
+          root.clear();
+          const paragraph = $createParagraphNode();
+          const textNode = $createTextNode(newText);
+          paragraph.append(textNode);
+          root.append(paragraph);
+        });
       }
-    });
+    })();
     setIsAIPopoverOpen(false);
-  }, [editor]);
+  }, [editor, normalizeNodesForRoot]);
 
   const hasSelectedText = selectedText.length > 0;
 
