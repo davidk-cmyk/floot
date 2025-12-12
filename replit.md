@@ -36,6 +36,13 @@ The application uses a combination of Replit Secrets and `env.json`:
 - API key and from_email automatically managed by Replit
 - No manual configuration required
 
+### Google Drive Integration (per-user OAuth)
+- `GOOGLE_CLIENT_ID` - OAuth client ID from Google Cloud Console
+- `GOOGLE_CLIENT_SECRET` - OAuth client secret from Google Cloud Console
+- Each user connects their own Google Drive account (multi-tenant)
+- Tokens stored in `user_google_drive_connections` table with auto-refresh
+- Redirect URI: `https://[app-url]/_api/google-drive/oauth_callback`
+
 The `loadEnv.js` file prioritizes environment variables over env.json values for security.
 
 ## Development
@@ -60,7 +67,7 @@ The "Start application" workflow is configured to:
 
 ### Database Schema
 The database includes:
-- **26 tables**: users, organizations, policies, portals, notifications, sessions, and more
+- **27 tables**: users, organizations, policies, portals, notifications, sessions, user_google_drive_connections, and more
 - **1 view**: `unacknowledged_required_policies` - computed view for policy acknowledgment tracking
 - **2 triggers**: Auto-create policy versions on insert/update
 - **101 indexes**: Performance optimization for all major queries
@@ -76,6 +83,17 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-12**: Implemented per-user Google Drive OAuth integration
+  - Replaced shared Replit connector with per-user OAuth flow
+  - Each tenant user now connects their own Google Drive account (multi-tenant support)
+  - Created `user_google_drive_connections` table for storing per-user OAuth tokens
+  - Implemented PKCE-secured OAuth flow with state validation for CSRF protection
+  - Auto-refresh of expired access tokens using stored refresh tokens
+  - New OAuth endpoints: authorize, callback, status, disconnect
+  - FileUploadTab updated with "Connect Google Drive" popup flow
+  - Required secrets: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
+  - Redirect URI: `https://[app-url]/_api/google-drive/oauth_callback`
+
 - **2024-12-12**: Improved streaming UX for AI Edit and Format features
   - Added animated "AI is thinking/formatting" state with spinning icon and pulsing dots before first token arrives
   - Added blinking cursor at end of text while generation is in progress

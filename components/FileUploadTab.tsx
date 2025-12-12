@@ -299,7 +299,23 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
               <p>Connect your Google Drive to import documents directly from your cloud storage.</p>
               <Button 
                 onClick={() => {
-                  window.location.href = '/_api/google-drive/authorize';
+                  const popup = window.open(
+                    '/_api/google-drive/authorize',
+                    'google-drive-auth',
+                    'width=600,height=700,popup=yes'
+                  );
+                  
+                  const handleMessage = (event: MessageEvent) => {
+                    if (event.origin === window.location.origin && event.data?.type === 'GOOGLE_DRIVE_OAUTH_RESULT') {
+                      window.removeEventListener('message', handleMessage);
+                      if (event.data.success) {
+                        handleGoogleDriveOpen();
+                      } else {
+                        setErrorMessage(event.data.error || 'Failed to connect Google Drive');
+                      }
+                    }
+                  };
+                  window.addEventListener('message', handleMessage);
                 }}
               >
                 Connect Google Drive

@@ -10,7 +10,6 @@ export async function handle(request: Request) {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     const error = url.searchParams.get("error");
-    const codeVerifier = url.searchParams.get("code_verifier");
 
     if (error) {
       return createPopupResponse({
@@ -19,10 +18,10 @@ export async function handle(request: Request) {
       });
     }
 
-    if (!code) {
+    if (!code || !state) {
       return createPopupResponse({
         success: false,
-        error: "No authorization code received",
+        error: "Invalid authorization response",
       });
     }
 
@@ -33,7 +32,34 @@ export async function handle(request: Request) {
       });
     }
 
-    const redirectUri = `${url.origin}/_api/google-drive/oauth_callback`;
+    const oauthState = await db
+      .selectFrom("oauthStates")
+      .select(["codeVerifier", "redirectUrl", "expiresAt"])
+      .where("state", "=", state)
+      .where("provider", "=", "google-drive")
+      .executeTakeFirst();
+
+    if (!oauthState) {
+      return createPopupResponse({
+        success: false,
+        error: "Invalid or expired authorization state. Please try again.",
+      });
+    }
+
+    await db
+      .deleteFrom("oauthStates")
+      .where("state", "=", state)
+      .execute();
+
+    const now = new Date();
+    if (oauthState.expiresAt && new Date(oauthState.expiresAt) < now) {
+      return createPopupResponse({
+        success: false,
+        error: "Authorization expired. Please try again.",
+      });
+    }
+
+    const redirectUri = oauthState.redirectUrl;
 
     let provider: GoogleDriveOAuthProvider;
     try {
@@ -45,7 +71,7 @@ export async function handle(request: Request) {
       });
     }
 
-    const tokens = await provider.exchangeCodeForTokens(code, redirectUri, codeVerifier || undefined);
+    const tokens = await provider.exchangeCodeForTokens(code, redirectUri, oauthState.codeVerifier);
     const userInfo = await provider.fetchUserInfo(tokens);
 
     const expiresAt = tokens.expiresIn
@@ -102,14 +128,24 @@ function createPopupResponse(result: { success: boolean; email?: string; error?:
     <html>
       <head>
         <title>Google Drive Connection</title>
+        <style>
+          body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f5f5f5; }
+          .container { text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+          .success { color: #16a34a; }
+          .error { color: #dc2626; }
+        </style>
       </head>
       <body>
-        <p>${result.success ? "Connected successfully! Closing..." : result.error}</p>
+        <div class="container">
+          <p class="${result.success ? 'success' : 'error'}">
+            ${result.success ? `Connected to ${result.email || 'Google Drive'}! This window will close automatically.` : result.error}
+          </p>
+        </div>
         <script>
           const result = ${JSON.stringify(result)};
           if (window.opener) {
             window.opener.postMessage({ type: "GOOGLE_DRIVE_OAUTH_RESULT", ...result }, location.origin);
-            setTimeout(() => window.close(), 1000);
+            setTimeout(() => window.close(), 2000);
           }
         </script>
       </body>
