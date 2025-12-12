@@ -1,4 +1,4 @@
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
+import pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
 
 export const parsePdfDocument = async (pdfBuffer: Buffer): Promise<string> => {
   try {
