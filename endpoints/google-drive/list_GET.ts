@@ -1,15 +1,21 @@
 import { getServerUserSession } from "../../helpers/getServerUserSession";
-import { listGoogleDriveFiles, isGoogleDriveConnected } from "../../helpers/googleDriveClient";
+import { listGoogleDriveFilesForUser, isGoogleDriveConnectedForUser } from "../../helpers/googleDriveClient";
 import superjson from "superjson";
 
 export async function handle(request: Request): Promise<Response> {
   try {
-    await getServerUserSession(request);
+    const { user } = await getServerUserSession(request);
+    if (!user) {
+      return new Response(
+        superjson.stringify({ error: "Unauthorized", connected: false }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
     
     const url = new URL(request.url);
     const query = url.searchParams.get('q') || undefined;
     
-    const isConnected = await isGoogleDriveConnected();
+    const isConnected = await isGoogleDriveConnectedForUser(user.id);
     if (!isConnected) {
       return new Response(
         superjson.stringify({ 
@@ -20,7 +26,7 @@ export async function handle(request: Request): Promise<Response> {
       );
     }
     
-    const files = await listGoogleDriveFiles(query);
+    const files = await listGoogleDriveFilesForUser(user.id, query);
     
     return new Response(
       superjson.stringify({ files, connected: true }),

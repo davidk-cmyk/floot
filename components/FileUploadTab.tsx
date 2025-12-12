@@ -295,10 +295,17 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
           
           {googleDriveConnected === false && (
             <div className={styles.notConnectedMessage}>
-              <AlertCircle size={24} />
-              <p>Google Drive is not connected. Please connect your Google Drive account in the Replit integrations panel.</p>
+              <Cloud size={24} />
+              <p>Connect your Google Drive to import documents directly from your cloud storage.</p>
+              <Button 
+                onClick={() => {
+                  window.location.href = '/_api/google-drive/authorize';
+                }}
+              >
+                Connect Google Drive
+              </Button>
               <Button variant="outline" onClick={() => setShowGoogleDriveBrowser(false)}>
-                Close
+                Cancel
               </Button>
             </div>
           )}

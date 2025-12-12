@@ -799,6 +799,62 @@ app.post('_api/google-drive/download-file',async c => {
     return c.text("Error loading endpoint code " + e.message,  500)
   }
 })
+app.get('_api/google-drive/authorize',async c => {
+  try {
+    const { handle } = await import("./endpoints/google-drive/authorize_GET.js");
+    let request = c.req.raw;
+    const response = await handle(request);
+    if (!(response instanceof Response) && response.constructor.name !== "Response") {
+      return c.text("Invalid response format. handle should always return a Response object." + response.constructor.name, 500);
+    }
+    return response;
+  } catch (e) {
+    console.error(e);
+    return c.text("Error loading endpoint code " + e.message,  500)
+  }
+})
+app.get('_api/google-drive/oauth_callback',async c => {
+  try {
+    const { handle } = await import("./endpoints/google-drive/oauth_callback_GET.js");
+    let request = c.req.raw;
+    const response = await handle(request);
+    if (!(response instanceof Response) && response.constructor.name !== "Response") {
+      return c.text("Invalid response format. handle should always return a Response object." + response.constructor.name, 500);
+    }
+    return response;
+  } catch (e) {
+    console.error(e);
+    return c.text("Error loading endpoint code " + e.message,  500)
+  }
+})
+app.get('_api/google-drive/status',async c => {
+  try {
+    const { handle } = await import("./endpoints/google-drive/status_GET.js");
+    let request = c.req.raw;
+    const response = await handle(request);
+    if (!(response instanceof Response) && response.constructor.name !== "Response") {
+      return c.text("Invalid response format. handle should always return a Response object." + response.constructor.name, 500);
+    }
+    return response;
+  } catch (e) {
+    console.error(e);
+    return c.text("Error loading endpoint code " + e.message,  500)
+  }
+})
+app.post('_api/google-drive/disconnect',async c => {
+  try {
+    const { handle } = await import("./endpoints/google-drive/disconnect_POST.js");
+    let request = c.req.raw;
+    const response = await handle(request);
+    if (!(response instanceof Response) && response.constructor.name !== "Response") {
+      return c.text("Invalid response format. handle should always return a Response object." + response.constructor.name, 500);
+    }
+    return response;
+  } catch (e) {
+    console.error(e);
+    return c.text("Error loading endpoint code " + e.message,  500)
+  }
+})
 app.post('_api/policies/audit/export',async c => {
   try {
     const { handle } = await import("./endpoints/policies/audit/export_POST.js");

@@ -1,6 +1,6 @@
 import { schema } from "./download-file_POST.schema";
 import { getServerUserSession } from "../../helpers/getServerUserSession";
-import { downloadGoogleDriveFile } from "../../helpers/googleDriveClient";
+import { downloadGoogleDriveFileForUser } from "../../helpers/googleDriveClient";
 import { parsePdfDocument } from "../../helpers/parsePdfDocument";
 import superjson from "superjson";
 import mammoth from "mammoth";
@@ -25,12 +25,18 @@ const MAMMOTH_STYLE_MAP = [
 
 export async function handle(request: Request): Promise<Response> {
   try {
-    await getServerUserSession(request);
+    const { user } = await getServerUserSession(request);
+    if (!user) {
+      return new Response(
+        superjson.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
     
     const json = superjson.parse(await request.text());
     const { fileId } = schema.parse(json);
     
-    const file = await downloadGoogleDriveFile(fileId);
+    const file = await downloadGoogleDriveFileForUser(user.id, fileId);
     
     let content = "";
     const fileName = file.name.toLowerCase();

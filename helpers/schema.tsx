@@ -360,6 +360,17 @@ export interface Users {
   updatedAt: Generated<Timestamp | null>;
 }
 
+export interface UserGoogleDriveConnections {
+  id: Generated<number>;
+  userId: number;
+  accessToken: string;
+  refreshToken: string | null;
+  expiresAt: Timestamp | null;
+  googleEmail: string | null;
+  createdAt: Generated<Timestamp | null>;
+  updatedAt: Generated<Timestamp | null>;
+}
+
 export interface DB {
   acknowledgmentConfirmationCodes: AcknowledgmentConfirmationCodes;
   emailBasedAcknowledgments: EmailBasedAcknowledgments;
@@ -386,6 +397,7 @@ export interface DB {
   sessions: Sessions;
   settings: Settings;
   unacknowledgedRequiredPolicies: UnacknowledgedRequiredPolicies;
+  userGoogleDriveConnections: UserGoogleDriveConnections;
   userPasswords: UserPasswords;
   users: Users;
 }
