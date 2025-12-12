@@ -80,11 +80,10 @@ export async function handle(request: Request) {
       );
     }
 
-    const baseUrl = process.env.REPLIT_DEV_DOMAIN
-      ? `https://${process.env.REPLIT_DEV_DOMAIN}`
-      : process.env.REPLIT_DEPLOYMENT_URL
-      ? `https://${process.env.REPLIT_DEPLOYMENT_URL}`
-      : "http://localhost:5000";
+    const baseUrl = process.env.APP_BASE_URL
+      || (process.env.REPLIT_DEPLOYMENT_URL ? `https://${process.env.REPLIT_DEPLOYMENT_URL}` : null)
+      || (process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : null)
+      || "http://localhost:5000";
 
     const emailData: PolicyReminderEmailData[] = validReminders.map((reminder) => {
       const policyUrl = `${baseUrl}/${organization.slug}/portal/${reminder.portalSlug}/policy/${reminder.policyId}`;
