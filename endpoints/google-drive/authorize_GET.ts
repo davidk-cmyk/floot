@@ -17,7 +17,8 @@ export async function handle(request: Request) {
     }
 
     const url = new URL(request.url);
-    const redirectUri = `${url.origin}/_api/google-drive/oauth_callback`;
+    const origin = url.origin.replace(/^http:/, 'https:');
+    const redirectUri = `${origin}/_api/google-drive/oauth_callback`;
 
     let provider: GoogleDriveOAuthProvider;
     try {
