@@ -299,23 +299,59 @@ export const FileUploadTab: React.FC<FileUploadTabProps> = ({
               <p>Connect your Google Drive to import documents directly from your cloud storage.</p>
               <Button 
                 onClick={() => {
+                  // Clear any previous OAuth result from localStorage
+                  try { localStorage.removeItem('google_drive_oauth_result'); } catch (e) {}
+                  
                   const popup = window.open(
                     '/_api/google-drive/authorize',
                     'google-drive-auth',
                     'width=600,height=700,popup=yes'
                   );
                   
+                  let handled = false;
+                  
+                  const handleResult = (data: { success: boolean; error?: string }) => {
+                    if (handled) return;
+                    handled = true;
+                    window.removeEventListener('message', handleMessage);
+                    clearInterval(pollInterval);
+                    try { localStorage.removeItem('google_drive_oauth_result'); } catch (e) {}
+                    
+                    if (data.success) {
+                      handleGoogleDriveOpen();
+                    } else {
+                      setErrorMessage(data.error || 'Failed to connect Google Drive');
+                    }
+                  };
+                  
+                  // Listen for postMessage
                   const handleMessage = (event: MessageEvent) => {
-                    if (event.origin === window.location.origin && event.data?.type === 'GOOGLE_DRIVE_OAUTH_RESULT') {
-                      window.removeEventListener('message', handleMessage);
-                      if (event.data.success) {
-                        handleGoogleDriveOpen();
-                      } else {
-                        setErrorMessage(event.data.error || 'Failed to connect Google Drive');
-                      }
+                    if (event.data?.type === 'GOOGLE_DRIVE_OAUTH_RESULT') {
+                      handleResult(event.data);
                     }
                   };
                   window.addEventListener('message', handleMessage);
+                  
+                  // Poll localStorage as fallback
+                  const pollInterval = setInterval(() => {
+                    try {
+                      const stored = localStorage.getItem('google_drive_oauth_result');
+                      if (stored) {
+                        const data = JSON.parse(stored);
+                        if (data.type === 'GOOGLE_DRIVE_OAUTH_RESULT') {
+                          handleResult(data);
+                        }
+                      }
+                    } catch (e) {}
+                  }, 500);
+                  
+                  // Cleanup after 5 minutes
+                  setTimeout(() => {
+                    if (!handled) {
+                      window.removeEventListener('message', handleMessage);
+                      clearInterval(pollInterval);
+                    }
+                  }, 300000);
                 }}
               >
                 Connect Google Drive

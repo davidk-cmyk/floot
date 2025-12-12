@@ -132,20 +132,35 @@ function createPopupResponse(result: { success: boolean; email?: string; error?:
           .container { text-align: center; padding: 2rem; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
           .success { color: #16a34a; }
           .error { color: #dc2626; }
+          .close-btn { margin-top: 1rem; padding: 0.5rem 1rem; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+          .close-btn:hover { background: #2563eb; }
         </style>
       </head>
       <body>
         <div class="container">
           <p class="${result.success ? 'success' : 'error'}">
-            ${result.success ? `Connected to ${result.email || 'Google Drive'}! This window will close automatically.` : result.error}
+            ${result.success ? `Connected to ${result.email || 'Google Drive'}!` : result.error}
           </p>
+          <button class="close-btn" onclick="window.close()">Close Window</button>
         </div>
         <script>
           const result = ${JSON.stringify(result)};
+          
+          // Store result in localStorage as fallback
+          try {
+            localStorage.setItem('google_drive_oauth_result', JSON.stringify({ type: "GOOGLE_DRIVE_OAUTH_RESULT", ...result, timestamp: Date.now() }));
+          } catch (e) {}
+          
+          // Try postMessage to opener
           if (window.opener) {
-            window.opener.postMessage({ type: "GOOGLE_DRIVE_OAUTH_RESULT", ...result }, location.origin);
-            setTimeout(() => window.close(), 2000);
+            try {
+              window.opener.postMessage({ type: "GOOGLE_DRIVE_OAUTH_RESULT", ...result }, '*');
+            } catch (e) {}
           }
+          
+          setTimeout(() => {
+            try { window.close(); } catch (e) {}
+          }, 1500);
         </script>
       </body>
     </html>
