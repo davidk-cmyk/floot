@@ -44,6 +44,7 @@ export async function handle(request: Request) {
         provider: "google-drive",
         redirectUrl: redirectUri,
         expiresAt,
+        userId: user.id,
       })
       .execute();
 

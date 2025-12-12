@@ -1,11 +1,8 @@
-import { getServerUserSession } from "../../helpers/getServerUserSession";
 import { GoogleDriveOAuthProvider } from "../../helpers/GoogleDriveOAuthProvider";
 import { db } from "../../helpers/db";
 
 export async function handle(request: Request) {
   try {
-    const { user } = await getServerUserSession(request);
-    
     const url = new URL(request.url);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
@@ -25,16 +22,9 @@ export async function handle(request: Request) {
       });
     }
 
-    if (!user) {
-      return createPopupResponse({
-        success: false,
-        error: "You must be logged in to connect Google Drive",
-      });
-    }
-
     const oauthState = await db
       .selectFrom("oauthStates")
-      .select(["codeVerifier", "redirectUrl", "expiresAt"])
+      .select(["codeVerifier", "redirectUrl", "expiresAt", "userId"])
       .where("state", "=", state)
       .where("provider", "=", "google-drive")
       .executeTakeFirst();
@@ -45,6 +35,15 @@ export async function handle(request: Request) {
         error: "Invalid or expired authorization state. Please try again.",
       });
     }
+
+    if (!oauthState.userId) {
+      return createPopupResponse({
+        success: false,
+        error: "User session not found. Please try again.",
+      });
+    }
+
+    const userId = oauthState.userId;
 
     await db
       .deleteFrom("oauthStates")
@@ -81,7 +80,7 @@ export async function handle(request: Request) {
     const existing = await db
       .selectFrom("userGoogleDriveConnections")
       .select("id")
-      .where("userId", "=", user.id)
+      .where("userId", "=", userId)
       .executeTakeFirst();
 
     if (existing) {
@@ -94,13 +93,13 @@ export async function handle(request: Request) {
           googleEmail: userInfo.email,
           updatedAt: new Date(),
         })
-        .where("userId", "=", user.id)
+        .where("userId", "=", userId)
         .execute();
     } else {
       await db
         .insertInto("userGoogleDriveConnections")
         .values({
-          userId: user.id,
+          userId: userId,
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken || null,
           expiresAt,

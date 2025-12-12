@@ -99,6 +99,7 @@ export interface OauthStates {
   provider: string;
   redirectUrl: string;
   state: string;
+  userId: number | null;
 }
 
 export interface OrganizationDownloadSettings {
