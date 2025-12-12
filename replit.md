@@ -76,6 +76,13 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-12**: Improved streaming UX for AI Edit and Format features
+  - Added animated "AI is thinking/formatting" state with spinning icon and pulsing dots before first token arrives
+  - Added blinking cursor at end of text while generation is in progress
+  - Added real-time character count indicator showing "Generating... (X chars)"
+  - Added auto-scroll to keep latest streaming content visible
+  - Removed static skeleton loaders in favor of active animations for better responsiveness
+
 - **2024-12-12**: Fixed AI Edit markdown rendering issue
   - AI Edit now properly renders markdown (bold, headings, lists) as formatted HTML
   - Updated handleApplyToSelection and handleApplyToFullText to convert markdown to HTML
