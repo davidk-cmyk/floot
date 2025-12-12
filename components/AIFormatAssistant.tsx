@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { flushSync } from 'react-dom';
-import { Wand2, Check, RefreshCw } from 'lucide-react';
+import { Wand2, Check, RefreshCw, Loader2 } from 'lucide-react';
 import { usePolicyPrompt } from '../helpers/useAIPolicyApi';
 import { Button } from './Button';
-import { Skeleton } from './Skeleton';
 import styles from './AIFormatAssistant.module.css';
 
 type AIFormatAssistantProps = {
@@ -103,7 +102,8 @@ export const AIFormatAssistant = ({
   };
 
   const hasFormattedText = formattedText.length > 0;
-  const isProcessing = isPending && !hasFormattedText;
+  const isStreaming = isPending && hasFormattedText;
+  const isThinking = isPending && !hasFormattedText;
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -119,18 +119,35 @@ export const AIFormatAssistant = ({
       </div>
 
       <div className={styles.outputWrapper} ref={outputWrapperRef}>
-        {isProcessing ? (
-          <div className={styles.skeletonContainer}>
-            <Skeleton style={{ height: '0.875rem', width: '90%' }} />
-            <Skeleton style={{ height: '0.875rem', width: '80%' }} />
-            <Skeleton style={{ height: '0.875rem', width: '95%' }} />
+        {isThinking ? (
+          <div className={styles.thinkingContainer}>
+            <div className={styles.thinkingText}>
+              <Loader2 size={16} className={styles.spinIcon} />
+              <span>AI is formatting</span>
+              <span className={styles.thinkingDots}>
+                <span className={styles.thinkingDot}></span>
+                <span className={styles.thinkingDot}></span>
+                <span className={styles.thinkingDot}></span>
+              </span>
+            </div>
           </div>
+        ) : hasFormattedText ? (
+          <p className={`${styles.formattedText} ${isStreaming ? styles.streamingText : ''}`}>
+            {formattedText}
+          </p>
         ) : (
-          <p className={`${styles.formattedText} ${!hasFormattedText ? styles.placeholder : ''}`}>
-            {hasFormattedText ? formattedText : 'Formatting suggestions will appear here...'}
+          <p className={`${styles.formattedText} ${styles.placeholder}`}>
+            Formatting suggestions will appear here...
           </p>
         )}
         {error && <div className={styles.error}>Error: {error.message}</div>}
+        {(isStreaming || (hasFormattedText && !isPending)) && (
+          <div className={styles.streamingIndicator}>
+            <span className={styles.charCount}>
+              {isStreaming ? 'Generating...' : 'Complete'} ({formattedText.length} chars)
+            </span>
+          </div>
+        )}
       </div>
 
       <div className={styles.actions}>

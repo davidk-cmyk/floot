@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { flushSync } from 'react-dom';
-import { Sparkles, Check, RefreshCw } from 'lucide-react';
+import { Sparkles, Check, RefreshCw, Loader2 } from 'lucide-react';
 import { usePolicyPrompt } from '../helpers/useAIPolicyApi';
 import { Button } from './Button';
-import { Skeleton } from './Skeleton';
 import { Textarea } from './Textarea';
 import styles from './AIEditorAssistant.module.css';
 
@@ -32,6 +31,7 @@ export const AIEditorAssistant = ({
 }: AIEditorAssistantProps) => {
   const [modifiedText, setModifiedText] = useState('');
   const [userPrompt, setUserPrompt] = useState('');
+  const outputWrapperRef = useRef<HTMLDivElement>(null);
   const { mutate: processPrompt, isPending, data: stream, error, reset } = usePolicyPrompt();
 
   const isSelectionMode = !!selectedText;
@@ -42,6 +42,13 @@ export const AIEditorAssistant = ({
     reset();
     setModifiedText('');
   }, [targetText, reset]);
+
+  // Auto-scroll to bottom as new text is streamed in
+  useEffect(() => {
+    if (outputWrapperRef.current && modifiedText) {
+      outputWrapperRef.current.scrollTop = outputWrapperRef.current.scrollHeight;
+    }
+  }, [modifiedText]);
 
   const handleApplyPrompt = () => {
     if (!targetText || !userPrompt.trim()) return;
@@ -100,6 +107,8 @@ export const AIEditorAssistant = ({
   };
 
   const hasModifiedText = modifiedText.length > 0;
+  const isStreaming = isPending && hasModifiedText;
+  const isThinking = isPending && !hasModifiedText;
 
   return (
     <div className={`${styles.container} ${className || ''}`}>
@@ -120,19 +129,36 @@ export const AIEditorAssistant = ({
         />
       </div>
 
-      <div className={styles.outputWrapper}>
-        {isPending && !hasModifiedText ? (
-          <div className={styles.skeletonContainer}>
-            <Skeleton style={{ height: '0.875rem', width: '90%' }} />
-            <Skeleton style={{ height: '0.875rem', width: '80%' }} />
-            <Skeleton style={{ height: '0.875rem', width: '95%' }} />
+      <div className={styles.outputWrapper} ref={outputWrapperRef}>
+        {isThinking ? (
+          <div className={styles.thinkingContainer}>
+            <div className={styles.thinkingText}>
+              <Loader2 size={16} className={styles.spinIcon} />
+              <span>AI is thinking</span>
+              <span className={styles.thinkingDots}>
+                <span className={styles.thinkingDot}></span>
+                <span className={styles.thinkingDot}></span>
+                <span className={styles.thinkingDot}></span>
+              </span>
+            </div>
           </div>
+        ) : hasModifiedText ? (
+          <p className={`${styles.modifiedText} ${isStreaming ? styles.streamingText : ''}`}>
+            {modifiedText}
+          </p>
         ) : (
-          <p className={`${styles.modifiedText} ${!hasModifiedText ? styles.placeholder : ''}`}>
-            {hasModifiedText ? modifiedText : 'AI modifications will appear here...'}
+          <p className={`${styles.modifiedText} ${styles.placeholder}`}>
+            AI modifications will appear here...
           </p>
         )}
         {error && <div className={styles.error}>Error: {error.message}</div>}
+        {(isStreaming || (hasModifiedText && !isPending)) && (
+          <div className={styles.streamingIndicator}>
+            <span className={styles.charCount}>
+              {isStreaming ? 'Generating...' : 'Complete'} ({modifiedText.length} chars)
+            </span>
+          </div>
+        )}
       </div>
 
       <div className={styles.actions}>
