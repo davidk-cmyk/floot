@@ -1,8 +1,4 @@
-import * as pdfjsLib from 'pdfjs-dist';
-
-if (pdfjsLib.GlobalWorkerOptions) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.8.69/build/pdf.worker.min.mjs';
-}
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
 
 export const parsePdfDocument = async (pdfBuffer: Buffer): Promise<string> => {
   try {
