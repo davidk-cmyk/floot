@@ -76,8 +76,14 @@ Configured for VM deployment with:
 Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
 
 ## Recent Changes
+- **2024-12-12**: Fixed AI Edit markdown rendering issue
+  - AI Edit now properly renders markdown (bold, headings, lists) as formatted HTML
+  - Updated handleApplyToSelection and handleApplyToFullText to convert markdown to HTML
+  - Uses IIFE pattern for async markdownToHtml conversion while keeping handlers synchronous
+  - Both AI Edit and Format buttons now correctly render formatted content
+
 - **2024-12-11**: Multi-document upload feature
-  - FileUploadTab now supports uploading up to 10 files at once
+  - FileUploadTab now supports uploading up to 50 files at once
   - Single file upload: redirects to policy editor (existing behavior)
   - Multiple file upload: parses all documents, creates policies in bulk, redirects to policies list
   - Added bulk processing progress UI with completed/failed counts
