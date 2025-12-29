@@ -82,12 +82,6 @@ export const PortalManager: React.FC<{ className?: string }> = ({ className }) =
 
   return (
     <div className={`${styles.managerContainer} ${className || ''}`}>
-      <header className={styles.header}>
-        <p className={styles.description}>
-          Create and manage public or private portals to share specific sets of policies.
-        </p>
-      </header>
-
       <div className={styles.infoBox}>
         <div className={styles.infoBoxHeader}>
           <Lightbulb size={18} className={styles.infoIcon} />
