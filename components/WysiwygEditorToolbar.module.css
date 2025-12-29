@@ -52,12 +52,14 @@
 
 /* Quick tip for variable insertion */
 .quickTip {
-  margin-left: var(--spacing-2);
+  margin-left: auto;
+  padding-left: var(--spacing-2);
   font-size: 0.75rem;
   color: var(--muted-foreground);
   display: flex;
   align-items: center;
   gap: var(--spacing-1);
+  white-space: nowrap;
 }
 
 .kbd {
