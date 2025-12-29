@@ -12,7 +12,7 @@ import { Input } from './Input';
 import { Button } from './Button';
 import { Badge } from './Badge';
 import { Checkbox } from './Checkbox';
-import { Search, Clock, ArrowRight, CheckSquare, Loader } from 'lucide-react';
+import { Search, Clock, ArrowRight, CheckSquare, Loader, Scale } from 'lucide-react';
 import styles from './PolicyTemplateLibrary.module.css';
 import { useBulkCreatePolicies } from '../helpers/usePolicyApi';
 
@@ -23,6 +23,7 @@ export const PolicyTemplateLibrary: React.FC<{ className?: string }> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] =
     useState<PolicyTemplateCategory | 'All'>('All');
+  const [filterByLegallyRequired, setFilterByLegallyRequired] = useState(false);
   const [selectedTemplateIds, setSelectedTemplateIds] = useState<Set<string>>(
     new Set(),
   );
@@ -100,9 +101,11 @@ export const PolicyTemplateLibrary: React.FC<{ className?: string }> = ({
         !searchTerm ||
         template.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         template.description.toLowerCase().includes(searchTerm.toLowerCase());
-      return matchesCategory && matchesSearch;
+      const matchesLegallyRequired =
+        !filterByLegallyRequired || template.type === 'required';
+      return matchesCategory && matchesSearch && matchesLegallyRequired;
     });
-  }, [searchTerm, activeCategory]);
+  }, [searchTerm, activeCategory, filterByLegallyRequired]);
 
   const groupedTemplates = useMemo(() => {
     if (activeCategory !== 'All') {
@@ -135,17 +138,34 @@ export const PolicyTemplateLibrary: React.FC<{ className?: string }> = ({
         </div>
         <div className={styles.categoryFilters}>
           <Button
-            variant={activeCategory === 'All' ? 'primary' : 'ghost'}
-            onClick={() => setActiveCategory('All')}
+            variant={activeCategory === 'All' && !filterByLegallyRequired ? 'primary' : 'ghost'}
+            onClick={() => {
+              setActiveCategory('All');
+              setFilterByLegallyRequired(false);
+            }}
             className={styles.categoryButton}
           >
             All
           </Button>
+          <Button
+            variant={filterByLegallyRequired ? 'primary' : 'ghost'}
+            onClick={() => {
+              setFilterByLegallyRequired(!filterByLegallyRequired);
+              setActiveCategory('All');
+            }}
+            className={styles.categoryButton}
+          >
+            <Scale size={16} />
+            Legally Required
+          </Button>
           {POLICY_TEMPLATE_CATEGORIES.map((cat) => (
             <Button
               key={cat.name}
-              variant={activeCategory === cat.name ? 'primary' : 'ghost'}
-              onClick={() => setActiveCategory(cat.name)}
+              variant={activeCategory === cat.name && !filterByLegallyRequired ? 'primary' : 'ghost'}
+              onClick={() => {
+                setActiveCategory(cat.name);
+                setFilterByLegallyRequired(false);
+              }}
               className={styles.categoryButton}
             >
               <cat.icon size={16} />

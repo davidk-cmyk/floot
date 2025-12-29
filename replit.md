@@ -1,227 +1,38 @@
 # MyPolicyPortal
 
 ## Overview
-MyPolicyPortal is a comprehensive policy management platform that streamlines policy creation, distribution, and acknowledgment, powered by AI.
+MyPolicyPortal is an AI-powered policy management platform designed to streamline policy creation, distribution, and acknowledgment. It aims to provide a comprehensive solution for organizations to manage their internal and external policies efficiently, leveraging AI for content generation and enhancement. The platform supports multi-tenancy, per-user Google Drive integration, and robust notification systems for policy acknowledgment and reminders.
 
-## Tech Stack
-- **Frontend**: React 19 + Vite + TypeScript
-- **Backend**: Hono (Node.js server framework)
-- **Database**: PostgreSQL (via Kysely ORM)
-- **Runtime**: Node.js 20
+## User Preferences
+I prefer clear and concise explanations. When implementing new features or making significant changes, please propose the approach first and wait for my approval. I value iterative development and prefer to see progress in small, testable increments. Ensure that the core architectural patterns are maintained.
 
-## Project Structure
-- `/components` - React components (TSX + CSS modules)
-- `/endpoints` - API endpoint handlers organized by domain
-- `/helpers` - Utility functions and database schema
-- `/pages` - Route pages
-- `server.ts` - Main server entry point (Hono)
-- `index.tsx` - React app entry point
-- `vite.config.ts` - Vite configuration
+## System Architecture
+The application uses a modern web stack: React 19 with Vite and TypeScript for the frontend, and Hono (Node.js) for the backend. PostgreSQL is the database, accessed via the Kysely ORM.
 
-## Environment Configuration
-The application uses a combination of Replit Secrets and `env.json`:
+**UI/UX Decisions:**
+- **Branding:** Portal hero background and page elements dynamically adapt to organization branding colors.
+- **Layout:** Responsive 3-column grid for policy cards, consistent `PortalLayout` for all rendering paths.
+- **Interactivity:** Animated "AI is thinking/formatting" states with real-time character counts and auto-scroll for streaming AI features.
+- **Navigation:** Reorganized sidebar with Audit Trail, Settings, and dynamic Portals section.
 
-### Required (via Replit Secrets)
-- `DATABASE_URL` - Automatically mapped to `FLOOT_DATABASE_URL`
-- `SESSION_SECRET` - Automatically mapped to `JWT_SECRET`
+**Technical Implementations:**
+- **AI Integration:** Uses Replit AI Integrations with Anthropic's `claude-sonnet-4-5` model for policy generation, improvements, and rephrasing.
+- **Email System:** Transactional emails (policy acknowledgments, reminders) are handled via Replit's Resend connector.
+- **File Uploads:** Supports multi-document uploads (up to 50 files) from local system and per-user Google Drive accounts.
+- **Google Drive Integration:** PKCE-secured OAuth flow with state validation for per-user Google Drive connections, storing tokens in `user_google_drive_connections` table with auto-refresh.
+- **Policy Management:** Features bulk policy selection, bulk portal assignment, and a requirement to assign portals before publishing policies.
+- **Database Schema:** PostgreSQL schema includes 27 tables, 1 view (`unacknowledged_required_policies`), 2 triggers (auto-create policy versions), 101 indexes, and a `user_role` enum. Portal slugs are unique per organization.
 
-### AI Integration (via Replit AI Integrations)
-- `AI_INTEGRATIONS_ANTHROPIC_API_KEY` - Automatically provided by Replit
-- `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` - Automatically provided by Replit
-- Uses Claude claude-sonnet-4-5 model for policy generation and AI features
-- No API key required - charges billed to Replit credits
+**Feature Specifications:**
+- **Policy Templates:** "Legally Required" filter added to the Policy Template Library.
+- **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes.
+- **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
+- **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
 
-### Email Integration (via Replit Connectors)
-- Resend connector configured for transactional emails
-- API key and from_email automatically managed by Replit
-- No manual configuration required
-
-### Google Drive Integration (per-user OAuth)
-- `GOOGLE_CLIENT_ID` - OAuth client ID from Google Cloud Console
-- `GOOGLE_CLIENT_SECRET` - OAuth client secret from Google Cloud Console
-- Each user connects their own Google Drive account (multi-tenant)
-- Tokens stored in `user_google_drive_connections` table with auto-refresh
-- Redirect URI: `https://[app-url]/_api/google-drive/oauth_callback`
-
-The `loadEnv.js` file prioritizes environment variables over env.json values for security.
-
-## Development
-
-### Running the Application
-The application runs on port 5000 and serves both the frontend and backend:
-```bash
-npm run build  # Build the frontend
-tsx server.ts  # Start the server
-```
-
-### Workflow
-The "Start application" workflow is configured to:
-1. Run `tsx server.ts` on port 5000
-2. Serve the built frontend from `/dist`
-3. Handle API requests at `/_api/*` endpoints
-
-## Database
-- PostgreSQL database is available via the `DATABASE_URL` secret
-- Schema is defined in `helpers/schema.tsx` (auto-generated by kysely-codegen)
-- Database uses Kysely with camelCase mapping - TypeScript uses camelCase/PascalCase, SQL uses snake_case
-
-### Database Schema
-The database includes:
-- **27 tables**: users, organizations, policies, portals, notifications, sessions, user_google_drive_connections, and more
-- **1 view**: `unacknowledged_required_policies` - computed view for policy acknowledgment tracking
-- **2 triggers**: Auto-create policy versions on insert/update
-- **101 indexes**: Performance optimization for all major queries
-- **Custom type**: `user_role` enum (admin, approver, editor, user)
-
-## Deployment
-Configured for VM deployment with:
-- Build command: `npm run build` (builds the frontend to `/dist`)
-- Run command: `tsx server.ts` (serves the built frontend and API)
-- The application maintains state in server memory
-- Port: 5000 (frontend and backend on same server)
-
-Note: The build step is automatically executed during deployment. For local development, run `npm run build` once before starting the server, or the workflow will serve the existing dist folder.
-
-## Recent Changes
-- **2024-12-12**: Implemented per-user Google Drive OAuth integration
-  - Replaced shared Replit connector with per-user OAuth flow
-  - Each tenant user now connects their own Google Drive account (multi-tenant support)
-  - Created `user_google_drive_connections` table for storing per-user OAuth tokens
-  - Implemented PKCE-secured OAuth flow with state validation for CSRF protection
-  - Auto-refresh of expired access tokens using stored refresh tokens
-  - New OAuth endpoints: authorize, callback, status, disconnect
-  - FileUploadTab updated with "Connect Google Drive" popup flow
-  - Required secrets: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET
-  - Redirect URI: `https://[app-url]/_api/google-drive/oauth_callback`
-
-- **2024-12-12**: Improved streaming UX for AI Edit and Format features
-  - Added animated "AI is thinking/formatting" state with spinning icon and pulsing dots before first token arrives
-  - Added blinking cursor at end of text while generation is in progress
-  - Added real-time character count indicator showing "Generating... (X chars)"
-  - Added auto-scroll to keep latest streaming content visible
-  - Removed static skeleton loaders in favor of active animations for better responsiveness
-
-- **2024-12-12**: Fixed AI Edit markdown rendering issue
-  - AI Edit now properly renders markdown (bold, headings, lists) as formatted HTML
-  - Updated handleApplyToSelection and handleApplyToFullText to convert markdown to HTML
-  - Uses IIFE pattern for async markdownToHtml conversion while keeping handlers synchronous
-  - Both AI Edit and Format buttons now correctly render formatted content
-
-- **2024-12-11**: Multi-document upload feature
-  - FileUploadTab now supports uploading up to 50 files at once
-  - Single file upload: redirects to policy editor (existing behavior)
-  - Multiple file upload: parses all documents, creates policies in bulk, redirects to policies list
-  - Added bulk processing progress UI with completed/failed counts
-  - Added bulk success UI showing created policies and any failures
-  - New API flow: parse-document for each file, then bulk-create to create all policies
-  - Feature available on "Upload" tab in policy creation form
-
-- **2024-12-11**: Fixed bulk policy selection checkbox event handling
-  - Resolved double-triggering bug where both wrapper onClick and Checkbox onChange were firing
-  - Now only Checkbox onChange handles selection (no more race conditions)
-  - Fixed stale closure issue: now using e.target.checked instead of !isSelected
-  - Checkboxes now properly toggle selection and count on single click
-  - Selection state accurately reflects visible checkmarks
-  - Clicking checkbox no longer navigates away from policy list
-
-- **2024-12-11**: Bulk policy selection and portal assignment feature
-  - Added checkboxes to PolicyCard (grid view) and PolicyListView (list view) for multi-select
-  - Created BulkActionsBar floating component that appears when policies are selected
-  - Created BulkPortalAssignModal for assigning multiple policies to multiple portals
-  - New API endpoint POST `/_api/policies/bulk-assign-portals` with admin/editor authorization
-  - Selection automatically clears when filters or pagination changes
-  - Feature only available to admins and editors
-
-- **2024-12-09**: Updated Create & Publish Policy button navigation
-  - Changed "Create & Publish Policy" button to navigate to `/admin/policies` (list page) instead of `/admin/policies/create`
-  - Users can now see all policies and create new ones from the list view
-
-- **2024-12-09**: Reorganized sidebar navigation
-  - Audit Trail followed by Settings in main navigation
-  - Spacing separates Settings from Portals section
-  - Portals section displays available portals as sub-items
-  - "Coming soon" features (Handbook, FAQ, Assistant) moved below separator line
-
-- **2024-12-09**: Added Handbook Generator promo feature to dashboard
-  - HandbookPromo component on admin dashboard showing coming soon feature
-  - Displays feature descriptions: generate handbooks for internal/external use from policy collections
-  - Shows feature cards explaining internal handbooks, external handbooks, and AI-powered formatting
-  - Includes placeholder "Notify Me When Available" button
-
-- **2024-12-09**: Removed "My Favorites" section from portal sidebar
-  - Portal sidebar now only shows "All Policies" and "Recent Updates"
-  - Removed unused favorites filtering logic from portal pages
-
-- **2024-12-09**: Configurable portal labels
-  - Added `label` field to portals table for customizable badge text
-  - Portal label is now editable in portal settings (Basic Info section)
-  - Portal pages display the configured label instead of hardcoded "Internal Portal"
-  - Labels default to empty (no badge shown) but can be set to any text like "Internal Portal", "Public Portal", "HR Portal", etc.
-
-- **2024-12-08**: Email acknowledgment and reminder system fully enabled
-  - Disabled demo mode: Real 6-digit confirmation codes now generated for policy acknowledgments
-  - Confirmation code emails sent via Replit's Resend connector (automatic API key management)
-  - Implemented send reminders API endpoint (`/_api/email-acknowledgment/send-reminders`)
-  - Added sendPolicyReminderEmail and sendBulkPolicyReminders functions with HTML templates
-  - ReminderManager component now fully functional with Send Reminders button enabled
-  - Admins can select pending acknowledgments and send customizable reminder emails
-  - Emails include policy title, portal name, and direct link to view policy
-
-- **2024-12-08**: Portal assignment required before publishing
-  - Added PortalAssignmentModal component that shows when publishing a draft policy with no assigned portals
-  - PolicyStatusActions now checks for portal assignments before allowing publish
-  - User must select at least one portal to assign the policy to before it can be published
-  - Modal uses existing PortalSelector component for portal selection
-  - Safeguards prevent bypassing the modal if portals are later removed
-
-- **2024-12-08**: Admin policy detail page button alignment
-  - Standardized all action buttons (Download, Edit, Unpublish) to full-width
-  - Download button now wrapped in card container matching other action sections
-
-- **2024-12-08**: Dynamic portal branding colors
-  - Portal hero background and page background now derived from organization branding colors
-  - All portal UI elements (badges, sidebar, tabs) use branding colors instead of hardcoded values
-
-- **2024-12-08**: Portal UI redesign to match design specifications
-  - Header: Added search bar to header, added "POLICY PORTAL" subtitle under org name
-  - Hero: Changed to left-aligned layout, removed search bar (moved to header)
-  - Policy cards display in 3-column responsive grid
-  - All render paths (loading, error, password) wrapped in consistent PortalLayout
-  - Updated PortalLayout.tsx, PortalHero.tsx, and portal page components
-
-- **2024-12-08**: Replaced Google Drive integration with Replit connector
-  - Replaced custom Google Picker implementation with Replit's Google Drive integration
-  - New file browser UI in FileUploadTab component for selecting files from Google Drive
-  - OAuth is now handled automatically by Replit - no hardcoded API keys
-  - Created new endpoints: `/_api/google-drive/list` and `/_api/google-drive/download-file`
-  - SharePoint integration available but not configured (user dismissed during setup)
-
-- **2024-12-08**: Fixed PDF upload parsing issue
-  - Installed libuuid system dependency
-  - Fixed pdfjs-dist import for Node.js ESM environment
-
-- **2024-12-08**: Fixed organization registration constraint
-  - Changed portal slug unique constraint from global to per-organization
-  - Dropped `portals_slug_key` (global unique on slug)
-  - Added `portals_organization_slug_unique` (unique on organization_id + slug)
-  - This allows each organization to have their own "public" and "internal" portals
-
-- **2024-12-03**: Switched AI provider from OpenAI to Claude
-  - Migrated from OpenAI API to Replit AI Integrations (Anthropic/Claude)
-  - No API key required - uses Replit's built-in integration
-  - Updated all AI endpoints: generate-policy, policy-prompt, suggest-improvements, rewrite-plain-english, suggest-missing-policies
-  - Using Claude claude-sonnet-4-5 model with 8192 max tokens
-
-- **2024-12-03**: Database schema import from original deployment
-  - Imported exact schema from original database dump including all triggers, constraints, and indexes
-  - Created 26 tables, 1 view, 2 triggers, 101 indexes, and user_role enum type
-  - All foreign key constraints properly configured with ON DELETE CASCADE where appropriate
-  - Verified application runs correctly with new schema
-
-- **2024-12-02**: Initial Replit environment setup
-  - Configured Vite to bind to 0.0.0.0:5000 with proper HMR settings for Replit proxy
-  - Updated server.ts to bind to 0.0.0.0:5000
-  - Created env.json with database and JWT configuration
-  - Configured workflow for port 5000 with webview output
-  - Set up deployment configuration for VM target
-  - Installed dependencies with legacy peer deps flag (React 19 compatibility)
+## External Dependencies
+- **Database:** PostgreSQL
+- **AI Integration:** Anthropic (Claude `claude-sonnet-4-5` model) via Replit AI Integrations
+- **Email Service:** Resend (via Replit Connectors)
+- **File Storage/Management:** Google Drive (per-user OAuth integration)
+- **Runtime:** Node.js 20
+- **Frameworks/Libraries:** React 19, Vite, Hono, Kysely ORM
