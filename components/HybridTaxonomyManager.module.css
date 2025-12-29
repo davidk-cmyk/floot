@@ -73,14 +73,19 @@
 }
 
 .guideContent p {
-  margin: 0 0 var(--spacing-3) 0;
+  margin: 0 0 var(--spacing-4) 0;
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
+  line-height: 1.7;
 }
 
 .guideContent p:last-child {
   margin-bottom: 0;
+}
+
+.guideContent span {
+  flex: 1;
 }
 
 .customGuideBadge {
@@ -109,7 +114,9 @@
 .standardBadge,
 .customBadge {
   font-size: 0.875rem;
-  padding: var(--spacing-1) var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .customBadge {
