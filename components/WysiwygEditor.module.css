@@ -5,7 +5,6 @@
   background-color: var(--card);
   transition: border-color var(--animation-duration-normal) ease, box-shadow var(--animation-duration-normal) ease;
   font-family: var(--font-family-base);
-  overflow: hidden;
 }
 
 .editorContainer:focus-within {
