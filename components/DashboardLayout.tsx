@@ -10,8 +10,7 @@ import { UserAvatar } from './UserAvatar';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
 import { NotificationBell } from './NotificationBell';
 import { Separator } from './Separator';
-import { LogOut, LayoutDashboard, BookOpen, Shield, Users, Settings, History, ChevronLeft, ChevronRight, CheckCircle, FileText, HelpCircle, MessageCircleQuestion } from 'lucide-react';
-import { PortalQuickAccessList } from './PortalQuickAccessList';
+import { LogOut, LayoutDashboard, BookOpen, Shield, Users, Settings, History, ChevronLeft, ChevronRight, CheckCircle, FileText, HelpCircle, MessageCircleQuestion, PanelsTopLeft } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 import {
   DropdownMenu,
@@ -122,6 +121,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 </Badge>
               )}
             </NavLink>
+            <NavLink to={buildUrl('/admin/settings/portals')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+              <PanelsTopLeft size={20} />
+              {!sidebarCollapsed && <span>Portals</span>}
+            </NavLink>
             {user?.role === 'admin' && (
               <NavLink to={buildUrl('/admin/users')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
                 <Users size={20} />
@@ -144,8 +147,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
               <Settings size={20} />
               {!sidebarCollapsed && <span>Settings</span>}
             </NavLink>
-            <div className={styles.navSpacing} />
-            <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
             <hr className={styles.navSeparator} />
             <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${styles.previewNavLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <FileText size={20} />
