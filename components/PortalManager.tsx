@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
 import { usePortals } from '../helpers/usePortalApi';
 import { Button } from './Button';
 import { PortalCard } from './PortalCard';
@@ -12,6 +12,7 @@ import { OutputType as ListPortalsOutputType } from '../endpoints/portals/list_G
 export const PortalManager: React.FC<{ className?: string }> = ({ className }) => {
   const [page, setPage] = useState(1);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const [showUseCases, setShowUseCases] = useState(false);
   const { data, isFetching, error } = usePortals({ page, limit: 10 });
 
   const renderSkeletons = () => (
@@ -82,14 +83,44 @@ export const PortalManager: React.FC<{ className?: string }> = ({ className }) =
   return (
     <div className={`${styles.managerContainer} ${className || ''}`}>
       <header className={styles.header}>
-        <div>
-          <p className={styles.description}>
-            Create and manage public or private portals to share specific sets of policies.
-          </p>
+        <p className={styles.description}>
+          Create and manage public or private portals to share specific sets of policies.
+        </p>
+      </header>
+
+      <div className={styles.infoBox}>
+        <div className={styles.infoBoxHeader}>
+          <Lightbulb size={18} className={styles.infoIcon} />
+          <span className={styles.infoBoxTitle}>Quick Guide</span>
         </div>
+        <p className={styles.infoBoxText}>
+          Most organizations only need these two default portals. <strong>Public Portal</strong> for external audiences, <strong>Internal Portal</strong> for your team. Create additional portals only if you need to share different policy sets with specific groups.
+        </p>
+        <button 
+          className={styles.useCasesToggle} 
+          onClick={() => setShowUseCases(!showUseCases)}
+        >
+          {showUseCases ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          When to create additional portals
+        </button>
+        {showUseCases && (
+          <ul className={styles.useCasesList}>
+            <li>Regional offices with different local policies</li>
+            <li>Partner portals with vendor-specific agreements</li>
+            <li>Department-specific policy collections (HR, IT, Legal)</li>
+            <li>Customer segments requiring different terms</li>
+          </ul>
+        )}
+      </div>
+      
+      {renderContent()}
+      {renderPagination(data?.pagination)}
+
+      <div className={styles.createSection}>
+        <p className={styles.createHelper}>Need a custom portal for a specific audience?</p>
         <Dialog open={isCreateModalOpen} onOpenChange={setCreateModalOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button variant="outline">
               <Plus size={16} />
               Create New Portal
             </Button>
@@ -101,10 +132,7 @@ export const PortalManager: React.FC<{ className?: string }> = ({ className }) =
             <PortalForm onSuccess={() => setCreateModalOpen(false)} />
           </DialogContent>
         </Dialog>
-      </header>
-      
-      {renderContent()}
-      {renderPagination(data?.pagination)}
+      </div>
     </div>
   );
 };

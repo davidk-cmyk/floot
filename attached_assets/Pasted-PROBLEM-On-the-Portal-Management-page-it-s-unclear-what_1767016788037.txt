@@ -1,0 +1,31 @@
+PROBLEM: On the Portal Management page, it's unclear what the purpose of each portal is (Public vs Internal) and why a user would need to create additional portals. The "Create New Portal" button is prominent but most users only need the two default portals.
+
+REQUIRED CHANGES:
+
+1. ADD CLEAR EXPLANATORY TEXT for each portal type in their cards:
+
+   **Public Portal:**
+   - Update description from "Default public portal for sharing policies externally." to:
+   - "Share policies with external stakeholders, customers, and partners. Perfect for public-facing compliance documentation, terms of service, and privacy policies."
+   
+   **Internal Portal:**
+   - Update description from "Default internal portal for organization members. dfdfdf" to:
+   - "Share policies with employees and internal team members only. Use this for internal procedures, HR policies, and confidential operational guidelines."
+
+2. ADD AN INFORMATION/HELP SECTION above the portals:
+   - Add a subtle info box at the top of the page (below "Create and manage public or private portals to share specific sets of policies.")
+   - Content: "💡 Most organizations only need these two default portals. Public Portal for external audiences, Internal Portal for your team. Create additional portals only if you need to share different policy sets with specific groups (e.g., different departments, regions, or partner organizations)."
+
+3. MAKE "CREATE NEW PORTAL" BUTTON LESS PROMINENT:
+   - Change from primary blue button to a secondary/outline button style
+   - Move it to the bottom of the page or make it smaller
+   - Add helper text near the button: "Need to create custom portal for a specific audience?"
+   - OR add a tooltip/hover state explaining: "Create additional portals to share different policy sets with specific groups or departments"
+
+4. ADD USE CASE EXAMPLES (optional):
+   - Consider adding a collapsible "When to create additional portals" section that shows examples:
+     - "Regional offices with different local policies"
+     - "Partner portals with vendor-specific agreements"
+     - "Department-specific policy collections"
+
+GOAL: Make it crystal clear what each portal type is for and prevent confusion about whether users need to create additional portals.

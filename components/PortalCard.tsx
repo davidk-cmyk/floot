@@ -59,7 +59,13 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
           <label htmlFor={`status-${portal.id}`}>{portal.isActive ? 'Active' : 'Inactive'}</label>
         </div>
       </div>
-      <p className={styles.description}>{portal.description || 'No description provided.'}</p>
+      <p className={styles.description}>
+        {portal.slug === 'public' 
+          ? 'Share policies with external stakeholders, customers, and partners. Perfect for public-facing compliance documentation, terms of service, and privacy policies.'
+          : portal.slug === 'internal'
+          ? 'Share policies with employees and internal team members only. Use this for internal procedures, HR policies, and confidential operational guidelines.'
+          : portal.description || 'No description provided.'}
+      </p>
       
       <div className={styles.cardInfo}>
                 <PortalStatusIndicator portal={portal} />
