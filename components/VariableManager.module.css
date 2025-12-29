@@ -39,3 +39,119 @@
   box-shadow: var(--shadow-md);
   margin-top: var(--spacing-4);
 }
+
+/* Helpful Guide Section */
+.helpGuideSection {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 6%, var(--muted)) 0%,
+    color-mix(in srgb, var(--primary) 3%, var(--muted)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, var(--border));
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+  animation: slideDown 300ms ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.helpGuideHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.helpGuideLightbulb {
+  font-size: 1.5rem;
+}
+
+.helpGuideTitle {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.helpGuideText {
+  margin: 0 0 var(--spacing-2) 0;
+  color: var(--foreground);
+  line-height: 1.6;
+}
+
+.examplesSection {
+  margin: var(--spacing-2) 0;
+  padding-left: var(--spacing-3);
+}
+
+.examplesTitle {
+  margin: 0 0 var(--spacing-1) 0;
+  font-weight: 600;
+  color: var(--foreground);
+  font-size: 0.9rem;
+}
+
+.examplesList {
+  margin: 0;
+  padding: 0 0 0 var(--spacing-3);
+  list-style-type: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-1);
+}
+
+.examplesList li {
+  color: var(--muted-foreground);
+  line-height: 1.5;
+  font-size: 0.9rem;
+  padding-left: var(--spacing-2);
+  position: relative;
+}
+
+.examplesList li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.examplesList code {
+  background-color: color-mix(in srgb, var(--primary) 10%, var(--secondary));
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: 'Monaco', 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+.helpGuideHint {
+  margin: var(--spacing-2) 0 0 0;
+  padding: var(--spacing-2);
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--background));
+  border-left: 2px solid var(--primary);
+  border-radius: var(--radius-sm);
+  color: var(--muted-foreground);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.helpGuideHint code {
+  background-color: color-mix(in srgb, var(--primary) 12%, var(--background));
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-family: 'Monaco', 'Courier New', monospace;
+}

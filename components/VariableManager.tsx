@@ -156,6 +156,34 @@ export const VariableManager = () => {
           </TabsList>
         </div>
 
+        {/* Helpful Guide Section */}
+        <div className={styles.helpGuideSection}>
+          <div className={styles.helpGuideHeader}>
+            <span className={styles.helpGuideLightbulb}>💡</span>
+            <h3 className={styles.helpGuideTitle}>How Variables Work</h3>
+          </div>
+          <p className={styles.helpGuideText}>
+            Create variables for information that appears frequently across your policies. When you update a variable here, it automatically updates everywhere it's used.
+          </p>
+          <div className={styles.examplesSection}>
+            <p className={styles.examplesTitle}>Common Examples:</p>
+            <ul className={styles.examplesList}>
+              <li><code>company.name</code> - Company or organization name</li>
+              <li><code>company.address</code> - Registered office address</li>
+              <li><code>company.email</code> - General company email</li>
+              <li><code>company.phone</code> - Company phone number</li>
+              <li><code>dpo_email</code> - Data Protection Officer contact</li>
+              <li><code>hr_contact</code> - HR department email or phone</li>
+              <li><code>emergency_number</code> - Emergency contact number</li>
+              <li><code>head_office_location</code> - Main office location</li>
+              <li><code>company_registration</code> - Company registration number</li>
+            </ul>
+          </div>
+          <p className={styles.helpGuideHint}>
+            Simply use variables in your policies (type <code>/</code> in the editor), and they'll automatically populate with the values you set here.
+          </p>
+        </div>
+
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <TabsContent value="editor">
             <VariableManagerEditor

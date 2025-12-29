@@ -40,6 +40,12 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
   - Clear Format: "Remove all text formatting and return to plain text"
   - Variables: "Insert dynamic fields that auto-populate (press /)"
 - **Variables Hint Pill:** Added floating hint pill that appears near the cursor when user starts typing, showing "Press / for variables" tip. Auto-hides after 4 seconds or when "/" is pressed.
+- **Organization Variables Page Enhancements:**
+  - Added "How Variables Work" section with explanation and 9 common examples (company.name, dpo_email, hr_contact, etc.)
+  - Improved "Add Custom Variable" form with better placeholder text and helper instructions (use lowercase with underscores)
+  - Quick Start suggestions (CEO Name, Company Address, DPO Contact, HR Email, Emergency Number, Head Office Location)
+  - Suggestion buttons show existing variables as disabled to prevent duplicates
+  - Animated gradient guide section with clear visual hierarchy
 
 ## External Dependencies
 - **Database:** PostgreSQL

@@ -1,0 +1,44 @@
+PROBLEM: The Organization Variables page doesn't provide examples or guidance on what variables to create, making it unclear how this feature can simplify policy editing.
+
+REQUIRED CHANGES:
+
+1. ADD A HELPFUL DESCRIPTION/GUIDE at the top of the page (below "Define dynamic variables to personalize policy templates and content."):
+
+   **Add a prominent help section that says:**
+   
+   "💡 **How Variables Work**
+   
+   Create variables for information that appears frequently across your policies. When you update a variable here, it automatically updates everywhere it's used.
+   
+   **Common Examples:**
+   - {{ceo_name}} - CEO or Managing Director name
+   - {{company_address}} - Registered office address
+   - {{dpo_email}} - Data Protection Officer contact
+   - {{hr_contact}} - HR department email or phone
+   - {{emergency_number}} - Emergency contact number
+   - {{head_office_location}} - Main office location
+   - {{company_registration}} - Company registration number
+   
+   Simply type these variables in your policies (using the / key in the editor), and they'll automatically populate with the values you set here."
+
+2. IMPROVE THE "ADD CUSTOM VARIABLE" EXPERIENCE:
+   - When user clicks "Add Custom Variable", show a form with:
+     - Variable name field (with placeholder: e.g., "ceo_name, company_address")
+     - Variable value field (with placeholder: "Enter the actual value")
+     - Optional: Variable description field
+   - Add helper text: "Use lowercase with underscores (e.g., ceo_name, not CEO Name)"
+
+3. ADD EXAMPLE VARIABLES AS SUGGESTIONS:
+   - Below the "Add Custom Variable" button, add a small section:
+   - "Quick Start: Add common variables" with clickable suggestions:
+     - "+ CEO Name"
+     - "+ Company Address"  
+     - "+ DPO Contact"
+     - "+ HR Email"
+   - Clicking these pre-fills the form with suggested variable names
+
+4. SHOW USAGE COUNT (if possible):
+   - When variables are created and used in policies, show "Used in X policies" next to each variable
+   - This helps users understand which variables are actively in use
+
+GOAL: Make it immediately clear what variables are, why they're useful, and provide concrete examples so users can quickly start using this feature to simplify policy editing.

@@ -1,7 +1,23 @@
+.dialogContent {
+  max-width: 500px;
+}
+
 .content {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-2);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
 .error {
@@ -14,4 +30,36 @@
   color: var(--muted-foreground);
   font-size: 0.875rem;
   margin: 0;
+}
+
+.suggestionsSection {
+  padding: var(--spacing-2);
+  background-color: color-mix(in srgb, var(--primary) 5%, var(--muted));
+  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, var(--primary) 15%, var(--border));
+}
+
+.suggestionsTitle {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.suggestionsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.suggestionButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  font-size: 0.875rem;
+}
+
+.suggestionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
