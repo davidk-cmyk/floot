@@ -28,45 +28,65 @@
   margin: 0;
 }
 
-.infoBox {
+.quickGuideBox {
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--background));
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.quickGuideHeader {
   display: flex;
-  align-items: flex-start;
-  gap: var(--spacing-3);
-  background-color: color-mix(in srgb, var(--info) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--info) 20%, transparent);
-  color: var(--foreground);
-  padding: var(--spacing-3);
-  border-radius: var(--radius);
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: var(--spacing-4) var(--spacing-5);
+  background: none;
+  border: none;
+  cursor: pointer;
   font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-align: left;
+  transition: background-color var(--animation-duration-fast) ease;
 }
 
-.infoIcon {
-  color: var(--info);
+.quickGuideHeader:hover {
+  background-color: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.guideIcon {
+  color: var(--primary);
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
-.infoBox p {
-  margin: 0 0 var(--spacing-2) 0;
-  line-height: 1.5;
+.guideTitle {
+  flex-grow: 1;
 }
 
-.infoBox p:last-child {
+.guideContent {
+  padding: 0 var(--spacing-5) var(--spacing-4) var(--spacing-5);
+  border-top: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.6;
+}
+
+.guideContent p {
+  margin: 0 0 var(--spacing-3) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.guideContent p:last-child {
   margin-bottom: 0;
 }
 
-.infoBox ul {
-  margin: 0 0 var(--spacing-2) 0;
-  padding-left: var(--spacing-4);
-}
-
-.infoBox li {
-  margin-bottom: var(--spacing-1);
-  line-height: 1.5;
-}
-
-.infoBox li:last-child {
-  margin-bottom: 0;
+.customGuideBadge {
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: color-mix(in srgb, var(--primary) 100%, var(--primary));
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 .addForm {
@@ -97,6 +117,9 @@
   align-items: center;
   gap: var(--spacing-2);
   padding-right: var(--spacing-1);
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent);
+  color: color-mix(in srgb, var(--primary) 100%, var(--primary));
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
 }
 
 .removeButton {
