@@ -603,6 +603,10 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
           />
         </DialogContent>
       </Dialog>
+
+      <span className={styles.quickTip}>
+        Press <kbd className={styles.kbd}>/</kbd> to use variables
+      </span>
     </div>
   );
 };

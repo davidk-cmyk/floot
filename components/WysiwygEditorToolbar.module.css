@@ -50,3 +50,27 @@
   border-bottom-color: var(--border);
 }
 
+/* Quick tip for variable insertion */
+.quickTip {
+  margin-left: var(--spacing-2);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-weight: 500;
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--foreground);
+}
+
