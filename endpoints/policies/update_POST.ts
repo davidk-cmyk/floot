@@ -135,7 +135,7 @@ export async function handle(request: Request) {
           .where("portals.isActive", "=", true)
           .execute();
 
-        portalUrls = portalAssignments.map(assignment => `/${assignment.slug}/${policyId}`);
+        portalUrls = portalAssignments.map(assignment => `/${user.organizationId}/${assignment.slug}/${policyId}`);
       } catch (error) {
         console.error("Error fetching portal URLs for published policy:", {
           policyId: updatedPolicy.id,
