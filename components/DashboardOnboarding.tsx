@@ -68,7 +68,7 @@ export const DashboardOnboarding: React.FC<DashboardOnboardingProps> = ({
       title: "View Your Portals",
       description: "Preview and manage your Internal and Public portals where policies are published.",
       icon: Globe,
-      href: "/admin/portals",
+      href: "/admin/settings/portals",
       cta: "Go to Portals",
       isComplete: false,
     },
