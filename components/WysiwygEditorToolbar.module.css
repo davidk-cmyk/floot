@@ -62,24 +62,64 @@
 
 /* Clear Format Button in AI Group */
 .clearFormatButton {
-  color: color-mix(in srgb, var(--primary) 70%, var(--foreground));
+  gap: var(--spacing-1);
+  font-weight: 500;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 10%, var(--secondary)),
+    color-mix(in srgb, var(--primary) 6%, var(--secondary))
+  );
+  color: var(--secondary-foreground);
+  border: 1px solid color-mix(in srgb, var(--primary) 12%, var(--border));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--primary) 6%, transparent);
   transition: all 200ms ease;
 }
 
 .clearFormatButton:hover {
-  background-color: color-mix(in srgb, var(--primary) 10%, var(--background));
-  color: var(--primary);
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 15%, var(--secondary)),
+    color-mix(in srgb, var(--primary) 11%, var(--secondary))
+  );
+  border-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
 /* Variables Button in AI Group */
 .variablesButton {
-  color: color-mix(in srgb, var(--primary) 70%, var(--foreground));
+  gap: var(--spacing-1);
+  font-weight: 500;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 10%, var(--secondary)),
+    color-mix(in srgb, var(--primary) 6%, var(--secondary))
+  );
+  color: var(--secondary-foreground);
+  border: 1px solid color-mix(in srgb, var(--primary) 12%, var(--border));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--primary) 6%, transparent);
   transition: all 200ms ease;
 }
 
 .variablesButton:hover {
-  background-color: color-mix(in srgb, var(--primary) 10%, var(--background));
-  color: var(--primary);
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 15%, var(--secondary)),
+    color-mix(in srgb, var(--primary) 11%, var(--secondary))
+  );
+  border-color: color-mix(in srgb, var(--primary) 20%, var(--border));
+  box-shadow: 0 2px 4px color-mix(in srgb, var(--primary) 10%, transparent);
+}
+
+/* Info Icon Inside Button */
+.buttonInfoIcon {
+  color: color-mix(in srgb, var(--primary) 50%, var(--secondary-foreground));
+  flex-shrink: 0;
+  transition: all 200ms ease;
+  opacity: 0.7;
+  margin-left: var(--spacing-1);
+}
+
+.clearFormatButton:hover .buttonInfoIcon,
+.variablesButton:hover .buttonInfoIcon,
+.aiFeatureButton:hover .buttonInfoIcon {
+  opacity: 1;
+  color: var(--secondary-foreground);
 }
 
 /* Dark mode adjustments */

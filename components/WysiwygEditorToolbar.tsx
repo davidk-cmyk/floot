@@ -38,7 +38,7 @@ import {
   Redo,
   Sparkles,
   Variable,
-  RotateCcw,
+  Eraser,
   Info
 } from 'lucide-react';
 import { Button } from './Button';
@@ -579,93 +579,110 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       <div className={styles.aiGroupContainer}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className={styles.buttonWithIcon}>
-              <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    className={styles.aiFeatureButton}
-                  >
-                    <Sparkles size={16} />
-                    AI Edit
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <AIEditorAssistant
-                    selectedText={selectedText}
-                    fullText={getFullText()}
-                    onApplyToSelection={handleApplyToSelection}
-                    onApplyToFullText={handleApplyToFullText}
-                    onClose={() => setIsAIPopoverOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
-              <Info size={14} className={styles.infoIcon} />
-            </div>
+            <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className={styles.aiFeatureButton}
+                >
+                  <Sparkles size={16} />
+                  AI Edit
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info size={14} className={styles.buttonInfoIcon} />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">Select text and use AI to rewrite, expand, or modify it</TooltipContent>
+                  </Tooltip>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <AIEditorAssistant
+                  selectedText={selectedText}
+                  fullText={getFullText()}
+                  onApplyToSelection={handleApplyToSelection}
+                  onApplyToFullText={handleApplyToFullText}
+                  onClose={() => setIsAIPopoverOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
           </TooltipTrigger>
-          <TooltipContent>Select text and use AI to rewrite, expand, or modify it</TooltipContent>
         </Tooltip>
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className={styles.buttonWithIcon}>
-              <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="sm"
-                    className={styles.aiFeatureButton}
-                  >
-                    <Sparkles size={16} />
-                    Format Document
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <AIFormatAssistant
-                    selectedText={selectedText}
-                    fullText={getFullText()}
-                    onApplyToSelection={handleFormatApplyToSelection}
-                    onApplyToFullText={handleFormatApplyToFullText}
-                    onClose={() => setIsFormatPopoverOpen(false)}
-                  />
-                </DialogContent>
-              </Dialog>
-              <Info size={14} className={styles.infoIcon} />
-            </div>
+            <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  className={styles.aiFeatureButton}
+                >
+                  <Sparkles size={16} />
+                  Format Document
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Info size={14} className={styles.buttonInfoIcon} />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">Apply consistent formatting across entire document</TooltipContent>
+                  </Tooltip>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <AIFormatAssistant
+                  selectedText={selectedText}
+                  fullText={getFullText()}
+                  onApplyToSelection={handleFormatApplyToSelection}
+                  onApplyToFullText={handleFormatApplyToFullText}
+                  onClose={() => setIsFormatPopoverOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
           </TooltipTrigger>
-          <TooltipContent>Apply consistent formatting across entire document</TooltipContent>
         </Tooltip>
-
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          onClick={clearFormatting}
-          title="Clear Format: Remove all text formatting"
-          className={styles.clearFormatButton}
-        >
-          <RotateCcw size={16} />
-        </Button>
 
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className={styles.buttonWithIcon}>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                onClick={() => setIsVariablesHelpOpen(!isVariablesHelpOpen)}
-                className={styles.variablesButton}
-              >
-                <Variable size={16} />
-              </Button>
-              <Info size={14} className={styles.infoIcon} />
-            </div>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={clearFormatting}
+              className={styles.clearFormatButton}
+            >
+              <Eraser size={16} />
+              Clear Format
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info size={14} className={styles.buttonInfoIcon} />
+                </TooltipTrigger>
+                <TooltipContent side="top">Remove all text formatting and return to plain text</TooltipContent>
+              </Tooltip>
+            </Button>
           </TooltipTrigger>
-          <TooltipContent>Insert dynamic fields that auto-populate (press /)</TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsVariablesHelpOpen(!isVariablesHelpOpen)}
+              className={styles.variablesButton}
+            >
+              <Variable size={16} />
+              Variables
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info size={14} className={styles.buttonInfoIcon} />
+                </TooltipTrigger>
+                <TooltipContent side="top">Insert dynamic fields that auto-populate (press /)</TooltipContent>
+              </Tooltip>
+            </Button>
+          </TooltipTrigger>
         </Tooltip>
       </div>
     </div>

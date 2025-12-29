@@ -28,10 +28,16 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 - **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes.
 - **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
 - **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
-- **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups, with sparkle icons, descriptive tooltips with (i) info icons, Clear Format button, and Variables helper with "/" shortcut hint.
-- **Tooltip Descriptions:** Added info icons (i) with descriptive tooltips:
+- **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups with all four AI buttons styled consistently (secondary variant with gradient backgrounds and shadows).
+- **AI-Powered Features Styling:**
+  - AI Edit: Sparkles icon + "AI Edit" label with (i) tooltip inside button
+  - Format Document: Sparkles icon + "Format Document" label with (i) tooltip inside button
+  - Clear Format: Eraser icon + "Clear Format" label with (i) tooltip inside button
+  - Variables: Variable icon + "Variables" label with (i) tooltip inside button
+- **Tooltip Descriptions:** All AI buttons have descriptive (i) icons with tooltips:
   - AI Edit: "Select text and use AI to rewrite, expand, or modify it"
   - Format Document: "Apply consistent formatting across entire document"
+  - Clear Format: "Remove all text formatting and return to plain text"
   - Variables: "Insert dynamic fields that auto-populate (press /)"
 - **Variables Hint Pill:** Added floating hint pill that appears near the cursor when user starts typing, showing "Press / for variables" tip. Auto-hides after 4 seconds or when "/" is pressed.
 
