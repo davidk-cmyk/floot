@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { CheckCircle, Circle, FileText, Edit, Calendar, User, Clock, ExternalLink } from "lucide-react";
+import { CheckCircle, Circle, Edit, Calendar, User, Clock, ExternalLink } from "lucide-react";
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
@@ -136,7 +136,6 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
       )}
       
       <div className={styles.cardHeader}>
-        <FileText className={styles.icon} />
         <h3 className={styles.title}>{policy.title}</h3>
       </div>
 
