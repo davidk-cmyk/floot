@@ -77,7 +77,7 @@
   background-color: color-mix(in srgb, var(--primary) 8%, var(--background));
   border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
   border-radius: var(--radius-md);
-  padding: var(--spacing-5);
+  padding: var(--spacing-6);
   margin-bottom: var(--spacing-8);
 }
 
