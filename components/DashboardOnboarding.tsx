@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Building2, FileText, Send, ArrowRight, Sparkles } from "lucide-react";
+import { Building2, FileText, Send, ArrowRight, Sparkles, Globe } from "lucide-react";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
 import { Button } from "./Button";
 import styles from "./DashboardOnboarding.module.css";
@@ -62,6 +62,15 @@ export const DashboardOnboarding: React.FC<DashboardOnboardingProps> = ({
       href: "/admin/acknowledgements",
       cta: "View Acknowledgements",
       isComplete: (stats?.requiresAcknowledgement || 0) > 0,
+    },
+    {
+      id: "portals",
+      title: "View Your Portals",
+      description: "Preview and manage your Internal and Public portals where policies are published.",
+      icon: Globe,
+      href: "/admin/portals",
+      cta: "Go to Portals",
+      isComplete: false,
     },
   ];
 
