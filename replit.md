@@ -28,7 +28,11 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 - **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes.
 - **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
 - **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
-- **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups, with sparkle icons, descriptive tooltips, Clear Format button, and Variables helper with "/" shortcut hint.
+- **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups, with sparkle icons, descriptive tooltips with (i) info icons, Clear Format button, and Variables helper with "/" shortcut hint.
+- **Tooltip Descriptions:** Added info icons (i) with descriptive tooltips:
+  - AI Edit: "Select text and use AI to rewrite, expand, or modify it"
+  - Format Document: "Apply consistent formatting across entire document"
+  - Variables: "Insert dynamic fields that auto-populate (press /)"
 - **Variables Hint Pill:** Added floating hint pill that appears near the cursor when user starts typing, showing "Press / for variables" tip. Auto-hides after 4 seconds or when "/" is pressed.
 
 ## External Dependencies

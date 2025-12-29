@@ -38,10 +38,12 @@ import {
   Redo,
   Sparkles,
   Variable,
-  RotateCcw
+  RotateCcw,
+  Info
 } from 'lucide-react';
 import { Button } from './Button';
 import { Dialog, DialogContent, DialogTrigger } from './Dialog';
+import { Tooltip, TooltipContent, TooltipTrigger } from './Tooltip';
 import { AIEditorAssistant } from './AIEditorAssistant';
 
 import { AIFormatAssistant } from './AIFormatAssistant';
@@ -575,53 +577,67 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
 
       {/* Group 2: AI-Powered Features */}
       <div className={styles.aiGroupContainer}>
-        <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
-          <DialogTrigger asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              title={hasSelectedText ? "AI Edit: Select text and use AI to rewrite, expand, or modify it" : "AI Edit: Use AI to improve your entire document"}
-              className={styles.aiFeatureButton}
-            >
-              <Sparkles size={16} />
-              AI Edit
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <AIEditorAssistant
-              selectedText={selectedText}
-              fullText={getFullText()}
-              onApplyToSelection={handleApplyToSelection}
-              onApplyToFullText={handleApplyToFullText}
-              onClose={() => setIsAIPopoverOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={styles.buttonWithIcon}>
+              <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className={styles.aiFeatureButton}
+                  >
+                    <Sparkles size={16} />
+                    AI Edit
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <AIEditorAssistant
+                    selectedText={selectedText}
+                    fullText={getFullText()}
+                    onApplyToSelection={handleApplyToSelection}
+                    onApplyToFullText={handleApplyToFullText}
+                    onClose={() => setIsAIPopoverOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+              <Info size={14} className={styles.infoIcon} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>Select text and use AI to rewrite, expand, or modify it</TooltipContent>
+        </Tooltip>
 
-        <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
-          <DialogTrigger asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              title={hasSelectedText ? "Format Document: Apply consistent formatting across selection" : "Format Document: Apply consistent formatting across entire document"}
-              className={styles.aiFeatureButton}
-            >
-              <Sparkles size={16} />
-              Format Document
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <AIFormatAssistant
-              selectedText={selectedText}
-              fullText={getFullText()}
-              onApplyToSelection={handleFormatApplyToSelection}
-              onApplyToFullText={handleFormatApplyToFullText}
-              onClose={() => setIsFormatPopoverOpen(false)}
-            />
-          </DialogContent>
-        </Dialog>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={styles.buttonWithIcon}>
+              <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className={styles.aiFeatureButton}
+                  >
+                    <Sparkles size={16} />
+                    Format Document
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <AIFormatAssistant
+                    selectedText={selectedText}
+                    fullText={getFullText()}
+                    onApplyToSelection={handleFormatApplyToSelection}
+                    onApplyToFullText={handleFormatApplyToFullText}
+                    onClose={() => setIsFormatPopoverOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+              <Info size={14} className={styles.infoIcon} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>Apply consistent formatting across entire document</TooltipContent>
+        </Tooltip>
 
         <Button
           type="button"
@@ -634,16 +650,23 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
           <RotateCcw size={16} />
         </Button>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => setIsVariablesHelpOpen(!isVariablesHelpOpen)}
-          title="Variables: Insert dynamic fields like {{company_name}}, {{department}}, etc. (Press / to use)"
-          className={styles.variablesButton}
-        >
-          <Variable size={16} />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className={styles.buttonWithIcon}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setIsVariablesHelpOpen(!isVariablesHelpOpen)}
+                className={styles.variablesButton}
+              >
+                <Variable size={16} />
+              </Button>
+              <Info size={14} className={styles.infoIcon} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>Insert dynamic fields that auto-populate (press /)</TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );
