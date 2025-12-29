@@ -1,0 +1,36 @@
+PROBLEM: Powerful document editing features (AI Edit, Format, Clear Format, and Variables via "/") are hidden in the toolbar and easily overlooked by users, resulting in poor discoverability and underutilization of key features.
+
+REQUIRED CHANGES:
+
+1. REORGANIZE THE TOOLBAR WITH CLEAR VISUAL SEPARATION:
+   
+   **Group 1: Basic Formatting** (left side)
+   - Keep basic WYSIWYG controls together: H1, H2, H3, Bold, Italic, Lists, Links
+   - Light grey separator line after this group
+   
+   **Group 2: AI-Powered Features** (center/right side - make these STAND OUT)
+   - "AI Edit" button - keep current styling but make more prominent
+   - "Format Document" button (rename from just "Format" to be clearer)
+   - "Clear Format" button
+   - Add a subtle background color or border around this group to make it visually distinct
+   - Consider adding a small "✨ AI" badge or sparkle icon to these buttons
+
+2. ADD A VARIABLES HELPER:
+   - Add a visible "Variables" button next to the AI features with a tag/variable icon
+   - On click, show a dropdown/tooltip explaining: "Press / to insert variables like {{company_name}}, {{department}}, etc."
+   - OR add a small floating hint pill that says "Press / for variables" that appears near the cursor when user starts typing
+   - Show a list of available variables when user presses "/"
+
+3. IMPROVE BUTTON LABELS AND TOOLTIPS:
+   - Change "Format" to "Format Document" or "AI Format"
+   - Add descriptive tooltips on hover:
+     - AI Edit: "Select text and use AI to rewrite, expand, or modify it"
+     - Format Document: "Apply consistent formatting across entire document"
+     - Variables: "Insert dynamic fields that auto-populate (press /)"
+   
+4. VISUAL HIERARCHY:
+   - Make AI-powered buttons slightly larger or use a different color scheme (e.g., purple accent to match AI theme)
+   - Add icons that clearly indicate AI functionality (sparkle/star icons)
+   - Ensure these buttons don't blend in with basic formatting tools
+
+GOAL: Make AI editing features and variables immediately discoverable and clearly distinguish them from basic WYSIWYG formatting tools. Users should understand at a glance what powerful features are available to enhance their document editing experience.

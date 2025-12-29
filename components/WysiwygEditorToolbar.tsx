@@ -35,7 +35,10 @@ import {
   AlignLeft,
   Code,
   Undo,
-  Redo
+  Redo,
+  Sparkles,
+  Variable,
+  RotateCcw
 } from 'lucide-react';
 import { Button } from './Button';
 import { Dialog, DialogContent, DialogTrigger } from './Dialog';
@@ -70,8 +73,8 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
   }, []);
   const [selectedText, setSelectedText] = useState('');
   const [isAIPopoverOpen, setIsAIPopoverOpen] = useState(false);
-
   const [isFormatPopoverOpen, setIsFormatPopoverOpen] = useState(false);
+  const [isVariablesHelpOpen, setIsVariablesHelpOpen] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
   
@@ -260,6 +263,20 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
     }
   }, [editor, getFullText]);
 
+  const clearFormatting = useCallback(() => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        // Clear all text formatting
+        selection.getNodes().forEach((node) => {
+          if ($isTextNode(node)) {
+            node.setFormat(0); // Clear all formatting
+          }
+        });
+      }
+    });
+  }, [editor]);
+
   // Handle applying AI changes to selected text
   const handleApplyToSelection = useCallback((newText: string) => {
     // Use IIFE to handle async markdown conversion while keeping handler synchronous
@@ -433,6 +450,7 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
 
   return (
     <div className={styles.toolbar}>
+      {/* Undo/Redo */}
       <Button
         type="button"
         variant="ghost"
@@ -453,7 +471,11 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       >
         <Redo size={16} />
       </Button>
+
+      {/* Group 1: Basic Formatting Tools */}
       <div className={styles.toolbarDivider} />
+      
+      {/* Headings & Structure */}
       <Button
         type="button"
         variant="ghost"
@@ -499,6 +521,8 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       >
         <Quote size={16} />
       </Button>
+
+      {/* Text Formatting */}
       <div className={styles.toolbarDivider} />
       <Button
         type="button"
@@ -518,6 +542,8 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       >
         <Italic size={16} />
       </Button>
+
+      {/* Lists & Links */}
       <div className={styles.toolbarDivider} />
       <Button
         type="button"
@@ -546,67 +572,79 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
       >
         <LinkIcon size={16} />
       </Button>
-      <div className={styles.toolbarDivider} />
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={convertMarkdown}
-        title="Convert Markdown to Formatting"
-      >
-        <FileText size={16} />
-      </Button>
-      <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
-        <DialogTrigger asChild>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            title={hasSelectedText ? "AI Assistant (Selected Text)" : "AI Assistant (Full Document)"}
-            className={styles.aiFeatureButton}
-          >
-            <Bot size={16} />
-            AI Edit
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <AIEditorAssistant
-            selectedText={selectedText}
-            fullText={getFullText()}
-            onApplyToSelection={handleApplyToSelection}
-            onApplyToFullText={handleApplyToFullText}
-            onClose={() => setIsAIPopoverOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
 
-      <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
-        <DialogTrigger asChild>
-          <Button
-            type="button"
-            variant="secondary"
-            size="sm"
-            title={hasSelectedText ? "AI Format Assistant (Selected Text)" : "AI Format Assistant (Full Document)"}
-            className={styles.aiFeatureButton}
-          >
-            <AlignLeft size={16} />
-            Format
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <AIFormatAssistant
-            selectedText={selectedText}
-            fullText={getFullText()}
-            onApplyToSelection={handleFormatApplyToSelection}
-            onApplyToFullText={handleFormatApplyToFullText}
-            onClose={() => setIsFormatPopoverOpen(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      {/* Group 2: AI-Powered Features */}
+      <div className={styles.aiGroupContainer}>
+        <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
+          <DialogTrigger asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              title={hasSelectedText ? "AI Edit: Select text and use AI to rewrite, expand, or modify it" : "AI Edit: Use AI to improve your entire document"}
+              className={styles.aiFeatureButton}
+            >
+              <Sparkles size={16} />
+              AI Edit
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AIEditorAssistant
+              selectedText={selectedText}
+              fullText={getFullText()}
+              onApplyToSelection={handleApplyToSelection}
+              onApplyToFullText={handleApplyToFullText}
+              onClose={() => setIsAIPopoverOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
 
-      <span className={styles.quickTip}>
-        Press <kbd className={styles.kbd}>/</kbd> to use variables
-      </span>
+        <Dialog open={isFormatPopoverOpen} onOpenChange={setIsFormatPopoverOpen}>
+          <DialogTrigger asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              title={hasSelectedText ? "Format Document: Apply consistent formatting across selection" : "Format Document: Apply consistent formatting across entire document"}
+              className={styles.aiFeatureButton}
+            >
+              <Sparkles size={16} />
+              Format Document
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <AIFormatAssistant
+              selectedText={selectedText}
+              fullText={getFullText()}
+              onApplyToSelection={handleFormatApplyToSelection}
+              onApplyToFullText={handleFormatApplyToFullText}
+              onClose={() => setIsFormatPopoverOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={clearFormatting}
+          title="Clear Format: Remove all text formatting"
+          className={styles.clearFormatButton}
+        >
+          <RotateCcw size={16} />
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => setIsVariablesHelpOpen(!isVariablesHelpOpen)}
+          title="Variables: Insert dynamic fields like {{company_name}}, {{department}}, etc. (Press / to use)"
+          className={styles.variablesButton}
+        >
+          <Variable size={16} />
+        </Button>
+      </div>
     </div>
   );
 };

@@ -24,10 +24,11 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 - **Database Schema:** PostgreSQL schema includes 27 tables, 1 view (`unacknowledged_required_policies`), 2 triggers (auto-create policy versions), 101 indexes, and a `user_role` enum. Portal slugs are unique per organization.
 
 **Feature Specifications:**
-- **Policy Templates:** "Legally Required" filter added to the Policy Template Library.
+- **Policy Templates:** "Legally Required" filter added to the Policy Template Library for quick access to legally mandated templates.
 - **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes.
 - **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
 - **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
+- **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups, with sparkle icons, descriptive tooltips, Clear Format button, and Variables helper with "/" shortcut hint.
 
 ## External Dependencies
 - **Database:** PostgreSQL
