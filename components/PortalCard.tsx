@@ -72,42 +72,25 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
       </div>
 
       <div className={styles.cardFooter}>
-        <Dialog open={isAssignModalOpen} onOpenChange={setAssignModalOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Settings size={14} /> Manage Policies
-            </Button>
-          </DialogTrigger>
-          <DialogContent className={styles.dialogContent}>
-            <DialogHeader>
-              <DialogTitle>Manage Policies for {portal.name}</DialogTitle>
-            </DialogHeader>
-            <PortalPolicyAssignment portalId={portal.id} onSuccess={() => setAssignModalOpen(false)} />
-          </DialogContent>
-        </Dialog>
+        <div className={styles.mainActions}>
+          <Dialog open={isAssignModalOpen} onOpenChange={setAssignModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Settings size={14} /> Manage Policies
+              </Button>
+            </DialogTrigger>
+            <DialogContent className={styles.dialogContent}>
+              <DialogHeader>
+                <DialogTitle>Manage Policies for {portal.name}</DialogTitle>
+              </DialogHeader>
+              <PortalPolicyAssignment portalId={portal.id} onSuccess={() => setAssignModalOpen(false)} />
+            </DialogContent>
+          </Dialog>
 
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setEmbedDialogOpen(true)}
-          title="Get embed code for this portal"
-        >
-          <Code size={14} /> Get Embed Code
-        </Button>
-
-        {organizationId && (
-          <Button variant="outline" size="sm" asChild>
-            <Link to={`/${organizationId}/${portal.slug}`} target="_blank" rel="noopener noreferrer">
-              <ExternalLink size={14} /> View Portal
-            </Link>
-          </Button>
-        )}
-
-        <div className={styles.actions}>
           <Dialog open={isEditModalOpen} onOpenChange={setEditModalOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon-sm">
-                <Edit size={16} />
+              <Button variant="outline" size="sm">
+                <Edit size={14} /> Edit Portal
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -118,28 +101,45 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
             </DialogContent>
           </Dialog>
 
-          <Dialog open={isDeleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon-sm" className={styles.deleteButton}>
-                <Trash2 size={16} />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirm Deletion</DialogTitle>
-              </DialogHeader>
-              <p>Are you sure you want to delete the "{portal.name}" portal? This action cannot be undone.</p>
-              <div className={styles.dialogFooter}>
-                <DialogClose asChild>
-                  <Button variant="secondary">Cancel</Button>
-                </DialogClose>
-                <Button variant="destructive" onClick={handleDelete} disabled={deletePortalMutation.isPending}>
-                  {deletePortalMutation.isPending ? 'Deleting...' : 'Delete'}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setEmbedDialogOpen(true)}
+            title="Get embed code for this portal"
+          >
+            <Code size={14} /> Get Embed Code
+          </Button>
+
+          {organizationId && (
+            <Button variant="outline" size="sm" asChild>
+              <Link to={`/${organizationId}/${portal.slug}`} target="_blank" rel="noopener noreferrer">
+                <ExternalLink size={14} /> View Portal
+              </Link>
+            </Button>
+          )}
         </div>
+
+        <Dialog open={isDeleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon-sm" className={styles.deleteButton} title="Delete portal">
+              <Trash2 size={16} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirm Deletion</DialogTitle>
+            </DialogHeader>
+            <p>Are you sure you want to delete the "{portal.name}" portal? This action cannot be undone.</p>
+            <div className={styles.dialogFooter}>
+              <DialogClose asChild>
+                <Button variant="secondary">Cancel</Button>
+              </DialogClose>
+              <Button variant="destructive" onClick={handleDelete} disabled={deletePortalMutation.isPending}>
+                {deletePortalMutation.isPending ? 'Deleting...' : 'Delete'}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         <PortalEmbedDialog
           portal={portal}

@@ -64,20 +64,26 @@
   align-items: center;
   gap: var(--spacing-2);
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
-.actions {
+.mainActions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-1);
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  flex-grow: 1;
 }
 
 .deleteButton {
-  color: var(--error);
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .deleteButton:hover {
   background-color: color-mix(in srgb, var(--error) 10%, transparent);
+  color: var(--error);
 }
 
 .dialogContent {
