@@ -18,6 +18,7 @@ import { TablePlugin } from '@lexical/react/LexicalTablePlugin';
 import { MarkdownShortcutPlugin } from '@lexical/react/LexicalMarkdownShortcutPlugin';
 import { TRANSFORMERS } from '@lexical/markdown';
 import { VariableSlashCommandPlugin } from './VariableSlashCommandPlugin';
+import { VariablesHintPill } from './VariablesHintPill';
 import { $generateHtmlFromNodes } from '@lexical/html';
 import { WysiwygEditorToolbar } from './WysiwygEditorToolbar';
 
@@ -269,6 +270,7 @@ export const WysiwygEditor = forwardRef<HTMLDivElement, WysiwygEditorProps>(
 
             <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
             <VariableSlashCommandPlugin />
+            <VariablesHintPill />
           </div>
         </LexicalComposer>
       </div>

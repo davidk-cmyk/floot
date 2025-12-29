@@ -29,6 +29,7 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 - **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
 - **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
 - **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups, with sparkle icons, descriptive tooltips, Clear Format button, and Variables helper with "/" shortcut hint.
+- **Variables Hint Pill:** Added floating hint pill that appears near the cursor when user starts typing, showing "Press / for variables" tip. Auto-hides after 4 seconds or when "/" is pressed.
 
 ## External Dependencies
 - **Database:** PostgreSQL
