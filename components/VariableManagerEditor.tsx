@@ -73,7 +73,7 @@ export const VariableManagerEditor = ({
 
   return (
     <div className={styles.card}>
-      <Accordion type="multiple" className={styles.accordion}>
+      <Accordion type="multiple" defaultValue={["all-variables"]} className={styles.accordion}>
         <AccordionItem value="all-variables">
           <AccordionTrigger>Custom Variables ({variables.length})</AccordionTrigger>
           <AccordionContent>
