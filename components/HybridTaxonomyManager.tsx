@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { Plus, Trash2, Lightbulb, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Plus, Trash2, Loader2 } from 'lucide-react';
 import {
   useCustomTaxonomies,
   useUpdateCustomTaxonomies,
@@ -43,7 +43,6 @@ export const HybridTaxonomyManager: React.FC<HybridTaxonomyManagerProps> = ({
   className,
 }) => {
   const [newItem, setNewItem] = useState('');
-  const [showGuide, setShowGuide] = useState(false);
   const { isLoading: isLoadingCustom, customTaxonomies } = useCustomTaxonomies();
   const {
     addCustomCategory,
@@ -127,29 +126,6 @@ export const HybridTaxonomyManager: React.FC<HybridTaxonomyManagerProps> = ({
         <p className={styles.description}>{description}</p>
       </div>
 
-      <div className={styles.quickGuideBox}>
-        <button 
-          className={styles.quickGuideHeader}
-          onClick={() => setShowGuide(!showGuide)}
-        >
-          <Lightbulb size={18} className={styles.guideIcon} />
-          <span className={styles.guideTitle}>💡 Understanding {taxonomyType.charAt(0).toUpperCase() + taxonomyType.slice(1)}</span>
-          {showGuide ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-        </button>
-        {showGuide && (
-          <div className={styles.guideContent}>
-            <p>
-              <Badge variant="default" className={styles.standardBadge}>Standard</Badge>
-              <span> items (blue badges) are provided by the platform and available to all organizations. These cannot be edited or removed, ensuring consistent analytics across all users. They're automatically available for use when creating policies.</span>
-            </p>
-            <p>
-              <Badge variant="outline" className={styles.customGuideBadge}>Custom</Badge>
-              <span> items (purple badges) are specific to your organization. You can create, edit, or remove these as needed to match your unique policy structure.</span>
-            </p>
-          </div>
-        )}
-      </div>
-
       <form onSubmit={handleAddItem} className={styles.addForm}>
         <Input
           type="text"
@@ -171,7 +147,7 @@ export const HybridTaxonomyManager: React.FC<HybridTaxonomyManagerProps> = ({
           </Badge>
         ))}
         {customItems.map((item) => (
-          <Badge key={item} variant="secondary" className={styles.customBadge}>
+          <Badge key={item} variant="outline" className={styles.customBadge}>
             {item}
             <Button
               variant="ghost"

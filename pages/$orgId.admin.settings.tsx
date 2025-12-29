@@ -17,7 +17,8 @@ import { Form, FormItem, FormLabel, FormControl, FormMessage, useForm } from "..
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { Skeleton } from "../components/Skeleton";
-import { Building, Info, Edit2, X, Check } from 'lucide-react';
+import { Building, Info, Edit2, X, Check, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
+import { Badge } from '../components/Badge';
 import { z } from 'zod';
 
 import { SettingsNavigation } from "../components/SettingsNavigation";
@@ -294,20 +295,34 @@ const SettingsPage = () => {
         return (
           <section id="policy-management" className={styles.section}>
             <h2 className={styles.sectionTitle}>Policy Management</h2>
+            <div className={styles.taxonomyQuickGuide}>
+              <div className={styles.taxonomyQuickGuideHeader}>
+                <Lightbulb size={18} className={styles.taxonomyGuideIcon} />
+                <span className={styles.taxonomyGuideTitle}>Quick Guide</span>
+              </div>
+              <p className={styles.taxonomyGuideText}>
+                <Badge variant="default" className={styles.taxonomyGuideBadge}>Standard</Badge>
+                <span>items (blue badges) are provided by the platform for consistent analytics across all organizations. These cannot be edited or removed.</span>
+              </p>
+              <p className={styles.taxonomyGuideText}>
+                <Badge variant="outline" className={styles.taxonomyGuideCustomBadge}>Custom</Badge>
+                <span>items (purple badges) are specific to your organization. You can create, edit, or remove these to match your unique policy structure.</span>
+              </p>
+            </div>
             <div className={styles.grid}>
               <HybridTaxonomyManager
                 title="Policy Categories"
-                description="Manage the categories available for organizing policies. Standard categories are provided for consistent analytics."
+                description="Manage the categories available for organizing policies."
                 taxonomyType="categories"
               />
               <HybridTaxonomyManager
                 title="Policy Departments"
-                description="Manage the departments that policies can be assigned to. Standard departments are provided for consistent analytics."
+                description="Manage the departments that policies can be assigned to."
                 taxonomyType="departments"
               />
               <HybridTaxonomyManager
                 title="Policy Tags"
-                description="Manage tags to improve policy searchability and filtering. Standard tags are provided for consistent analytics."
+                description="Manage tags to improve policy searchability and filtering."
                 taxonomyType="tags"
               />
             </div>

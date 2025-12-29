@@ -346,3 +346,61 @@
   margin: 0;
   max-width: 400px;
 }
+
+.taxonomyQuickGuide {
+  background-color: color-mix(in srgb, var(--primary) 8%, var(--background));
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-5) var(--spacing-6);
+  margin-bottom: var(--spacing-6);
+}
+
+.taxonomyQuickGuideHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.taxonomyGuideIcon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.taxonomyGuideTitle {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--foreground);
+}
+
+.taxonomyGuideText {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-3) 0;
+  line-height: 1.6;
+}
+
+.taxonomyGuideText:last-child {
+  margin-bottom: 0;
+}
+
+.taxonomyGuideText span {
+  flex: 1;
+  padding-top: 2px;
+}
+
+.taxonomyGuideBadge {
+  flex-shrink: 0;
+  padding: var(--spacing-1) var(--spacing-3);
+}
+
+.taxonomyGuideCustomBadge {
+  flex-shrink: 0;
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: color-mix(in srgb, var(--primary) 15%, transparent) !important;
+  color: var(--primary) !important;
+  border-color: color-mix(in srgb, var(--primary) 40%, transparent) !important;
+}
