@@ -70,6 +70,8 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     ? formatDistanceToNow(new Date(policy.updatedAt), { addSuffix: true })
     : "N/A";
 
+  const isPortalView = Boolean(portalSlug);
+  
   const canEdit = authState.type === "authenticated" && 
     (authState.user.role === "admin" || authState.user.role === "editor");
 
@@ -113,7 +115,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
           />
         </div>
       )}
-      {policy.status && (
+      {!isPortalView && policy.status && (
         <div className={styles.statusBadge}>
           <Badge variant={getStatusVariant(policy.status)}>{policy.status}</Badge>
         </div>
@@ -137,24 +139,26 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
         </div>
       )}
 
-      <div className={styles.metadata}>
-        {policy.category && <Badge variant="outline">{policy.category}</Badge>}
-        {policy.department && (
-          <Badge variant="outline">{policy.department}</Badge>
-        )}
-        {policy.assignedPortals && policy.assignedPortals.length > 0 && 
-          policy.assignedPortals.map((portal) => (
-            <Badge key={portal.id} variant="secondary">{portal.name}</Badge>
-          ))
-        }
-        {policy.reviewStatus && (
-          <Badge variant={getReviewStatusVariant(policy.reviewStatus)}>
-            {policy.reviewStatus === "overdue" && "Overdue"}
-            {policy.reviewStatus === "due_soon" && "Due Soon"}
-            {policy.reviewStatus === "upcoming" && "Upcoming"}
-          </Badge>
-        )}
-      </div>
+      {!isPortalView && (
+        <div className={styles.metadata}>
+          {policy.category && <Badge variant="outline">{policy.category}</Badge>}
+          {policy.department && (
+            <Badge variant="outline">{policy.department}</Badge>
+          )}
+          {policy.assignedPortals && policy.assignedPortals.length > 0 && 
+            policy.assignedPortals.map((portal) => (
+              <Badge key={portal.id} variant="secondary">{portal.name}</Badge>
+            ))
+          }
+          {policy.reviewStatus && (
+            <Badge variant={getReviewStatusVariant(policy.reviewStatus)}>
+              {policy.reviewStatus === "overdue" && "Overdue"}
+              {policy.reviewStatus === "due_soon" && "Due Soon"}
+              {policy.reviewStatus === "upcoming" && "Upcoming"}
+            </Badge>
+          )}
+        </div>
+      )}
 
       {policy.reviewDate && (
         <div className={styles.reviewInfo}>
@@ -196,7 +200,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
               )}
             </div>
           )}
-          {canDownload && (
+          {!isPortalView && canDownload && (
             <PolicyDownloadButton
               policyId={policy.id}
               policyTitle={policy.title}
@@ -205,7 +209,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
               className={styles.downloadButton}
             />
           )}
-          {canEdit && (
+          {!isPortalView && canEdit && (
             <Button
               asChild
               variant="ghost"
