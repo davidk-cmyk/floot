@@ -147,30 +147,30 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
             <div className={styles.navSpacing} />
             <PortalQuickAccessList sidebarCollapsed={sidebarCollapsed} />
             <hr className={styles.navSeparator} />
-            <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+            <NavLink to={buildUrl('/admin/handbook')} className={({ isActive }) => `${styles.navLink} ${styles.previewNavLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <FileText size={20} />
               {!sidebarCollapsed && (
                 <>
                   <span>Handbook</span>
-                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                  <Badge variant="outline" className={styles.previewBadge}>Preview</Badge>
                 </>
               )}
             </NavLink>
-            <NavLink to={buildUrl('/admin/faq')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+            <NavLink to={buildUrl('/admin/faq')} className={({ isActive }) => `${styles.navLink} ${styles.previewNavLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <HelpCircle size={20} />
               {!sidebarCollapsed && (
                 <>
                   <span>FAQ</span>
-                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                  <Badge variant="outline" className={styles.previewBadge}>Preview</Badge>
                 </>
               )}
             </NavLink>
-            <NavLink to={buildUrl('/admin/assistant')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+            <NavLink to={buildUrl('/admin/assistant')} className={({ isActive }) => `${styles.navLink} ${styles.previewNavLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <MessageCircleQuestion size={20} />
               {!sidebarCollapsed && (
                 <>
                   <span>Assistant</span>
-                  <Badge variant="secondary" className={styles.comingSoonBadge}>Soon</Badge>
+                  <Badge variant="outline" className={styles.previewBadge}>Preview</Badge>
                 </>
               )}
             </NavLink>

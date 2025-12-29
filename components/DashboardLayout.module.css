@@ -253,6 +253,41 @@
   font-weight: 500;
 }
 
+.previewNavLink {
+  position: relative;
+}
+
+.previewNavLink:hover .previewBadge {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  transform: scale(1.05);
+}
+
+.previewBadge {
+  margin-left: auto;
+  font-size: 0.625rem;
+  padding: 0.125rem var(--spacing-2);
+  font-weight: 600;
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+  animation: subtlePulse 3s ease-in-out infinite;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--primary) 30%, transparent);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 8px 2px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+}
+
 .navSeparator {
   margin: var(--spacing-4) 0;
   height: 1px;
