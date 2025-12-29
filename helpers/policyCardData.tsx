@@ -30,6 +30,7 @@ export type PolicyCardData = {
   assignedPortals?: Array<{
     id: number;
     name: string;
+    slug: string;
     requiresAcknowledgment: boolean;
   }>;
   reviewDate?: Date | string | null;

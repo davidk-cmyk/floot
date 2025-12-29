@@ -13,7 +13,7 @@ import { db } from "./db";
 export async function getPortalAssignments(policyIds: number[]): Promise<
   Record<
     number,
-    Array<{ id: number; name: string; requiresAcknowledgment: boolean }>
+    Array<{ id: number; name: string; slug: string; requiresAcknowledgment: boolean }>
   >
 > {
   if (policyIds.length === 0) {
@@ -27,6 +27,7 @@ export async function getPortalAssignments(policyIds: number[]): Promise<
       "policyPortalAssignments.policyId",
       "portals.id as portalId",
       "portals.name",
+      "portals.slug",
       "portals.requiresAcknowledgment",
     ])
     .where("policyPortalAssignments.policyId", "in", policyIds)
@@ -34,7 +35,7 @@ export async function getPortalAssignments(policyIds: number[]): Promise<
 
   const portalsByPolicy: Record<
     number,
-    Array<{ id: number; name: string; requiresAcknowledgment: boolean }>
+    Array<{ id: number; name: string; slug: string; requiresAcknowledgment: boolean }>
   > = {};
 
   for (const assignment of assignments) {
@@ -44,6 +45,7 @@ export async function getPortalAssignments(policyIds: number[]): Promise<
     portalsByPolicy[assignment.policyId].push({
       id: assignment.portalId,
       name: assignment.name,
+      slug: assignment.slug,
       requiresAcknowledgment: !!assignment.requiresAcknowledgment,
     });
   }

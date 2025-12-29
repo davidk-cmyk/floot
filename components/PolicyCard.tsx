@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { CheckCircle, Circle, FileText, Edit, Calendar, User, Clock } from "lucide-react";
+import { CheckCircle, Circle, FileText, Edit, Calendar, User, Clock, ExternalLink } from "lucide-react";
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
@@ -90,6 +90,20 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     : buildUrl(`/admin/policies/${policy.id}`);
 
   const editUrl = buildUrl(`/admin/policies/${policy.id}/edit`);
+
+  const handleViewOnPortal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    if (!policy.assignedPortals || policy.assignedPortals.length === 0) {
+      return;
+    }
+
+    // Use the first assigned portal
+    const portal = policy.assignedPortals[0];
+    const portalUrl = buildUrl(`/${portal.slug}/${policy.id}`);
+    window.open(portalUrl, '_blank');
+  };
 
   return (
     <Link
@@ -199,6 +213,17 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
                 </>
               )}
             </div>
+          )}
+          {!isPortalView && policy.assignedPortals && policy.assignedPortals.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className={styles.viewPortalButton}
+              onClick={handleViewOnPortal}
+              title="View on Portal"
+            >
+              <ExternalLink size={14} />
+            </Button>
           )}
           {!isPortalView && canDownload && (
             <PolicyDownloadButton

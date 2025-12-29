@@ -40,6 +40,7 @@ export type PolicyWithAcknowledgement = Selectable<Policies> & {
   assignedPortals: Array<{
     id: number;
     name: string;
+    slug: string;
     requiresAcknowledgment: boolean;
   }>;
 };
