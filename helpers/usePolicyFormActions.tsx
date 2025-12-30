@@ -80,11 +80,18 @@ export function usePolicyFormActions({
         onSettled: handleSettled,
       });
     } else if (mode === 'edit' && policyId) {
+      // Determine the correct status based on the action type
+      // 'publish' action -> 'published' status
+      // 'draft' action -> 'draft' status  
+      // 'approval' action -> keep existing form status (for future approval workflow)
+      const statusFromAction = action === 'publish' ? 'published' : action === 'draft' ? 'draft' : values.status;
+      
       const apiValues: UpdatePolicyInput = {
         ...commonData,
         policyId,
-        status: values.status,
+        status: statusFromAction,
         changeSummary: values.changeSummary,
+        ...(action === 'publish' && { publishedAt: new Date() }),
       };
       updatePolicyMutation.mutate(apiValues, {
         onSuccess: handleSuccess,
