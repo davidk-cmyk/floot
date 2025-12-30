@@ -143,7 +143,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
                 {!sidebarCollapsed && <span>Audit Trail</span>}
               </NavLink>
             )}
-            <NavLink to={buildUrl('/admin/settings')} className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
+            <NavLink to={buildUrl('/admin/settings')} end className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeLink : ''} ${sidebarCollapsed ? styles.collapsedNavLink : ''}`}>
               <Settings size={20} />
               {!sidebarCollapsed && <span>Settings</span>}
             </NavLink>
