@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as z from 'zod';
-import { Clipboard, Copy } from 'lucide-react';
+import { Clipboard, Copy, Lightbulb } from 'lucide-react';
 import { toast } from 'sonner';
 import { generateInviteLink } from '../helpers/generateInviteLink';
 
@@ -101,7 +101,8 @@ export const UserCreateForm = () => {
         <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.quickGuide}>
             <div className={styles.guideHeader}>
-              <span>💡 Understanding User Roles</span>
+              <Lightbulb size={18} className={styles.guideIcon} />
+              <span className={styles.guideTitle}>Understanding User Roles</span>
             </div>
             <div className={styles.guideContent}>
               {Object.entries(roleDescriptions).map(([role, description]) => (
