@@ -42,7 +42,7 @@ type CreatedUserInfo = {
 };
 
 const roleDescriptions = {
-  superadmin: 'Full access to all features, settings, and user management. Can create and manage all policies and portals.',
+  admin: 'Full access to all features, settings, and user management. Can create and manage all policies and portals.',
   approver: 'Can review and approve policy drafts before publication. Cannot modify system settings.',
   editor: 'Can create, edit, and publish policies. Cannot access user management or system settings.',
   user: 'Can view assigned policies and acknowledge them. Read-only access to portal content.',
