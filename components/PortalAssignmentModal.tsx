@@ -13,7 +13,7 @@ interface PortalAssignmentModalProps {
   onClose: () => void;
   policyId: number;
   policyTitle: string;
-  onAssignmentComplete: () => void;
+  onAssignmentComplete: (assignedPortalIds: number[]) => void;
 }
 
 export const PortalAssignmentModal: React.FC<PortalAssignmentModalProps> = ({
@@ -42,7 +42,7 @@ export const PortalAssignmentModal: React.FC<PortalAssignmentModalProps> = ({
       queryClient.invalidateQueries({ queryKey: ['policies'] });
       queryClient.invalidateQueries({ queryKey: ['portals'] });
       toast.success('Policy assigned to portal(s) successfully');
-      onAssignmentComplete();
+      onAssignmentComplete(selectedPortalIds);
       handleClose();
     },
     onError: (error: unknown) => {

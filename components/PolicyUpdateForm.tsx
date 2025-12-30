@@ -91,11 +91,27 @@ export const PolicyUpdateForm: React.FC<PolicyUpdateFormProps> = ({
     }
   }, [policy.assignedPortals, form.values.portalIds, justAssignedPortals, doPublish]);
 
-  const handleAssignmentComplete = useCallback(() => {
+  const handleAssignmentComplete = useCallback((assignedPortalIds: number[]) => {
     setJustAssignedPortals(true);
     setShowPortalModal(false);
-    doPublish();
-  }, [doPublish]);
+    
+    // Merge and deduplicate portal IDs
+    const existingPortalIds = form.values.portalIds || [];
+    const mergedPortalIds = [...new Set([...existingPortalIds, ...assignedPortalIds])];
+    
+    // Update form state so future submissions include the correct portal IDs
+    form.setValues((prev) => ({
+      ...prev,
+      portalIds: mergedPortalIds,
+    }));
+    
+    // Create updated values with the merged portal IDs for immediate publish
+    const updatedValues = {
+      ...form.values,
+      portalIds: mergedPortalIds,
+    };
+    handleSubmit(updatedValues, 'publish');
+  }, [form.values, form.setValues, handleSubmit]);
 
   // Manual save handler for the shell - routes through portal check
   const submitToDatabase = useCallback(() => {

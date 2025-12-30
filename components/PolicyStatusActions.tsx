@@ -61,7 +61,9 @@ export const PolicyStatusActions = ({ policy, className }: PolicyStatusActionsPr
     });
   };
 
-  const handleAssignmentComplete = () => {
+  const handleAssignmentComplete = (_assignedPortalIds: number[]) => {
+    // Portal assignments were already saved by the modal
+    // We just need to update the policy status to published
     setJustAssignedPortals(true);
     setShowPortalModal(false);
     doPublish();
