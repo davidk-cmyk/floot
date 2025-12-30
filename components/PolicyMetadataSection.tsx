@@ -1,15 +1,12 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { FormItem, FormLabel, FormControl, FormMessage, FormDescription } from './Form';
-import { Button } from './Button';
-import { Popover, PopoverTrigger, PopoverContent } from './Popover';
-import { Calendar } from './Calendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
-import { Switch } from './Switch';
 import { Badge } from './Badge';
 import { Calendar as CalendarIcon, AlertTriangle } from 'lucide-react';
 import { PolicyTaxonomyGroup } from './PolicyTaxonomyGroup';
 import { Textarea } from './Textarea';
 import { PortalSelector } from './PortalSelector';
+import { DateDropdownSelector } from './DateDropdownSelector';
 import styles from './PolicyMetadataSection.module.css';
 
 interface PolicyMetadataSectionProps {
@@ -42,7 +39,7 @@ interface PolicyMetadataSectionProps {
   }>;
 }
 
-type ReviewDateOption = 'specific' | '1year' | '2years' | '3years' | '5years';
+type DateDurationOption = 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
 
 export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
   status,
@@ -89,13 +86,12 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
   const safeExpirationDate = useMemo(() => safeDate(expirationDate), [expirationDate, safeDate]);
   const safeReviewDate = useMemo(() => safeDate(reviewDate), [reviewDate, safeDate]);
 
-  const [reviewDateOption, setReviewDateOption] = useState<ReviewDateOption>('specific');
+  const [expirationDateOption, setExpirationDateOption] = useState<DateDurationOption>('specific');
+  const [reviewDateOption, setReviewDateOption] = useState<DateDurationOption>('specific');
 
-  // Derive showReviewDateWarning instead of using state to eliminate timer-based setState
   const showReviewDateWarning = !safeReviewDate;
 
-  // Calculate review date based on effective date and selected option
-  const calculateReviewDate = useCallback((option: ReviewDateOption, baseDate?: Date | null): Date | null => {
+  const calculateDateFromEffective = useCallback((option: DateDurationOption, baseDate?: Date | null): Date | null => {
     if (option === 'specific' || !baseDate) {
       return null;
     }
@@ -104,6 +100,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
       '1year': 1,
       '2years': 2,
       '3years': 3,
+      '4years': 4,
       '5years': 5,
     }[option];
     
@@ -114,38 +111,55 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
     return calculatedDate;
   }, []);
 
-  // Auto-calculate review date when effective date changes and we're using a years-based option
+  useEffect(() => {
+    if (expirationDateOption !== 'specific' && safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(expirationDateOption, safeEffectiveDate);
+      if (calculatedDate) {
+        const currentTimestamp = safeExpirationDate?.getTime();
+        const calculatedTimestamp = calculatedDate.getTime();
+        if (currentTimestamp !== calculatedTimestamp) {
+          onExpirationDateChange(calculatedDate);
+        }
+      }
+    }
+  }, [safeEffectiveDate, expirationDateOption, calculateDateFromEffective, onExpirationDateChange, safeExpirationDate]);
+
   useEffect(() => {
     if (reviewDateOption !== 'specific' && safeEffectiveDate) {
-      const calculatedDate = calculateReviewDate(reviewDateOption, safeEffectiveDate);
+      const calculatedDate = calculateDateFromEffective(reviewDateOption, safeEffectiveDate);
       if (calculatedDate) {
-        // Only call onReviewDateChange when the calculated date actually changes by comparing timestamps
         const currentTimestamp = safeReviewDate?.getTime();
         const calculatedTimestamp = calculatedDate.getTime();
-        
         if (currentTimestamp !== calculatedTimestamp) {
           onReviewDateChange(calculatedDate);
         }
       }
     }
-  }, [safeEffectiveDate, reviewDateOption, calculateReviewDate, onReviewDateChange, safeReviewDate]);
+  }, [safeEffectiveDate, reviewDateOption, calculateDateFromEffective, onReviewDateChange, safeReviewDate]);
 
-  const handleReviewDateOptionChange = (option: ReviewDateOption) => {
-    setReviewDateOption(option);
-    
-    if (option === 'specific') {
-      // Keep current date or clear it
-      return;
-    }
-    
-    // Calculate new date based on effective date
+  const handleExpirationDateOptionChange = (option: DateDurationOption) => {
+    setExpirationDateOption(option);
+    if (option === 'specific') return;
     if (safeEffectiveDate) {
-      const calculatedDate = calculateReviewDate(option, safeEffectiveDate);
+      const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
       if (calculatedDate) {
-        // Only update if the calculated date is different from current review date
+        const currentTimestamp = safeExpirationDate?.getTime();
+        const calculatedTimestamp = calculatedDate.getTime();
+        if (currentTimestamp !== calculatedTimestamp) {
+          onExpirationDateChange(calculatedDate);
+        }
+      }
+    }
+  };
+
+  const handleReviewDateOptionChange = (option: DateDurationOption) => {
+    setReviewDateOption(option);
+    if (option === 'specific') return;
+    if (safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
+      if (calculatedDate) {
         const currentTimestamp = safeReviewDate?.getTime();
         const calculatedTimestamp = calculatedDate.getTime();
-        
         if (currentTimestamp !== calculatedTimestamp) {
           onReviewDateChange(calculatedDate);
         }
@@ -153,14 +167,15 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
     }
   };
 
-  const getReviewDateOptionLabel = (option: ReviewDateOption): string => {
+  const getDateOptionLabel = (option: DateDurationOption): string => {
     switch (option) {
-      case 'specific': return 'Specific Date';
-      case '1year': return '1 Year from Effective Date';
-      case '2years': return '2 Years from Effective Date';
-      case '3years': return '3 Years from Effective Date';
-      case '5years': return '5 Years from Effective Date';
-      default: return 'Specific Date';
+      case 'specific': return 'Custom Date';
+      case '1year': return '1 Year from Effective';
+      case '2years': return '2 Years from Effective';
+      case '3years': return '3 Years from Effective';
+      case '4years': return '4 Years from Effective';
+      case '5years': return '5 Years from Effective';
+      default: return 'Custom Date';
     }
   };
 
@@ -203,56 +218,60 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
         <FormMessage />
       </FormItem>
 
-      <div className={styles.grid}>
+      <div className={styles.dateSection}>
         <FormItem name="effectiveDate">
           <FormLabel>Effective Date</FormLabel>
-          <Popover>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button 
-                  variant="outline" 
-                  className={styles.datePickerButton}
-                  aria-label={safeEffectiveDate ? `Effective date: ${formatDateDisplay(safeEffectiveDate)}` : "Select effective date"}
-                >
-                  <CalendarIcon size={16} />
-                  {safeEffectiveDate ? formatDateDisplay(safeEffectiveDate) : <span>Pick a date</span>}
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent removeBackgroundAndPadding>
-              <Calendar
-                mode="single"
-                selected={safeEffectiveDate || undefined}
-                onSelect={(date) => onEffectiveDateChange(date ?? null)}
-              />
-            </PopoverContent>
-          </Popover>
+          <FormControl>
+            <DateDropdownSelector
+              value={safeEffectiveDate}
+              onChange={onEffectiveDateChange}
+            />
+          </FormControl>
+          <FormDescription>
+            Select the date when this policy becomes effective
+          </FormDescription>
           <FormMessage />
         </FormItem>
 
         <FormItem name="expirationDate">
           <FormLabel>Expiration Date</FormLabel>
-          <Popover>
-            <PopoverTrigger asChild>
+          <div className={styles.durationDateContainer}>
+            <Select value={expirationDateOption} onValueChange={handleExpirationDateOptionChange}>
+              <SelectTrigger className={styles.durationSelect}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1year">1 Year from Effective</SelectItem>
+                <SelectItem value="2years">2 Years from Effective</SelectItem>
+                <SelectItem value="3years">3 Years from Effective</SelectItem>
+                <SelectItem value="4years">4 Years from Effective</SelectItem>
+                <SelectItem value="5years">5 Years from Effective</SelectItem>
+                <SelectItem value="specific">Custom Date</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            {expirationDateOption === 'specific' && (
               <FormControl>
-                <Button 
-                  variant="outline" 
-                  className={styles.datePickerButton}
-                  aria-label={safeExpirationDate ? `Expiration date: ${formatDateDisplay(safeExpirationDate)}` : "Select expiration date"}
-                >
-                  <CalendarIcon size={16} />
-                  {safeExpirationDate ? formatDateDisplay(safeExpirationDate) : <span>Pick a date</span>}
-                </Button>
+                <DateDropdownSelector
+                  value={safeExpirationDate}
+                  onChange={onExpirationDateChange}
+                />
               </FormControl>
-            </PopoverTrigger>
-            <PopoverContent removeBackgroundAndPadding>
-              <Calendar
-                mode="single"
-                selected={safeExpirationDate || undefined}
-                onSelect={(date) => onExpirationDateChange(date ?? null)}
-              />
-            </PopoverContent>
-          </Popover>
+            )}
+            
+            {expirationDateOption !== 'specific' && safeExpirationDate && (
+              <div className={styles.calculatedDate}>
+                <CalendarIcon size={16} />
+                <span>{formatDateDisplay(safeExpirationDate)}</span>
+              </div>
+            )}
+          </div>
+          <FormDescription>
+            {expirationDateOption === 'specific' 
+              ? "Select a specific expiration date"
+              : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
+            }
+          </FormDescription>
           <FormMessage />
         </FormItem>
 
@@ -266,53 +285,28 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
             )}
           </FormLabel>
           
-          <div className={styles.reviewDateContainer}>
+          <div className={styles.durationDateContainer}>
             <Select value={reviewDateOption} onValueChange={handleReviewDateOptionChange}>
-              <SelectTrigger>
+              <SelectTrigger className={styles.durationSelect}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="specific">Specific Date</SelectItem>
-                <SelectItem value="1year">1 Year from Effective Date</SelectItem>
-                <SelectItem value="2years">2 Years from Effective Date</SelectItem>
-                <SelectItem value="3years">3 Years from Effective Date</SelectItem>
-                <SelectItem value="5years">5 Years from Effective Date</SelectItem>
+                <SelectItem value="1year">1 Year from Effective</SelectItem>
+                <SelectItem value="2years">2 Years from Effective</SelectItem>
+                <SelectItem value="3years">3 Years from Effective</SelectItem>
+                <SelectItem value="4years">4 Years from Effective</SelectItem>
+                <SelectItem value="5years">5 Years from Effective</SelectItem>
+                <SelectItem value="specific">Custom Date</SelectItem>
               </SelectContent>
             </Select>
             
             {reviewDateOption === 'specific' && (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button 
-                      variant="outline" 
-                      className={`${styles.datePickerButton} ${!isReviewDateValid ? styles.datePickerButtonError : ''}`}
-                      aria-label={safeReviewDate ? `Review date: ${formatDateDisplay(safeReviewDate)}` : "Select review date"}
-                    >
-                      <CalendarIcon size={16} />
-                      {safeReviewDate ? formatDateDisplay(safeReviewDate) : <span>Pick a date</span>}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent removeBackgroundAndPadding>
-                  <Calendar
-                    mode="single"
-                    selected={safeReviewDate || undefined}
-                    onSelect={(date) => onReviewDateChange(date ?? null)}
-                    disabled={(date) => {
-                      // Disable dates earlier than effective date
-                      if (safeEffectiveDate && date < safeEffectiveDate) {
-                        return true;
-                      }
-                      // Disable dates earlier than expiration date
-                      if (safeExpirationDate && date < safeExpirationDate) {
-                        return true;
-                      }
-                      return false;
-                    }}
-                  />
-                </PopoverContent>
-              </Popover>
+              <FormControl>
+                <DateDropdownSelector
+                  value={safeReviewDate}
+                  onChange={onReviewDateChange}
+                />
+              </FormControl>
             )}
             
             {reviewDateOption !== 'specific' && safeReviewDate && (
@@ -325,17 +319,17 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
           
           <FormDescription>
             {reviewDateOption === 'specific' 
-              ? "Set a specific date for policy review. Must be on or after the effective date and expiration date."
-              : `Review date will be automatically calculated as ${getReviewDateOptionLabel(reviewDateOption).toLowerCase()}`
+              ? "Select a specific review date"
+              : `Review date: ${getDateOptionLabel(reviewDateOption).toLowerCase()}`
             }
             {showReviewDateWarning && (
               <span className={styles.warningText}>
-                <br />⚠️ Setting a review date is recommended for policy maintenance
+                <br />Setting a review date is recommended for policy maintenance
               </span>
             )}
             {!isReviewDateValid && safeReviewDate && (
               <span className={styles.warningText}>
-                <br />⚠️ Review date cannot be earlier than the effective date or expiration date
+                <br />Review date cannot be earlier than effective date or expiration date
               </span>
             )}
           </FormDescription>

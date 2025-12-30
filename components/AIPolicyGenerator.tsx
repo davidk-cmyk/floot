@@ -11,8 +11,8 @@ import { Textarea } from './Textarea';
 import { Button } from './Button';
 import { Skeleton } from './Skeleton';
 import { PolicyTaxonomyGroup } from './PolicyTaxonomyGroup';
-import { Popover, PopoverTrigger, PopoverContent } from './Popover';
-import { Calendar } from './Calendar';
+import { DateDropdownSelector } from './DateDropdownSelector';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
 import styles from './AIPolicyGenerator.module.css';
 
 // Extended schema for enhanced form features
@@ -223,55 +223,31 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
           <div className={styles.dateFields}>
             <FormItem name="effectiveDate">
               <FormLabel>Effective Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button 
-                      variant="outline" 
-                      className={styles.datePickerButton}
-                      aria-label={form.values.effectiveDate ? `Effective date: ${new Date(form.values.effectiveDate).toLocaleDateString()}` : "Select effective date"}
-                      disabled={isPending}
-                    >
-                      <CalendarIcon size={16} />
-                      {form.values.effectiveDate ? new Date(form.values.effectiveDate).toLocaleDateString() : <span>Pick a date</span>}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent removeBackgroundAndPadding>
-                  <Calendar
-                    mode="single"
-                    selected={form.values.effectiveDate ? new Date(form.values.effectiveDate) : undefined}
-                    onSelect={(date) => form.setValues((prev) => ({ ...prev, effectiveDate: date || undefined }))}
-                  />
-                </PopoverContent>
-              </Popover>
+              <FormControl>
+                <DateDropdownSelector
+                  value={form.values.effectiveDate}
+                  onChange={(date) => form.setValues((prev) => ({ ...prev, effectiveDate: date || undefined }))}
+                  disabled={isPending}
+                />
+              </FormControl>
+              <FormDescription>
+                Select the date when this policy becomes effective
+              </FormDescription>
               <FormMessage />
             </FormItem>
 
             <FormItem name="expirationDate">
               <FormLabel>Expiration Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button 
-                      variant="outline" 
-                      className={styles.datePickerButton}
-                      aria-label={form.values.expirationDate ? `Expiration date: ${new Date(form.values.expirationDate).toLocaleDateString()}` : "Select expiration date"}
-                      disabled={isPending}
-                    >
-                      <CalendarIcon size={16} />
-                      {form.values.expirationDate ? new Date(form.values.expirationDate).toLocaleDateString() : <span>Pick a date</span>}
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent removeBackgroundAndPadding>
-                  <Calendar
-                    mode="single"
-                    selected={form.values.expirationDate ? new Date(form.values.expirationDate) : undefined}
-                    onSelect={(date) => form.setValues((prev) => ({ ...prev, expirationDate: date || undefined }))}
-                  />
-                </PopoverContent>
-              </Popover>
+              <FormControl>
+                <DateDropdownSelector
+                  value={form.values.expirationDate}
+                  onChange={(date) => form.setValues((prev) => ({ ...prev, expirationDate: date || undefined }))}
+                  disabled={isPending}
+                />
+              </FormControl>
+              <FormDescription>
+                Select when this policy expires (optional)
+              </FormDescription>
               <FormMessage />
             </FormItem>
           </div>

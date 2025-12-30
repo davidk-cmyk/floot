@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.daySelect {
+  width: 80px;
+  min-width: 80px;
+}
+
+.monthSelect {
+  width: 130px;
+  min-width: 130px;
+}
+
+.yearSelect {
+  width: 90px;
+  min-width: 90px;
+}
+
+.daySelect [data-placeholder],
+.monthSelect [data-placeholder],
+.yearSelect [data-placeholder] {
+  color: var(--muted-foreground);
+}

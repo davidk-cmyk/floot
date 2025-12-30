@@ -10,6 +10,26 @@
   gap: var(--spacing-4);
 }
 
+.dateSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.durationDateContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.durationSelect {
+  max-width: 250px;
+}
+
 .reviewDateContainer {
   display: flex;
   flex-direction: column;
