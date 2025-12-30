@@ -46,10 +46,10 @@ const roleDescriptions = {
   admin: 'Full access to all features, settings, and user management. Can create and manage all policies and portals.',
   approver: 'Can review and approve policy drafts before publication. Cannot modify system settings.',
   editor: 'Can create, edit, and publish policies. Cannot access user management or system settings.',
-  user: 'Can view assigned policies and acknowledge them. Read-only access to portal content.',
 };
 
-const roleComingSoon = ['approver', 'user'];
+const roleComingSoon = ['approver'];
+const assignableRoles = ['admin', 'approver', 'editor'] as const;
 
 export const UserCreateForm = () => {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
@@ -106,7 +106,7 @@ export const UserCreateForm = () => {
               <span className={styles.guideTitle}>Understanding User Roles</span>
             </div>
             <div className={styles.guideContent}>
-              {Object.entries(roleDescriptions).map(([role, description]) => (
+              {assignableRoles.map((role) => (
                 <div key={role} className={styles.roleItem}>
                   <div className={styles.roleTitle}>
                     <strong>{formatRoleName(role)}</strong>
@@ -114,7 +114,7 @@ export const UserCreateForm = () => {
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
                     )}
                   </div>
-                  <p className={styles.roleDescription}>{description}</p>
+                  <p className={styles.roleDescription}>{roleDescriptions[role]}</p>
                 </div>
               ))}
             </div>
@@ -182,7 +182,7 @@ export const UserCreateForm = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {UserRoleArrayValues.map((role) => (
+                {assignableRoles.map((role) => (
                   <SelectItem 
                     key={role} 
                     value={role} 
