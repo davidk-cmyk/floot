@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import * as z from 'zod';
 import { Wand2, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
@@ -14,6 +14,8 @@ import { PolicyTaxonomyGroup } from './PolicyTaxonomyGroup';
 import { DateDropdownSelector } from './DateDropdownSelector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
 import styles from './AIPolicyGenerator.module.css';
+
+type DateDurationOption = 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
 
 // Extended schema for enhanced form features
 const enhancedGeneratePolicySchema = generatePolicySchema.extend({
@@ -42,6 +44,7 @@ type AIPolicyGeneratorProps = {
 export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues }: AIPolicyGeneratorProps) => {
   const [generatedContent, setGeneratedContent] = useState('');
   const [isStreamingContent, setIsStreamingContent] = useState(false);
+  const [expirationDateOption, setExpirationDateOption] = useState<DateDurationOption>('1year');
   const outputRef = useRef<HTMLTextAreaElement>(null);
   
   const { buildUrl } = useOrgNavigation();
@@ -60,6 +63,77 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
       versionNotes: initialValues?.versionNotes || '',
     },
   });
+
+  const safeEffectiveDate = useMemo(() => {
+    const value = form.values.effectiveDate;
+    if (!value) return null;
+    if (value instanceof Date && !isNaN(value.getTime())) return value;
+    if (typeof value === 'string') {
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    return null;
+  }, [form.values.effectiveDate]);
+
+  const safeExpirationDate = useMemo(() => {
+    const value = form.values.expirationDate;
+    if (!value) return null;
+    if (value instanceof Date && !isNaN(value.getTime())) return value;
+    if (typeof value === 'string') {
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    return null;
+  }, [form.values.expirationDate]);
+
+  const calculateDateFromEffective = useCallback((option: DateDurationOption, baseDate?: Date | null): Date | null => {
+    if (option === 'specific' || !baseDate) return null;
+    const years = { '1year': 1, '2years': 2, '3years': 3, '4years': 4, '5years': 5 }[option];
+    if (!years) return null;
+    const calculatedDate = new Date(baseDate);
+    calculatedDate.setFullYear(calculatedDate.getFullYear() + years);
+    return calculatedDate;
+  }, []);
+
+  useEffect(() => {
+    if (expirationDateOption !== 'specific' && safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(expirationDateOption, safeEffectiveDate);
+      if (calculatedDate) {
+        const currentTimestamp = safeExpirationDate?.getTime();
+        const calculatedTimestamp = calculatedDate.getTime();
+        if (currentTimestamp !== calculatedTimestamp) {
+          form.setValues((prev) => ({ ...prev, expirationDate: calculatedDate }));
+        }
+      }
+    }
+  }, [safeEffectiveDate, expirationDateOption, calculateDateFromEffective, safeExpirationDate, form.setValues]);
+
+  const handleExpirationDateOptionChange = (option: DateDurationOption) => {
+    setExpirationDateOption(option);
+    if (option === 'specific') return;
+    if (safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
+      if (calculatedDate) {
+        form.setValues((prev) => ({ ...prev, expirationDate: calculatedDate }));
+      }
+    }
+  };
+
+  const getDateOptionLabel = (option: DateDurationOption): string => {
+    switch (option) {
+      case 'specific': return 'Custom Date';
+      case '1year': return '1 Year from Effective';
+      case '2years': return '2 Years from Effective';
+      case '3years': return '3 Years from Effective';
+      case '4years': return '4 Years from Effective';
+      case '5years': return '5 Years from Effective';
+      default: return 'Custom Date';
+    }
+  };
+
+  const formatDateDisplay = (value: Date | null): string => {
+    return value ? value.toLocaleDateString() : 'Pick a date';
+  };
 
   const handleSubmit = (values: EnhancedGeneratePolicyFormValues) => {
     setGeneratedContent('');
@@ -238,15 +312,43 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
 
             <FormItem name="expirationDate">
               <FormLabel>Expiration Date</FormLabel>
-              <FormControl>
-                <DateDropdownSelector
-                  value={form.values.expirationDate}
-                  onChange={(date) => form.setValues((prev) => ({ ...prev, expirationDate: date || undefined }))}
-                  disabled={isPending}
-                />
-              </FormControl>
+              <div className={styles.durationDateContainer}>
+                <Select value={expirationDateOption} onValueChange={handleExpirationDateOptionChange} disabled={isPending}>
+                  <SelectTrigger className={styles.durationSelect}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1year">1 Year from Effective</SelectItem>
+                    <SelectItem value="2years">2 Years from Effective</SelectItem>
+                    <SelectItem value="3years">3 Years from Effective</SelectItem>
+                    <SelectItem value="4years">4 Years from Effective</SelectItem>
+                    <SelectItem value="5years">5 Years from Effective</SelectItem>
+                    <SelectItem value="specific">Custom Date</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {expirationDateOption === 'specific' && (
+                  <FormControl>
+                    <DateDropdownSelector
+                      value={form.values.expirationDate}
+                      onChange={(date) => form.setValues((prev) => ({ ...prev, expirationDate: date || undefined }))}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                )}
+                
+                {expirationDateOption !== 'specific' && safeExpirationDate && (
+                  <div className={styles.calculatedDate}>
+                    <CalendarIcon size={16} />
+                    <span>{formatDateDisplay(safeExpirationDate)}</span>
+                  </div>
+                )}
+              </div>
               <FormDescription>
-                Select when this policy expires (optional)
+                {expirationDateOption === 'specific' 
+                  ? "Select a specific expiration date"
+                  : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
+                }
               </FormDescription>
               <FormMessage />
             </FormItem>
