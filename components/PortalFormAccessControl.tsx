@@ -7,6 +7,7 @@ import { Shield } from 'lucide-react';
 import { UserRoleArrayValues, UserRole } from '../helpers/schema';
 import { accessTypeOptions } from '../helpers/portalFormConstants';
 import { PortalFormData } from '../helpers/portalFormValidation';
+import { formatRoleName } from '../helpers/formatRoleName';
 import styles from './PortalFormAccessControl.module.css';
 
 type PortalFormAccessControlProps = {
@@ -120,7 +121,7 @@ export const PortalFormAccessControl: React.FC<PortalFormAccessControlProps> = (
                     />
                   </FormControl>
                   <label htmlFor={`role-${role}`} className={styles.checkboxLabel}>
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
+                    {formatRoleName(role)}
                   </label>
                 </div>
               ))}

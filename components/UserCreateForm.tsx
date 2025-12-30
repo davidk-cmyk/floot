@@ -3,6 +3,7 @@ import * as z from 'zod';
 import { Clipboard, Copy, Lightbulb } from 'lucide-react';
 import { toast } from 'sonner';
 import { generateInviteLink } from '../helpers/generateInviteLink';
+import { formatRoleName } from '../helpers/formatRoleName';
 
 import {
   Form,
@@ -108,7 +109,7 @@ export const UserCreateForm = () => {
               {Object.entries(roleDescriptions).map(([role, description]) => (
                 <div key={role} className={styles.roleItem}>
                   <div className={styles.roleTitle}>
-                    <strong>{role.charAt(0).toUpperCase() + role.slice(1)}</strong>
+                    <strong>{formatRoleName(role)}</strong>
                     {roleComingSoon.includes(role) && (
                       <span className={styles.comingSoonBadge}>COMING SOON</span>
                     )}
@@ -189,7 +190,7 @@ export const UserCreateForm = () => {
                     disabled={roleComingSoon.includes(role)}
                   >
                     <div className={styles.selectItemContent}>
-                      {role === 'admin' ? 'Superadmin' : role.charAt(0).toUpperCase() + role.slice(1)}
+                      {formatRoleName(role)}
                       {roleComingSoon.includes(role) && (
                         <span className={styles.selectItemSoon}> (COMING SOON)</span>
                       )}

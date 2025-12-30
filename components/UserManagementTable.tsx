@@ -4,6 +4,7 @@ import { useUserManagement } from "../helpers/useUserManagement";
 import { UserListItem } from "../endpoints/users/list_GET.schema";
 import { UserRole, UserRoleArrayValues } from "../helpers/schema";
 import { useAuth } from "../helpers/useAuth";
+import { formatRoleName } from "../helpers/formatRoleName";
 import { Input } from "./Input";
 import { Button } from "./Button";
 import { Badge } from "./Badge";
@@ -252,7 +253,7 @@ const UserManagementTable: React.FC = () => {
                 <SelectContent>
                   {UserRoleArrayValues.map((role) => (
                     <SelectItem key={role} value={role}>
-                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                      {formatRoleName(role)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -360,7 +361,7 @@ const UserManagementTable: React.FC = () => {
                     </td>
                     <td>
                       <Badge variant="secondary">
-                        {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                        {formatRoleName(user.role)}
                       </Badge>
                     </td>
                     <td>
