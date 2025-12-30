@@ -24,3 +24,15 @@
 .yearSelect [data-placeholder] {
   color: var(--muted-foreground);
 }
+
+.clearButton {
+  padding: 0.25rem;
+  height: auto;
+  min-height: unset;
+  color: var(--muted-foreground);
+}
+
+.clearButton:hover {
+  color: var(--foreground);
+  background-color: var(--muted);
+}

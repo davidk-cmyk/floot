@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
+import { Button } from './Button';
+import { X } from 'lucide-react';
 import styles from './DateDropdownSelector.module.css';
 
 interface DateDropdownSelectorProps {
@@ -9,6 +11,7 @@ interface DateDropdownSelectorProps {
   maxYear?: number;
   disabled?: boolean;
   placeholder?: string;
+  allowClear?: boolean;
 }
 
 const MONTHS = [
@@ -19,10 +22,11 @@ const MONTHS = [
 export const DateDropdownSelector: React.FC<DateDropdownSelectorProps> = ({
   value,
   onChange,
-  minYear = 2020,
-  maxYear = 2040,
+  minYear,
+  maxYear,
   disabled = false,
   placeholder = 'Select date',
+  allowClear = true,
 }) => {
   const safeDate = useMemo(() => {
     if (!value) return null;
@@ -48,12 +52,20 @@ export const DateDropdownSelector: React.FC<DateDropdownSelectorProps> = ({
   const daysInMonth = getDaysInMonth(currentMonth, currentYear);
 
   const years = useMemo(() => {
+    const currentYearNum = new Date().getFullYear();
+    const valueYear = safeDate?.getFullYear();
+    const effectiveMinYear = minYear ?? Math.min(currentYearNum - 10, valueYear ?? currentYearNum);
+    const effectiveMaxYear = maxYear ?? Math.max(currentYearNum + 20, valueYear ?? currentYearNum);
     const arr: number[] = [];
-    for (let y = minYear; y <= maxYear; y++) {
+    for (let y = effectiveMinYear; y <= effectiveMaxYear; y++) {
       arr.push(y);
     }
     return arr;
-  }, [minYear, maxYear]);
+  }, [minYear, maxYear, safeDate]);
+
+  const handleClear = useCallback(() => {
+    onChange(null);
+  }, [onChange]);
 
   const days = useMemo(() => {
     const arr: number[] = [];
@@ -139,6 +151,19 @@ export const DateDropdownSelector: React.FC<DateDropdownSelectorProps> = ({
           ))}
         </SelectContent>
       </Select>
+
+      {allowClear && safeDate && !disabled && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={handleClear}
+          className={styles.clearButton}
+          title="Clear date"
+        >
+          <X size={14} />
+        </Button>
+      )}
     </div>
   );
 };
