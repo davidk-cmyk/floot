@@ -39,7 +39,7 @@ interface PolicyMetadataSectionProps {
   }>;
 }
 
-type DateDurationOption = 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
+type DateDurationOption = 'none' | 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
 
 export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
   status,
@@ -92,7 +92,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
   const showReviewDateWarning = !safeReviewDate;
 
   const calculateDateFromEffective = useCallback((option: DateDurationOption, baseDate?: Date | null): Date | null => {
-    if (option === 'specific' || !baseDate) {
+    if (option === 'none' || option === 'specific' || !baseDate) {
       return null;
     }
     
@@ -139,6 +139,10 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
 
   const handleExpirationDateOptionChange = (option: DateDurationOption) => {
     setExpirationDateOption(option);
+    if (option === 'none') {
+      onExpirationDateChange(null);
+      return;
+    }
     if (option === 'specific') return;
     if (safeEffectiveDate) {
       const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
@@ -169,6 +173,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
 
   const getDateOptionLabel = (option: DateDurationOption): string => {
     switch (option) {
+      case 'none': return 'No Expiration';
       case 'specific': return 'Custom Date';
       case '1year': return '1 Year from Effective';
       case '2years': return '2 Years from Effective';
@@ -241,6 +246,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="none">No Expiration</SelectItem>
                 <SelectItem value="1year">1 Year from Effective</SelectItem>
                 <SelectItem value="2years">2 Years from Effective</SelectItem>
                 <SelectItem value="3years">3 Years from Effective</SelectItem>
@@ -259,7 +265,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
               </FormControl>
             )}
             
-            {expirationDateOption !== 'specific' && safeExpirationDate && (
+            {expirationDateOption !== 'specific' && expirationDateOption !== 'none' && safeExpirationDate && (
               <div className={styles.calculatedDate}>
                 <CalendarIcon size={16} />
                 <span>{formatDateDisplay(safeExpirationDate)}</span>
@@ -267,9 +273,11 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
             )}
           </div>
           <FormDescription>
-            {expirationDateOption === 'specific' 
-              ? "Select a specific expiration date"
-              : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
+            {expirationDateOption === 'none'
+              ? "This policy will not expire"
+              : expirationDateOption === 'specific' 
+                ? "Select a specific expiration date"
+                : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
             }
           </FormDescription>
           <FormMessage />

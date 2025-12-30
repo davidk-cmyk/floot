@@ -15,7 +15,7 @@ import { DateDropdownSelector } from './DateDropdownSelector';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
 import styles from './AIPolicyGenerator.module.css';
 
-type DateDurationOption = 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
+type DateDurationOption = 'none' | 'specific' | '1year' | '2years' | '3years' | '4years' | '5years';
 
 // Extended schema for enhanced form features
 const enhancedGeneratePolicySchema = generatePolicySchema.extend({
@@ -102,7 +102,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
   }, [form.values.expirationDate]);
 
   const calculateDateFromEffective = useCallback((option: DateDurationOption, baseDate?: Date | null): Date | null => {
-    if (option === 'specific' || !baseDate) return null;
+    if (option === 'none' || option === 'specific' || !baseDate) return null;
     const years = { '1year': 1, '2years': 2, '3years': 3, '4years': 4, '5years': 5 }[option];
     if (!years) return null;
     const calculatedDate = new Date(baseDate);
@@ -149,6 +149,10 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
 
   const handleExpirationDateOptionChange = (option: DateDurationOption) => {
     setExpirationDateOption(option);
+    if (option === 'none') {
+      form.setValues((prev) => ({ ...prev, expirationDate: undefined }));
+      return;
+    }
     if (option === 'specific') return;
     if (safeEffectiveDate) {
       const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
@@ -160,6 +164,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
 
   const getDateOptionLabel = (option: DateDurationOption): string => {
     switch (option) {
+      case 'none': return 'No Expiration';
       case 'specific': return 'Custom Date';
       case '1year': return '1 Year from Effective';
       case '2years': return '2 Years from Effective';
@@ -402,6 +407,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="none">No Expiration</SelectItem>
                     <SelectItem value="1year">1 Year from Effective</SelectItem>
                     <SelectItem value="2years">2 Years from Effective</SelectItem>
                     <SelectItem value="3years">3 Years from Effective</SelectItem>
@@ -421,7 +427,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
                   </FormControl>
                 )}
                 
-                {expirationDateOption !== 'specific' && safeExpirationDate && (
+                {expirationDateOption !== 'specific' && expirationDateOption !== 'none' && safeExpirationDate && (
                   <div className={styles.calculatedDate}>
                     <CalendarIcon size={16} />
                     <span>{formatDateDisplay(safeExpirationDate)}</span>
@@ -429,9 +435,11 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
                 )}
               </div>
               <FormDescription>
-                {expirationDateOption === 'specific' 
-                  ? "Select a specific expiration date"
-                  : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
+                {expirationDateOption === 'none'
+                  ? "This policy will not expire"
+                  : expirationDateOption === 'specific' 
+                    ? "Select a specific expiration date"
+                    : `Expiration date: ${getDateOptionLabel(expirationDateOption).toLowerCase()}`
                 }
               </FormDescription>
               <FormMessage />
