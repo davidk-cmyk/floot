@@ -46,11 +46,34 @@ export const UserCreateForm = () => {
   const [createdUserInfo, setCreatedUserInfo] = useState<CreatedUserInfo | null>(null);
   const { useCreateUser } = useUserManagement();
 
+  const roleDescriptions = {
+    admin: {
+      label: 'Superadmin',
+      description: 'Full access to all features, settings, and user management. Can create and manage all policies and portals.',
+      disabled: false,
+    },
+    approver: {
+      label: 'Approver',
+      description: 'Can review and approve policy drafts before publication. Cannot modify system settings.',
+      disabled: true,
+    },
+    editor: {
+      label: 'Editor',
+      description: 'Can create, edit, and publish policies. Cannot access user management or system settings.',
+      disabled: false,
+    },
+    user: {
+      label: 'User',
+      description: 'Can view assigned policies and acknowledge them. Read-only access to portal content.',
+      disabled: true,
+    },
+  };
+
   const defaultValues = {
     firstName: '',
     lastName: '',
     email: '',
-    role: 'user' as const,
+    role: 'editor' as const,
   };
 
   const form = useForm({
@@ -152,11 +175,25 @@ export const UserCreateForm = () => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {UserRoleArrayValues.map((role) => (
-                  <SelectItem key={role} value={role} className={styles.selectItem}>
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
-                  </SelectItem>
-                ))}
+                {UserRoleArrayValues.map((role) => {
+                  const roleInfo = roleDescriptions[role as keyof typeof roleDescriptions];
+                  return (
+                    <SelectItem 
+                      key={role} 
+                      value={role} 
+                      disabled={roleInfo.disabled}
+                      className={`${styles.selectItem} ${roleInfo.disabled ? styles.selectItemDisabled : ''}`}
+                    >
+                      <div className={styles.roleOption}>
+                        <div className={styles.roleLabel}>
+                          {roleInfo.label}
+                          {roleInfo.disabled && <span className={styles.soonBadge}>Soon</span>}
+                        </div>
+                        <div className={styles.roleDescription}>{roleInfo.description}</div>
+                      </div>
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             <FormDescription>
