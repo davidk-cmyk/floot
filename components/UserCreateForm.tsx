@@ -188,7 +188,7 @@ export const UserCreateForm = () => {
                     disabled={roleComingSoon.includes(role)}
                   >
                     <div className={styles.selectItemContent}>
-                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                      {role === 'admin' ? 'Superadmin' : role.charAt(0).toUpperCase() + role.slice(1)}
                       {roleComingSoon.includes(role) && (
                         <span className={styles.selectItemSoon}> (COMING SOON)</span>
                       )}
