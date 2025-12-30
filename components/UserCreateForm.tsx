@@ -162,40 +162,52 @@ export const UserCreateForm = () => {
 
           <FormItem name="role" className={styles.formField}>
             <FormLabel>Role</FormLabel>
-            <Select
-              onValueChange={(value) =>
-                form.setValues((prev) => ({ ...prev, role: value as z.infer<typeof createUserSchema>['role'] }))
-              }
-              value={form.values.role}
-              disabled={createUserMutation.isPending}
-            >
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {UserRoleArrayValues.map((role) => {
-                  const roleInfo = roleDescriptions[role as keyof typeof roleDescriptions];
-                  return (
-                    <SelectItem 
-                      key={role} 
-                      value={role} 
-                      disabled={roleInfo.disabled}
-                      className={`${styles.selectItem} ${roleInfo.disabled ? styles.selectItemDisabled : ''}`}
-                    >
-                      <div className={styles.roleOption}>
-                        <div className={styles.roleLabel}>
+            <div className={styles.roleFieldContainer}>
+              <Select
+                onValueChange={(value) =>
+                  form.setValues((prev) => ({ ...prev, role: value as z.infer<typeof createUserSchema>['role'] }))
+                }
+                value={form.values.role}
+                disabled={createUserMutation.isPending}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {UserRoleArrayValues.map((role) => {
+                    const roleInfo = roleDescriptions[role as keyof typeof roleDescriptions];
+                    return (
+                      <SelectItem 
+                        key={role} 
+                        value={role} 
+                        disabled={roleInfo.disabled}
+                        className={`${styles.selectItem} ${roleInfo.disabled ? styles.selectItemDisabled : ''}`}
+                      >
+                        <div className={styles.roleOptionCompact}>
                           {roleInfo.label}
                           {roleInfo.disabled && <span className={styles.soonBadge}>Soon</span>}
                         </div>
-                        <div className={styles.roleDescription}>{roleInfo.description}</div>
-                      </div>
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+              
+              <div className={styles.roleDescriptionPanel}>
+                {roleDescriptions[form.values.role as keyof typeof roleDescriptions] && (
+                  <>
+                    <div className={styles.descriptionLabel}>
+                      {roleDescriptions[form.values.role as keyof typeof roleDescriptions].label}
+                    </div>
+                    <p className={styles.descriptionText}>
+                      {roleDescriptions[form.values.role as keyof typeof roleDescriptions].description}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
             <FormDescription>
               The user's role determines their permissions.
             </FormDescription>
