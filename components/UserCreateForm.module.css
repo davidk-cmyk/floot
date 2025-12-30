@@ -1,9 +1,63 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-6);
   width: 100%;
   max-width: 500px;
+}
+
+.quickGuide {
+  background-color: color-mix(in srgb, var(--primary) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-2);
+}
+
+.guideHeader {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: var(--spacing-3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.guideContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.roleItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.roleTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-size: 0.875rem;
+}
+
+.comingSoonBadge {
+  background-color: color-mix(in srgb, var(--muted) 100%, transparent);
+  color: var(--muted-foreground);
+  padding: 0.125rem var(--spacing-2);
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.roleDescription {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .nameFields {
@@ -19,6 +73,18 @@
 
 .selectItem {
   text-transform: capitalize;
+}
+
+.selectItemContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.selectItemSoon {
+  font-size: 0.8em;
+  color: var(--muted-foreground);
+  opacity: 0.6;
 }
 
 .submitButton {

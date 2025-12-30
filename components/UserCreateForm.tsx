@@ -41,6 +41,15 @@ type CreatedUserInfo = {
   email?: string;
 };
 
+const roleDescriptions = {
+  superadmin: 'Full access to all features, settings, and user management. Can create and manage all policies and portals.',
+  approver: 'Can review and approve policy drafts before publication. Cannot modify system settings.',
+  editor: 'Can create, edit, and publish policies. Cannot access user management or system settings.',
+  user: 'Can view assigned policies and acknowledge them. Read-only access to portal content.',
+};
+
+const roleComingSoon = ['approver', 'user'];
+
 export const UserCreateForm = () => {
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false);
   const [createdUserInfo, setCreatedUserInfo] = useState<CreatedUserInfo | null>(null);
@@ -90,6 +99,25 @@ export const UserCreateForm = () => {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
+          <div className={styles.quickGuide}>
+            <div className={styles.guideHeader}>
+              <span>💡 Understanding User Roles</span>
+            </div>
+            <div className={styles.guideContent}>
+              {Object.entries(roleDescriptions).map(([role, description]) => (
+                <div key={role} className={styles.roleItem}>
+                  <div className={styles.roleTitle}>
+                    <strong>{role.charAt(0).toUpperCase() + role.slice(1)}</strong>
+                    {roleComingSoon.includes(role) && (
+                      <span className={styles.comingSoonBadge}>COMING SOON</span>
+                    )}
+                  </div>
+                  <p className={styles.roleDescription}>{description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           <div className={styles.nameFields}>
             <FormItem name="firstName" className={styles.formField}>
               <FormLabel>First Name</FormLabel>
@@ -153,8 +181,18 @@ export const UserCreateForm = () => {
               </FormControl>
               <SelectContent>
                 {UserRoleArrayValues.map((role) => (
-                  <SelectItem key={role} value={role} className={styles.selectItem}>
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
+                  <SelectItem 
+                    key={role} 
+                    value={role} 
+                    className={styles.selectItem}
+                    disabled={roleComingSoon.includes(role)}
+                  >
+                    <div className={styles.selectItemContent}>
+                      {role.charAt(0).toUpperCase() + role.slice(1)}
+                      {roleComingSoon.includes(role) && (
+                        <span className={styles.selectItemSoon}> (COMING SOON)</span>
+                      )}
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
