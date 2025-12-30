@@ -20,6 +20,7 @@ type DateDurationOption = 'specific' | '1year' | '2years' | '3years' | '4years' 
 // Extended schema for enhanced form features
 const enhancedGeneratePolicySchema = generatePolicySchema.extend({
   effectiveDate: z.date().optional(),
+  reviewDate: z.date().optional(),
   expirationDate: z.date().optional(),
   versionNotes: z.string().optional(),
 });
@@ -31,6 +32,7 @@ interface PolicyMetadata {
   category?: string;
   tags?: string[];
   effectiveDate?: Date;
+  reviewDate?: Date;
   expirationDate?: Date;
   versionNotes?: string;
 }
@@ -44,6 +46,7 @@ type AIPolicyGeneratorProps = {
 export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues }: AIPolicyGeneratorProps) => {
   const [generatedContent, setGeneratedContent] = useState('');
   const [isStreamingContent, setIsStreamingContent] = useState(false);
+  const [reviewDateOption, setReviewDateOption] = useState<DateDurationOption>('1year');
   const [expirationDateOption, setExpirationDateOption] = useState<DateDurationOption>('1year');
   const outputRef = useRef<HTMLTextAreaElement>(null);
   
@@ -59,6 +62,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
       keyRequirements: initialValues?.keyRequirements || '',
       tags: initialValues?.tags || [],
       effectiveDate: initialValues?.effectiveDate || undefined,
+      reviewDate: initialValues?.reviewDate || undefined,
       expirationDate: initialValues?.expirationDate || undefined,
       versionNotes: initialValues?.versionNotes || '',
     },
@@ -74,6 +78,17 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
     }
     return null;
   }, [form.values.effectiveDate]);
+
+  const safeReviewDate = useMemo(() => {
+    const value = form.values.reviewDate;
+    if (!value) return null;
+    if (value instanceof Date && !isNaN(value.getTime())) return value;
+    if (typeof value === 'string') {
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+    return null;
+  }, [form.values.reviewDate]);
 
   const safeExpirationDate = useMemo(() => {
     const value = form.values.expirationDate;
@@ -96,6 +111,19 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
   }, []);
 
   useEffect(() => {
+    if (reviewDateOption !== 'specific' && safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(reviewDateOption, safeEffectiveDate);
+      if (calculatedDate) {
+        const currentTimestamp = safeReviewDate?.getTime();
+        const calculatedTimestamp = calculatedDate.getTime();
+        if (currentTimestamp !== calculatedTimestamp) {
+          form.setValues((prev) => ({ ...prev, reviewDate: calculatedDate }));
+        }
+      }
+    }
+  }, [safeEffectiveDate, reviewDateOption, calculateDateFromEffective, safeReviewDate, form.setValues]);
+
+  useEffect(() => {
     if (expirationDateOption !== 'specific' && safeEffectiveDate) {
       const calculatedDate = calculateDateFromEffective(expirationDateOption, safeEffectiveDate);
       if (calculatedDate) {
@@ -107,6 +135,17 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
       }
     }
   }, [safeEffectiveDate, expirationDateOption, calculateDateFromEffective, safeExpirationDate, form.setValues]);
+
+  const handleReviewDateOptionChange = (option: DateDurationOption) => {
+    setReviewDateOption(option);
+    if (option === 'specific') return;
+    if (safeEffectiveDate) {
+      const calculatedDate = calculateDateFromEffective(option, safeEffectiveDate);
+      if (calculatedDate) {
+        form.setValues((prev) => ({ ...prev, reviewDate: calculatedDate }));
+      }
+    }
+  };
 
   const handleExpirationDateOptionChange = (option: DateDurationOption) => {
     setExpirationDateOption(option);
@@ -232,6 +271,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
       category: form.values.category,
       tags: form.values.tags,
       effectiveDate: form.values.effectiveDate,
+      reviewDate: form.values.reviewDate,
       expirationDate: form.values.expirationDate,
       versionNotes: form.values.versionNotes,
     };
@@ -245,6 +285,7 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
       keyRequirements: '',
       tags: [],
       effectiveDate: undefined,
+      reviewDate: undefined,
       expirationDate: undefined,
       versionNotes: '',
     });
@@ -306,6 +347,49 @@ export const AIPolicyGenerator = ({ onPolicyGenerated, className, initialValues 
               </FormControl>
               <FormDescription>
                 Select the date when this policy becomes effective
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+
+            <FormItem name="reviewDate">
+              <FormLabel>Review Date</FormLabel>
+              <div className={styles.durationDateContainer}>
+                <Select value={reviewDateOption} onValueChange={handleReviewDateOptionChange} disabled={isPending}>
+                  <SelectTrigger className={styles.durationSelect}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1year">1 Year from Effective</SelectItem>
+                    <SelectItem value="2years">2 Years from Effective</SelectItem>
+                    <SelectItem value="3years">3 Years from Effective</SelectItem>
+                    <SelectItem value="4years">4 Years from Effective</SelectItem>
+                    <SelectItem value="5years">5 Years from Effective</SelectItem>
+                    <SelectItem value="specific">Custom Date</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {reviewDateOption === 'specific' && (
+                  <FormControl>
+                    <DateDropdownSelector
+                      value={form.values.reviewDate}
+                      onChange={(date) => form.setValues((prev) => ({ ...prev, reviewDate: date || undefined }))}
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                )}
+                
+                {reviewDateOption !== 'specific' && safeReviewDate && (
+                  <div className={styles.calculatedDate}>
+                    <CalendarIcon size={16} />
+                    <span>{formatDateDisplay(safeReviewDate)}</span>
+                  </div>
+                )}
+              </div>
+              <FormDescription>
+                {reviewDateOption === 'specific' 
+                  ? "Select a specific review date"
+                  : `Review date: ${getDateOptionLabel(reviewDateOption).toLowerCase()}`
+                }
               </FormDescription>
               <FormMessage />
             </FormItem>
