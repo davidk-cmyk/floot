@@ -46,6 +46,13 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
   - Quick Start suggestions (CEO Name, Company Address, DPO Contact, HR Email, Emergency Number, Head Office Location)
   - Suggestion buttons show existing variables as disabled to prevent duplicates
   - Animated gradient guide section with clear visual hierarchy
+- **Date Selection UI:**
+  - Replaced calendar date pickers with three-dropdown selectors (Day, Month, Year) via DateDropdownSelector component
+  - Effective Date: Uses simple Day/Month/Year dropdown selection
+  - Expiration Date: Preset duration options (1-5 years from effective date) with "Custom Date" fallback to dropdown selectors
+  - Review Date: Same preset duration approach as Expiration Date
+  - Dynamic year range based on existing date value (default: current year -10 to +20)
+  - Clear button (X) to unset optional date fields
 
 ## External Dependencies
 - **Database:** PostgreSQL
