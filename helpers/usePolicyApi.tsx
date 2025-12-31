@@ -113,15 +113,21 @@ export const useCreatePolicy = () => {
   
   return useMutation({
     mutationFn: (newPolicy: CreatePolicyInput) => postCreatePolicy(newPolicy),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Policy created successfully!");
-      // Invalidate all policy-related queries for this organization
-      queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "filterMetadata"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboard", "stats", { organizationId }] });
-      // Invalidate review-related queries since new policies may have review dates
-      queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "list"] });
-      queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "stats"] });
+      // Await query invalidations and refetches to complete before allowing navigation
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "list"] }),
+        queryClient.refetchQueries({ queryKey: [...POLICIES_QUERY_KEY, "list"] }),
+        queryClient.invalidateQueries({ queryKey: [...POLICIES_QUERY_KEY, "filterMetadata"] }),
+        queryClient.refetchQueries({ queryKey: [...POLICIES_QUERY_KEY, "filterMetadata"] }),
+        queryClient.invalidateQueries({ queryKey: ["dashboard", "stats", { organizationId }] }),
+        queryClient.refetchQueries({ queryKey: ["dashboard", "stats", { organizationId }] }),
+        queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "list"] }),
+        queryClient.refetchQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "list"] }),
+        queryClient.invalidateQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "stats"] }),
+        queryClient.refetchQueries({ queryKey: [...REVIEW_POLICIES_QUERY_KEY, "stats"] }),
+      ]);
     },
     onError: (error: Error) => {
       toast.error(`Failed to create policy: ${error.message}`);

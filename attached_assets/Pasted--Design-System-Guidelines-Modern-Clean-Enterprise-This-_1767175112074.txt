@@ -1,0 +1,107 @@
+# Design System Guidelines: "Modern Clean Enterprise"
+
+This document outlines the design principles, tokens, and patterns used in the Policy Portal. Use these guidelines to replicate this aesthetic in other projects.
+
+## 1. Art Direction
+**Philosophy**: Crisp, professional, and airy. The interface balances high-density information with generous whitespace to prevent cognitive overload.
+**Key Traits**:
+- **Geometric**: Clean lines, consistent `12px` border radius.
+- **Tactile**: Subtle shadows and hover states make the UI feel responsive.
+- **Layered**: Use of white cards on soft gray backgrounds, with glassmorphism for floating controls.
+
+---
+
+## 2. Typography
+
+We use a dual-font system to create clear hierarchy.
+
+| Role | Font Family | Usage |
+|------|-------------|-------|
+| **Headings** | **Plus Jakarta Sans** | Page titles, section headers, navigation branding. chosen for its geometric, modern character. |
+| **Body** | **Inter** | Paragraphs, tables, inputs, labels. Chosen for maximum readability at small sizes. |
+
+### Scale & Weights
+- **Page Title**: `text-3xl font-bold tracking-tight` (Plus Jakarta Sans)
+- **Section Header**: `text-lg font-bold` (Plus Jakarta Sans)
+- **Body Text**: `text-sm text-muted-foreground` (Inter)
+- **Meta Text**: `text-xs font-medium` (Inter)
+
+---
+
+## 3. Color Palette (HSL)
+
+The palette uses cool, desaturated neutrals with a vibrant indigo primary action color.
+
+### Foundation
+- **Background**: `hsl(210 40% 98%)` (Cool Slate - distinct from pure white)
+- **Surface (Cards/Sidebar)**: `hsl(0 0% 100%)` (Pure White)
+- **Foreground (Text)**: `hsl(222 47% 11%)` (Deep Navy - softer than black)
+
+### Brand Colors
+- **Primary**: `hsl(221 83% 53%)` (Electric Indigo)
+  - *Usage*: Main buttons, active states, key icons.
+- **Primary Foreground**: `hsl(210 40% 98%)` (White text on primary)
+
+### Functional Colors
+- **Muted Text**: `hsl(215 16% 47%)` (Slate Gray)
+- **Borders**: `hsl(214 32% 91%)` (Very light cool gray)
+- **Success (Green)**: `text-green-700 bg-green-500/10` (Subtle pill badges)
+- **Warning (Amber)**: `text-amber-700 bg-amber-500/10`
+
+---
+
+## 4. Component Patterns
+
+### A. The "Floating" Card
+Cards should feel like they are floating slightly above the background.
+```css
+.card {
+  background: white;
+  border: 1px solid hsl(214 32% 91%); /* Subtle border */
+  border-radius: 0.75rem; /* 12px */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: hsl(221 83% 53% / 0.2); /* Hint of primary color */
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); /* Elevated shadow */
+}
+```
+
+### B. Glassmorphic Toolbar
+For control strips (search/filter bars), use a semi-transparent background to maintain context.
+```css
+.toolbar {
+  background: hsl(0 0% 100% / 0.5); /* 50% opacity white */
+  backdrop-filter: blur(4px);
+  border: 1px solid hsl(214 32% 91% / 0.6);
+}
+```
+
+### C. Sidebar Navigation
+- **Active State**: `bg-primary/10 text-primary` (Light wash of brand color)
+- **Inactive State**: `text-muted-foreground hover:bg-slate-100 hover:text-slate-900`
+
+---
+
+## 5. Spacing & Radius
+
+- **Global Radius**: `0.75rem` (12px). This is slightly rounder than the standard 4px/8px, giving a friendlier, modern feel.
+- **Padding**: Generous.
+  - Cards: `p-6` (24px)
+  - Screen Margins: `px-8` (32px)
+- **Gap**: Consistent `gap-4` or `gap-6` for grids.
+
+## 6. Iconography
+- Library: **Lucide React**
+- Style: Stroke width `2px` (default) or `1.5px` for larger sizes.
+- Pattern: Wrap icons in a container `p-2.5 rounded-lg` with a light colored background matching the icon color.
+
+---
+
+## 7. Motion
+UI elements should not just appear; they should enter.
+- **Entrance**: Fade up (`y: 20 -> 0`, `opacity: 0 -> 1`).
+- **Duration**: `0.3s`
+- **Stagger**: `0.05s` delay between list items.
