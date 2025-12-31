@@ -49,6 +49,12 @@
   font-size: var(--text-sm);
 }
 
+.selectAllButton {
+  margin-left: var(--spacing-2);
+  font-size: var(--text-xs);
+  color: var(--primary);
+}
+
 .actions {
   display: flex;
   gap: var(--spacing-2);

@@ -13,6 +13,7 @@ import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { usePortals } from "../helpers/usePortalApi";
 import { bulkAssignPoliciesToPortals } from "../endpoints/policies/bulk-assign-portals_POST.schema";
+import { queryKeys } from "../helpers/queryKeys";
 import { toast } from "sonner";
 import styles from "./BulkPortalAssignModal.module.css";
 
@@ -48,8 +49,12 @@ export const BulkPortalAssignModal: React.FC<BulkPortalAssignModalProps> = ({
     },
     onSuccess: (result) => {
       toast.success(result.message);
-      queryClient.invalidateQueries({ queryKey: ["policies"] });
-      queryClient.invalidateQueries({ queryKey: ["portals"] });
+      // Invalidate policy list queries (assigned portals are shown on cards)
+      queryClient.invalidateQueries({ queryKey: queryKeys.policies.list() });
+      // Invalidate portal assignment queries for affected portals
+      selectedPortalIds.forEach((portalId) => {
+        queryClient.invalidateQueries({ queryKey: queryKeys.portals.assignments(portalId) });
+      });
       onSuccess();
       onClose();
     },

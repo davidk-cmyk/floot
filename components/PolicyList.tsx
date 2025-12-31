@@ -16,6 +16,8 @@ interface PolicyListProps {
   isSelectable?: boolean;
   selectedPolicyIds?: number[];
   onSelectionChange?: (id: number, selected: boolean) => void;
+  onSelectAll?: () => void;
+  onClearSelection?: () => void;
 }
 
 export const PolicyList: React.FC<PolicyListProps> = ({
@@ -29,6 +31,8 @@ export const PolicyList: React.FC<PolicyListProps> = ({
   isSelectable = false,
   selectedPolicyIds = [],
   onSelectionChange,
+  onSelectAll,
+  onClearSelection,
 }) => {
   if (viewMode === "list") {
     return (
@@ -42,6 +46,8 @@ export const PolicyList: React.FC<PolicyListProps> = ({
         isSelectable={isSelectable}
         selectedPolicyIds={selectedPolicyIds}
         onSelectionChange={onSelectionChange}
+        onSelectAll={onSelectAll}
+        onClearSelection={onClearSelection}
       />
     );
   }

@@ -71,11 +71,11 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     : "N/A";
 
   const isPortalView = Boolean(portalSlug);
-  
-  const canEdit = authState.type === "authenticated" && 
+
+  const canEdit = authState.type === "authenticated" &&
     (authState.user.role === "admin" || authState.user.role === "editor");
 
-  const canDownload = authState.type === "authenticated" && 
+  const canDownload = authState.type === "authenticated" &&
     authState.user.role === "admin";
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -85,7 +85,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
   // Determine the target URL based on context
   // If portalSlug is provided, we are in a portal context
   // Otherwise, default to admin policy view
-    const policyUrl = portalSlug 
+    const policyUrl = portalSlug
     ? buildUrl(`/${portalSlug}/${policy.id}`)
     : buildUrl(`/admin/policies/${policy.id}`);
 
@@ -94,7 +94,7 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
   const handleViewOnPortal = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     if (!policy.assignedPortals || policy.assignedPortals.length === 0) {
       return;
     }
@@ -105,150 +105,150 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
     window.open(portalUrl, '_blank');
   };
 
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onSelectionChange?.(policy.id, !isSelected);
+  };
+
   return (
-    <Link
-      to={policyUrl}
-      className={`${styles.card} ${isSelected ? styles.selected : ""} ${className || ""}`}
-    >
+    <div className={`${styles.cardWrapper} ${isSelected ? styles.selected : ""} ${className || ""}`}>
       {isSelectable && (
-        <div 
+        <div
           className={styles.checkboxContainer}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
+          onClick={handleCheckboxClick}
         >
           <Checkbox
             checked={isSelected}
-            onChange={(e) => {
-              e.stopPropagation();
-              if (onSelectionChange) {
-                onSelectionChange(policy.id, e.target.checked);
-              }
-            }}
+            readOnly
           />
         </div>
       )}
-      {!isPortalView && policy.status && (
-        <div className={styles.statusBadge}>
-          <Badge variant={getStatusVariant(policy.status)}>{policy.status}</Badge>
-        </div>
-      )}
-      
-      <div className={styles.cardHeader}>
-        <h3 className={styles.title}>{policy.title}</h3>
-      </div>
-
-      {showDescription && (
-        <p className={styles.description}>
-          Policy details and guidelines...
-        </p>
-      )}
-
-      {policy.author && (
-        <div className={styles.author}>
-          <User size={14} className={styles.authorIcon} />
-          <span className={styles.authorName}>{policy.author.displayName}</span>
-        </div>
-      )}
-
-      {!isPortalView && (
-        <div className={styles.metadata}>
-          {policy.category && <Badge variant="outline">{policy.category}</Badge>}
-          {policy.department && (
-            <Badge variant="outline">{policy.department}</Badge>
-          )}
-          {policy.assignedPortals && policy.assignedPortals.length > 0 && 
-            policy.assignedPortals.map((portal) => (
-              <Badge key={portal.id} variant="secondary">{portal.name}</Badge>
-            ))
-          }
-          {policy.reviewStatus && (
-            <Badge variant={getReviewStatusVariant(policy.reviewStatus)}>
-              {policy.reviewStatus === "overdue" && "Overdue"}
-              {policy.reviewStatus === "due_soon" && "Due Soon"}
-              {policy.reviewStatus === "upcoming" && "Upcoming"}
-            </Badge>
-          )}
-        </div>
-      )}
-
-      {policy.reviewDate && (
-        <div className={styles.reviewInfo}>
-          <div className={styles.reviewDate}>
-            <Calendar size={14} className={styles.reviewIcon} />
-            <span>Review: {formatReviewDate(policy.reviewDate)}</span>
+      <Link
+        to={policyUrl}
+        className={styles.card}
+      >
+        {!isPortalView && policy.status && (
+          <div className={styles.statusBadge}>
+            <Badge variant={getStatusVariant(policy.status)}>{policy.status}</Badge>
           </div>
-          {(policy.daysOverdue !== undefined || policy.daysUntilDue !== undefined) && (
-            <div className={styles.reviewTiming}>
-              <Clock size={14} className={styles.reviewIcon} />
-              {policy.daysOverdue !== undefined && policy.daysOverdue > 0 && (
-                <span className={styles.overdue}>{policy.daysOverdue} days overdue</span>
-              )}
-              {policy.daysUntilDue !== undefined && policy.daysUntilDue > 0 && policy.daysOverdue === 0 && (
-                <span className={styles.dueSoon}>Due in {policy.daysUntilDue} days</span>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+        )}
 
-      <div className={styles.cardFooter}>
-        <div className={styles.status}>
-          <span className={styles.updatedAt}>Updated {updatedAt}</span>
+        <div className={styles.cardHeader}>
+          <h3 className={styles.title}>{policy.title}</h3>
         </div>
-        <div className={styles.footerActions}>
-          {policy.requiresAcknowledgment && (
-            <div className={styles.acknowledgment}>
-              {policy.acknowledged ? (
-                <>
-                  <CheckCircle size={16} className={styles.acknowledgedIcon} />
-                  <span>Acknowledged</span>
-                </>
-              ) : (
-                <>
-                  <Circle size={16} className={styles.unacknowledgedIcon} />
-                  <span>Pending</span>
-                </>
-              )}
+
+        {showDescription && (
+          <p className={styles.description}>
+            Policy details and guidelines...
+          </p>
+        )}
+
+        {policy.author && (
+          <div className={styles.author}>
+            <User size={14} className={styles.authorIcon} />
+            <span className={styles.authorName}>{policy.author.displayName}</span>
+          </div>
+        )}
+
+        {!isPortalView && (
+          <div className={styles.metadata}>
+            {policy.category && <Badge variant="outline">{policy.category}</Badge>}
+            {policy.department && (
+              <Badge variant="outline">{policy.department}</Badge>
+            )}
+            {policy.assignedPortals && policy.assignedPortals.length > 0 &&
+              policy.assignedPortals.map((portal) => (
+                <Badge key={portal.id} variant="secondary">{portal.name}</Badge>
+              ))
+            }
+            {policy.reviewStatus && (
+              <Badge variant={getReviewStatusVariant(policy.reviewStatus)}>
+                {policy.reviewStatus === "overdue" && "Overdue"}
+                {policy.reviewStatus === "due_soon" && "Due Soon"}
+                {policy.reviewStatus === "upcoming" && "Upcoming"}
+              </Badge>
+            )}
+          </div>
+        )}
+
+        {policy.reviewDate && (
+          <div className={styles.reviewInfo}>
+            <div className={styles.reviewDate}>
+              <Calendar size={14} className={styles.reviewIcon} />
+              <span>Review: {formatReviewDate(policy.reviewDate)}</span>
             </div>
-          )}
-          {!isPortalView && policy.assignedPortals && policy.assignedPortals.length > 0 && (
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              className={styles.viewPortalButton}
-              onClick={handleViewOnPortal}
-              title="View on Portal"
-            >
-              <ExternalLink size={14} />
-            </Button>
-          )}
-          {!isPortalView && canDownload && (
-            <PolicyDownloadButton
-              policyId={policy.id}
-              policyTitle={policy.title}
-              variant="icon"
-              defaultFormat="docx"
-              className={styles.downloadButton}
-            />
-          )}
-          {!isPortalView && canEdit && (
-            <Button
-              asChild
-              variant="ghost"
-              size="icon-sm"
-              className={styles.editButton}
-              onClick={handleEditClick}
-            >
-              <Link to={editUrl}>
-                <Edit size={14} />
-              </Link>
-            </Button>
-          )}
+            {(policy.daysOverdue !== undefined || policy.daysUntilDue !== undefined) && (
+              <div className={styles.reviewTiming}>
+                <Clock size={14} className={styles.reviewIcon} />
+                {policy.daysOverdue !== undefined && policy.daysOverdue > 0 && (
+                  <span className={styles.overdue}>{policy.daysOverdue} days overdue</span>
+                )}
+                {policy.daysUntilDue !== undefined && policy.daysUntilDue > 0 && policy.daysOverdue === 0 && (
+                  <span className={styles.dueSoon}>Due in {policy.daysUntilDue} days</span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className={styles.cardFooter}>
+          <div className={styles.status}>
+            <span className={styles.updatedAt}>Updated {updatedAt}</span>
+          </div>
+          <div className={styles.footerActions}>
+            {policy.requiresAcknowledgment && (
+              <div className={styles.acknowledgment}>
+                {policy.acknowledged ? (
+                  <>
+                    <CheckCircle size={16} className={styles.acknowledgedIcon} />
+                    <span>Acknowledged</span>
+                  </>
+                ) : (
+                  <>
+                    <Circle size={16} className={styles.unacknowledgedIcon} />
+                    <span>Pending</span>
+                  </>
+                )}
+              </div>
+            )}
+            {!isPortalView && policy.assignedPortals && policy.assignedPortals.length > 0 && (
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className={styles.viewPortalButton}
+                onClick={handleViewOnPortal}
+                title="View on Portal"
+              >
+                <ExternalLink size={14} />
+              </Button>
+            )}
+            {!isPortalView && canDownload && (
+              <PolicyDownloadButton
+                policyId={policy.id}
+                policyTitle={policy.title}
+                variant="icon"
+                defaultFormat="docx"
+                className={styles.downloadButton}
+              />
+            )}
+            {!isPortalView && canEdit && (
+              <Button
+                asChild
+                variant="ghost"
+                size="icon-sm"
+                className={styles.editButton}
+                onClick={handleEditClick}
+              >
+                <Link to={editUrl}>
+                  <Edit size={14} />
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

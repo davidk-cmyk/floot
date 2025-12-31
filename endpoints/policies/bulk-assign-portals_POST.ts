@@ -22,6 +22,14 @@ export async function handle(request: Request) {
 
     let totalAssigned = 0;
 
+    // Custom error class for not found errors
+    class NotFoundError extends Error {
+      constructor(message: string) {
+        super(message);
+        this.name = "NotFoundError";
+      }
+    }
+
     await db.transaction().execute(async (trx) => {
       const portals = await trx
         .selectFrom("portals")
@@ -31,7 +39,7 @@ export async function handle(request: Request) {
         .execute();
 
       if (portals.length !== portalIds.length) {
-        throw new Error("One or more portals not found or access denied.");
+        throw new NotFoundError("One or more portals not found or access denied.");
       }
 
       const policies = await trx
@@ -42,7 +50,7 @@ export async function handle(request: Request) {
         .execute();
 
       if (policies.length !== policyIds.length) {
-        throw new Error("One or more policies not found or access denied.");
+        throw new NotFoundError("One or more policies not found or access denied.");
       }
 
       const assignments: { portalId: number; policyId: number }[] = [];
@@ -76,8 +84,9 @@ export async function handle(request: Request) {
     console.error("Error bulk assigning policies to portals:", error);
     const errorMessage =
       error instanceof Error ? error.message : "An unexpected error occurred";
+    const status = error instanceof Error && error.name === "NotFoundError" ? 404 : 400;
     return new Response(superjson.stringify({ error: errorMessage }), {
-      status: 400,
+      status,
       headers: { "Content-Type": "application/json" },
     });
   }

@@ -1,0 +1,57 @@
+.modalContent {
+  max-width: 480px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  color: var(--error);
+}
+
+.warningIcon {
+  color: var(--error);
+}
+
+.description {
+  color: var(--muted-foreground);
+}
+
+.warningBox {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background-color: color-mix(in srgb, var(--error) 10%, var(--background));
+  border: 1px solid color-mix(in srgb, var(--error) 30%, transparent);
+  border-radius: var(--radius);
+  color: var(--error);
+  font-size: var(--text-sm);
+}
+
+.warningBox svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.warningList {
+  margin: var(--spacing-2) 0 0 0;
+  padding-left: var(--spacing-4);
+  color: var(--foreground);
+}
+
+.warningList li {
+  margin-bottom: var(--spacing-1);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

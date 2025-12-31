@@ -22,6 +22,8 @@ interface PolicyListViewProps {
   isSelectable?: boolean;
   selectedPolicyIds?: number[];
   onSelectionChange?: (id: number, selected: boolean) => void;
+  onSelectAll?: () => void;
+  onClearSelection?: () => void;
 }
 
 const getStatusVariant = (
@@ -62,12 +64,26 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
   isSelectable = false,
   selectedPolicyIds = [],
   onSelectionChange,
+  onSelectAll,
+  onClearSelection,
 }) => {
   const { authState } = useAuth();
   const { buildUrl } = useOrgNavigation();
 
-  const canEdit = authState.type === "authenticated" && 
+  const canEdit = authState.type === "authenticated" &&
     (authState.user.role === "admin" || authState.user.role === "editor");
+
+  const policyIds = policies?.map(p => p.id) || [];
+  const allSelected = policyIds.length > 0 && policyIds.every(id => selectedPolicyIds.includes(id));
+  const someSelected = selectedPolicyIds.length > 0 && !allSelected;
+
+  const handleHeaderCheckboxClick = () => {
+    if (allSelected) {
+      onClearSelection?.();
+    } else {
+      onSelectAll?.();
+    }
+  };
 
   const canDownload = authState.type === "authenticated" && 
     authState.user.role === "admin";
@@ -103,7 +119,17 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
   return (
     <div className={`${styles.listContainer} ${className || ""}`}>
       <div className={`${styles.listHeader} ${isSelectable ? styles.withCheckbox : ""}`}>
-        {isSelectable && <div className={styles.checkboxCol}></div>}
+        {isSelectable && (
+          <div className={styles.checkboxCol} onClick={handleHeaderCheckboxClick}>
+            <Checkbox
+              checked={allSelected}
+              ref={(el) => {
+                if (el) el.indeterminate = someSelected;
+              }}
+              readOnly
+            />
+          </div>
+        )}
         <div className={styles.titleCol}>Policy</div>
         <div className={styles.statusCol}>Status</div>
         <div className={styles.categoryCol}>Category</div>
@@ -127,21 +153,17 @@ export const PolicyListView: React.FC<PolicyListViewProps> = ({
             className={`${styles.row} ${isSelectable ? styles.withCheckbox : ""} ${isSelected ? styles.selected : ""}`}
           >
             {isSelectable && (
-              <div 
+              <div
                 className={styles.checkboxCol}
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  onSelectionChange?.(policy.id, !isSelected);
                 }}
               >
                 <Checkbox
                   checked={isSelected}
-                  onChange={(e) => {
-                    e.stopPropagation();
-                    if (onSelectionChange) {
-                      onSelectionChange(policy.id, e.target.checked);
-                    }
-                  }}
+                  readOnly
                 />
               </div>
             )}

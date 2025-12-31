@@ -1,3 +1,7 @@
+.cardWrapper {
+  position: relative;
+}
+
 .card {
   background-color: var(--portal-card-bg, var(--card));
   border-radius: var(--radius-lg);
@@ -26,13 +30,14 @@
   position: absolute;
   top: var(--spacing-3);
   left: var(--spacing-3);
-  z-index: 1;
+  z-index: 2;
   padding: var(--spacing-1);
   background-color: var(--card);
   border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
-.selected {
+.selected .card {
   border-color: var(--portal-primary, var(--branding-primary, var(--primary)));
   background-color: color-mix(in srgb, var(--portal-primary, var(--branding-primary, var(--primary))) 5%, var(--card));
 }

@@ -729,6 +729,20 @@ app.post('_api/policies/bulk-assign-portals',async c => {
     return c.text("Error loading endpoint code " + e.message,  500)
   }
 })
+app.post('_api/policies/bulk-delete',async c => {
+  try {
+    const { handle } = await import("./endpoints/policies/bulk-delete_POST.js");
+    let request = c.req.raw;
+    const response = await handle(request);
+    if (!(response instanceof Response) && response.constructor.name !== "Response") {
+      return c.text("Invalid response format. handle should always return a Response object." + response.constructor.name, 500);
+    }
+    return response;
+  } catch (e) {
+    console.error(e);
+    return c.text("Error loading endpoint code " + e.message,  500)
+  }
+})
 app.get('_api/review-policies/stats',async c => {
   try {
     const { handle } = await import("./endpoints/review-policies/stats_GET.js");

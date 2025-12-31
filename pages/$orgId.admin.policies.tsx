@@ -10,6 +10,7 @@ import { PolicyFilters } from "../components/PolicyFilters";
 import { BulkPolicyDownload } from "../components/BulkPolicyDownload";
 import { BulkActionsBar } from "../components/BulkActionsBar";
 import { BulkPortalAssignModal } from "../components/BulkPortalAssignModal";
+import { BulkDeleteModal } from "../components/BulkDeleteModal";
 import { fromListEndpoint, fromReviewEndpoint } from "../helpers/policyCardData";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
 
@@ -35,8 +36,11 @@ const PoliciesPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { buildUrl } = useOrgNavigation();
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [selectedPolicyIds, setSelectedPolicyIds] = useState<number[]>([]);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // Selection state
+  const [selectedPolicyIds, setSelectedPolicyIds] = useState<number[]>([]);
 
   // Load and save view mode preference
   useEffect(() => {
@@ -57,6 +61,10 @@ const PoliciesPage: React.FC = () => {
   const canBulkEdit =
     authState.type === "authenticated" &&
     (authState.user.role === "admin" || authState.user.role === "editor");
+
+  const canDelete =
+    authState.type === "authenticated" &&
+    authState.user.role === "admin";
 
   const canDownloadPolicies = authState.type === "authenticated";
 
@@ -139,10 +147,6 @@ const PoliciesPage: React.FC = () => {
     return convertedPolicies?.map(policy => policy.id) || [];
   }, [convertedPolicies]);
 
-  useEffect(() => {
-    setSelectedPolicyIds([]);
-  }, [debouncedSearch, status, department, category, portal, reviewFilter]);
-
   const handleFilterChange = (
     key: "search" | "status" | "department" | "category" | "portal" | "reviewFilter",
     value: string
@@ -155,6 +159,7 @@ const PoliciesPage: React.FC = () => {
     }
     newParams.set("page", "1"); // Reset to first page on filter change
     setSearchParams(newParams);
+    setSelectedPolicyIds([]); // Clear selection on filter change
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -170,18 +175,25 @@ const PoliciesPage: React.FC = () => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set("page", String(newPage));
     setSearchParams(newParams);
+    setSelectedPolicyIds([]); // Clear selection on page change
     window.scrollTo(0, 0);
-    setSelectedPolicyIds([]);
   };
 
   const handleSelectionChange = (id: number, selected: boolean) => {
-    setSelectedPolicyIds((prev) =>
-      selected ? [...prev, id] : prev.filter((pId) => pId !== id)
-    );
+    setSelectedPolicyIds((prev) => {
+      if (selected) {
+        return prev.includes(id) ? prev : [...prev, id];
+      }
+      return prev.filter((pId) => pId !== id);
+    });
   };
 
   const handleClearSelection = () => {
     setSelectedPolicyIds([]);
+  };
+
+  const handleSelectAll = () => {
+    setSelectedPolicyIds(currentPolicyIds);
   };
 
   const handleBulkAssignSuccess = () => {
@@ -352,6 +364,8 @@ const PoliciesPage: React.FC = () => {
             isSelectable={canBulkEdit}
             selectedPolicyIds={selectedPolicyIds}
             onSelectionChange={handleSelectionChange}
+            onSelectAll={handleSelectAll}
+            onClearSelection={handleClearSelection}
           />
           <div className={styles.paginationContainer}>
             {renderPagination()}
@@ -361,8 +375,12 @@ const PoliciesPage: React.FC = () => {
         {canBulkEdit && (
           <BulkActionsBar
             selectedCount={selectedPolicyIds.length}
+            totalCount={currentPolicyIds.length}
             onClearSelection={handleClearSelection}
+            onSelectAll={handleSelectAll}
             onAssignToPortal={() => setShowAssignModal(true)}
+            onDelete={() => setShowDeleteModal(true)}
+            canDelete={canDelete}
           />
         )}
 
@@ -371,6 +389,13 @@ const PoliciesPage: React.FC = () => {
           onClose={() => setShowAssignModal(false)}
           selectedPolicyIds={selectedPolicyIds}
           onSuccess={handleBulkAssignSuccess}
+        />
+
+        <BulkDeleteModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          selectedPolicyIds={selectedPolicyIds}
+          onSuccess={handleClearSelection}
         />
       </div>
     </>
