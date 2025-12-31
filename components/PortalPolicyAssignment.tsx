@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, memo } from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postPortalAssignments } from '../endpoints/portals/assignments_POST.schema';
 import { useAllPolicies } from '../helpers/usePolicyApi';
@@ -181,6 +182,23 @@ export const PortalPolicyAssignment: React.FC<PortalPolicyAssignmentProps> = ({ 
     }
 
     if (!filteredPolicies.length) {
+      // Check if there are no policies at all vs no search matches
+      const noPoliciesExist = !allPoliciesData?.policies?.length;
+      
+      if (noPoliciesExist) {
+        return (
+          <div className={styles.emptyState}>
+            <div>No policies found.</div>
+            <div className={styles.emptyStateMessage}>
+              You haven't created any policies yet. Create your first policy to assign it to this portal.
+            </div>
+            <Link to="/admin/policies/create" className={styles.emptyStateLink}>
+              Create a new policy
+            </Link>
+          </div>
+        );
+      }
+      
       const message = searchTerm.trim() 
         ? `No policies found matching "${searchTerm}"`
         : 'No policies found.';

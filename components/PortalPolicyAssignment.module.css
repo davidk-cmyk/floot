@@ -70,12 +70,32 @@
 
 .emptyState {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: var(--spacing-3);
   height: 100%;
   color: var(--muted-foreground);
   text-align: center;
   padding: var(--spacing-4);
+}
+
+.emptyStateMessage {
+  color: var(--muted-foreground);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.emptyStateLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: var(--spacing-2);
+  transition: text-decoration var(--animation-duration-fast) ease;
+}
+
+.emptyStateLink:hover {
+  text-decoration: underline;
 }
 
 .errorState {
