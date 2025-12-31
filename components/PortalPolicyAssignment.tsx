@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postPortalAssignments } from '../endpoints/portals/assignments_POST.schema';
 import { useAllPolicies } from '../helpers/usePolicyApi';
 import { useAllPortalAssignments, PORTAL_ASSIGNMENTS_QUERY_KEY } from '../helpers/usePortalAssignments';
+import { useOrgNavigation } from '../helpers/useOrgNavigation';
 import { Input } from './Input';
 import { Checkbox } from './Checkbox';
 import { Button } from './Button';
@@ -80,6 +81,7 @@ export const PortalPolicyAssignment: React.FC<PortalPolicyAssignmentProps> = ({ 
   const [selectedPolicyIds, setSelectedPolicyIds] = useState<Set<number>>(new Set());
   const [initialPolicyIds, setInitialPolicyIds] = useState<number[]>([]);
 
+  const { buildUrl } = useOrgNavigation();
   const { data: allPoliciesData, isFetching: isLoadingPolicies, error: policiesError } = useAllPolicies();
   const { data: assignedPoliciesData, isFetching: isLoadingAssignments, error: assignmentsError } = useAllPortalAssignments(portalId);
   const updateAssignmentsMutation = useUpdatePortalAssignments(portalId);
@@ -192,7 +194,7 @@ export const PortalPolicyAssignment: React.FC<PortalPolicyAssignmentProps> = ({ 
             <div className={styles.emptyStateMessage}>
               You haven't created any policies yet. Create your first policy to assign it to this portal.
             </div>
-            <Link to="/admin/policies" className={styles.emptyStateLink}>
+            <Link to={`${buildUrl('/admin/policies')}?page=1`} className={styles.emptyStateLink}>
               Create a new policy
             </Link>
           </div>
