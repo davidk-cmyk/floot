@@ -20,7 +20,7 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 - **Email System:** Transactional emails (policy acknowledgments, reminders) are handled via Replit's Resend connector.
 - **File Uploads:** Supports multi-document uploads (up to 50 files) from local system and per-user Google Drive accounts.
 - **Google Drive Integration:** PKCE-secured OAuth flow with state validation for per-user Google Drive connections, storing tokens in `user_google_drive_connections` table with auto-refresh.
-- **Policy Management:** Features bulk policy selection, bulk portal assignment, and a requirement to assign portals before publishing policies.
+- **Policy Management:** Features bulk policy selection, bulk portal assignment with pre-populated checkboxes showing existing assignments (supports indeterminate/mixed state for partial assignments), and a requirement to assign portals before publishing policies.
 - **Database Schema:** PostgreSQL schema includes 27 tables, 1 view (`unacknowledged_required_policies`), 2 triggers (auto-create policy versions), 101 indexes, and a `user_role` enum. Portal slugs are unique per organization.
 
 **Feature Specifications:**

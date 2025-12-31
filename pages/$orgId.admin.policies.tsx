@@ -147,6 +147,11 @@ const PoliciesPage: React.FC = () => {
     return convertedPolicies?.map(policy => policy.id) || [];
   }, [convertedPolicies]);
 
+  const selectedPoliciesWithPortals = useMemo(() => {
+    if (!convertedPolicies) return [];
+    return convertedPolicies.filter(policy => selectedPolicyIds.includes(policy.id));
+  }, [convertedPolicies, selectedPolicyIds]);
+
   const handleFilterChange = (
     key: "search" | "status" | "department" | "category" | "portal" | "reviewFilter",
     value: string
@@ -388,6 +393,7 @@ const PoliciesPage: React.FC = () => {
           isOpen={showAssignModal}
           onClose={() => setShowAssignModal(false)}
           selectedPolicyIds={selectedPolicyIds}
+          selectedPolicies={selectedPoliciesWithPortals}
           onSuccess={handleBulkAssignSuccess}
         />
 
