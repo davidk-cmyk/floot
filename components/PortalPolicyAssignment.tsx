@@ -192,7 +192,7 @@ export const PortalPolicyAssignment: React.FC<PortalPolicyAssignmentProps> = ({ 
             <div className={styles.emptyStateMessage}>
               You haven't created any policies yet. Create your first policy to assign it to this portal.
             </div>
-            <Link to="/admin/policies/create" className={styles.emptyStateLink}>
+            <Link to="/admin/policies" className={styles.emptyStateLink}>
               Create a new policy
             </Link>
           </div>
