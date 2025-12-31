@@ -22,7 +22,7 @@ const IndexPage = () => {
 
   const heroButtonLink = authState.type === 'authenticated' && organizationState.type === 'active'
     ? `/${organizationState.currentOrganization.id}/admin/dashboard`
-    : '/login';
+    : '/register-organization';
   const heroButtonText = authState.type === 'authenticated' ? 'Go to Dashboard' : 'Get Started';
 
   const features = [
