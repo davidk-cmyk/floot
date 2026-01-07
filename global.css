@@ -45,10 +45,10 @@
 
   --surface: hsl(0 0% 100%);
   --surface-foreground: hsl(222 47% 11%);
-  --sidebar: hsl(230 45% 18%);
-  --sidebar-foreground: hsl(0 0% 100%);
-  --sidebar-muted: hsl(230 30% 70%);
-  --sidebar-accent: hsl(230 50% 25%);
+  --sidebar: hsl(220 20% 97%);
+  --sidebar-foreground: hsl(222 47% 20%);
+  --sidebar-muted: hsl(220 15% 55%);
+  --sidebar-accent: hsl(220 20% 93%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(222 47% 11%);
   --popup: hsl(0 0% 100%);
@@ -135,10 +135,10 @@
 
   --surface: hsl(220 20% 14%);
   --surface-foreground: hsl(220 10% 95%);
-  --sidebar: hsl(230 45% 12%);
-  --sidebar-foreground: hsl(0 0% 100%);
-  --sidebar-muted: hsl(230 30% 60%);
-  --sidebar-accent: hsl(230 50% 18%);
+  --sidebar: hsl(220 20% 12%);
+  --sidebar-foreground: hsl(220 10% 90%);
+  --sidebar-muted: hsl(220 15% 55%);
+  --sidebar-accent: hsl(220 20% 18%);
 
   /* Icon background colors for Quick Actions - Dark Mode */
   --icon-bg-coral: hsl(10 60% 25%);
