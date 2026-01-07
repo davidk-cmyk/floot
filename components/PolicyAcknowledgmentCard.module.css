@@ -1,11 +1,11 @@
 .card {
-  background: linear-gradient(135deg, 
-    color-mix(in srgb, var(--primary) 8%, var(--background)) 0%,
-    color-mix(in srgb, var(--primary) 4%, var(--background)) 100%
-  );
-  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  background-color: var(--portal-card-bg, var(--surface));
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
   padding: var(--spacing-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
   margin-bottom: var(--spacing-4);
 }
 
@@ -13,71 +13,116 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  margin-bottom: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 1px solid var(--border);
 }
 
-.icon {
-  color: var(--primary);
+.headerIcon {
+  color: var(--portal-primary, var(--primary));
   flex-shrink: 0;
 }
 
-.title {
-  font-size: 1rem;
+.headerLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.policySection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.policyLabel {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.policyTitle {
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--foreground);
   margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.description {
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--foreground);
-  margin: 0 0 var(--spacing-3) 0;
+.complianceCapsule {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  background-color: color-mix(in srgb, var(--muted) 50%, transparent);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
 }
 
-.description strong {
-  color: var(--foreground);
-  font-weight: 600;
+.complianceIcon {
+  color: var(--muted-foreground);
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
-.notice {
+.complianceText {
   font-size: 0.75rem;
   color: var(--muted-foreground);
-  margin: 0 0 var(--spacing-4) 0;
-  padding-left: var(--spacing-3);
-  border-left: 2px solid var(--border);
+  line-height: 1.4;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-2);
 }
 
 .acknowledgeButton {
   width: 100%;
-  background-color: var(--primary);
-  border-color: var(--primary);
-  color: var(--primary-foreground);
-  font-weight: 500;
-  justify-content: center;
+  justify-content: flex-start;
+  background-color: var(--portal-primary, var(--primary));
+  border-color: var(--portal-primary, var(--primary));
+  color: white;
 }
 
 .acknowledgeButton:hover {
-  background-color: color-mix(in srgb, var(--primary), black 10%);
-  border-color: color-mix(in srgb, var(--primary), black 10%);
+  background-color: color-mix(in srgb, var(--portal-primary, var(--primary)), black 10%);
+  border-color: color-mix(in srgb, var(--portal-primary, var(--primary)), black 10%);
 }
 
-.reviewLaterButton {
-  width: 100%;
+.reviewLaterLink {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  color: var(--muted-foreground);
+  gap: var(--spacing-2);
+  background: none;
+  border: none;
+  padding: var(--spacing-2);
   font-size: 0.875rem;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color var(--animation-duration-fast) ease;
 }
 
-.reviewLaterButton:hover {
+.reviewLaterLink:hover {
   color: var(--foreground);
-  background-color: var(--muted);
+}
+
+.reviewLaterLink:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:global(.dark) .card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
 }
 
 @media print {

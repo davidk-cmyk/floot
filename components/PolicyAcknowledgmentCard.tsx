@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileCheck, Clock } from 'lucide-react';
+import { FileCheck, Clock, ShieldCheck } from 'lucide-react';
 import { Button } from './Button';
 import styles from './PolicyAcknowledgmentCard.module.css';
 
@@ -25,17 +25,21 @@ export const PolicyAcknowledgmentCard: React.FC<PolicyAcknowledgmentCardProps> =
   return (
     <div className={`${styles.card} ${className || ''}`}>
       <div className={styles.header}>
-        <FileCheck size={20} className={styles.icon} />
-        <h3 className={styles.title}>Acknowledgment Required</h3>
+        <FileCheck size={18} className={styles.headerIcon} />
+        <span className={styles.headerLabel}>Acknowledgment Required</span>
       </div>
       
-      <p className={styles.description}>
-        By acknowledging, you confirm you have read and agree to comply with the <strong>{policyTitle}</strong>.
-      </p>
+      <div className={styles.policySection}>
+        <p className={styles.policyLabel}>You are reviewing:</p>
+        <h4 className={styles.policyTitle}>{policyTitle}</h4>
+      </div>
       
-      <p className={styles.notice}>
-        Your acknowledgment will be recorded for compliance purposes.
-      </p>
+      <div className={styles.complianceCapsule}>
+        <ShieldCheck size={14} className={styles.complianceIcon} />
+        <span className={styles.complianceText}>
+          Your acknowledgment will be recorded for compliance purposes
+        </span>
+      </div>
       
       <div className={styles.actions}>
         <Button 
@@ -43,20 +47,19 @@ export const PolicyAcknowledgmentCard: React.FC<PolicyAcknowledgmentCardProps> =
           onClick={onAcknowledge}
           disabled={isAcknowledging}
         >
-          <FileCheck size={18} />
+          <FileCheck size={16} />
           Acknowledge Policy
         </Button>
         
         {onReviewLater && (
-          <Button 
-            variant="ghost" 
-            className={styles.reviewLaterButton}
+          <button 
+            className={styles.reviewLaterLink}
             onClick={onReviewLater}
             disabled={isAcknowledging}
           >
-            <Clock size={16} />
+            <Clock size={14} />
             Review Later
-          </Button>
+          </button>
         )}
       </div>
     </div>
