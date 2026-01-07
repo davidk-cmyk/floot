@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { 
-  $getSelection, 
-  $isRangeSelection, 
-  FORMAT_TEXT_COMMAND, 
+import {
+  $getSelection,
+  $isRangeSelection,
+  FORMAT_TEXT_COMMAND,
+  FORMAT_ELEMENT_COMMAND,
   $getRoot,
   $createParagraphNode,
   $createTextNode,
@@ -10,7 +11,7 @@ import {
   UNDO_COMMAND,
   REDO_COMMAND,
   CAN_UNDO_COMMAND,
-  CAN_REDO_COMMAND
+  CAN_REDO_COMMAND,
 } from 'lexical';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
@@ -19,21 +20,22 @@ import { TOGGLE_LINK_COMMAND } from '@lexical/link';
 import { $setBlocksType } from '@lexical/selection';
 import { $generateHtmlFromNodes, $generateNodesFromDOM } from '@lexical/html';
 import { markdownToHtml } from '../helpers/markdownToHtml';
-import { 
-  Bold, 
-  Italic, 
-  List, 
-  ListOrdered, 
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
   Link as LinkIcon,
-  Type,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
   Heading1,
   Heading2,
   Heading3,
+  Type,
   Quote,
-  FileText,
-  Bot,
-  AlignLeft,
-  Code,
   Undo,
   Redo,
   Sparkles,
@@ -450,133 +452,193 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
 
   const hasSelectedText = selectedText.length > 0;
 
+  const formatUnderline = () => {
+    editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
+  };
+
+  const formatAlign = (alignment: 'left' | 'center' | 'right' | 'justify') => {
+    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, alignment);
+  };
+
   return (
     <div className={styles.toolbar}>
-      {/* Undo/Redo */}
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={handleUndo}
-        disabled={!canUndo}
-        title="Undo"
-      >
-        <Undo size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={handleRedo}
-        disabled={!canRedo}
-        title="Redo"
-      >
-        <Redo size={16} />
-      </Button>
+      {/* Row 1: Basic Formatting */}
+      <div className={styles.toolbarRow}>
+        {/* Undo/Redo */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={handleUndo}
+          disabled={!canUndo}
+          title="Undo"
+        >
+          <Undo size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={handleRedo}
+          disabled={!canRedo}
+          title="Redo"
+        >
+          <Redo size={16} />
+        </Button>
 
-      {/* Group 1: Basic Formatting Tools */}
-      <div className={styles.toolbarDivider} />
-      
-      {/* Headings & Structure */}
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={() => formatHeading('h1')}
-        title="Heading 1"
-      >
-        <Heading1 size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={() => formatHeading('h2')}
-        title="Heading 2"
-      >
-        <Heading2 size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={() => formatHeading('h3')}
-        title="Heading 3"
-      >
-        <Heading3 size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={formatParagraph}
-        title="Paragraph"
-      >
-        <Type size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={formatQuote}
-        title="Quote"
-      >
-        <Quote size={16} />
-      </Button>
+        <div className={styles.toolbarDivider} />
 
-      {/* Text Formatting */}
-      <div className={styles.toolbarDivider} />
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={formatBold}
-        title="Bold"
-      >
-        <Bold size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={formatItalic}
-        title="Italic"
-      >
-        <Italic size={16} />
-      </Button>
+        {/* Headings */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatHeading('h1')}
+          title="Heading 1"
+        >
+          <Heading1 size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatHeading('h2')}
+          title="Heading 2"
+        >
+          <Heading2 size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatHeading('h3')}
+          title="Heading 3"
+        >
+          <Heading3 size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={formatParagraph}
+          title="Paragraph"
+        >
+          <Type size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={formatQuote}
+          title="Quote"
+        >
+          <Quote size={16} />
+        </Button>
 
-      {/* Lists & Links */}
-      <div className={styles.toolbarDivider} />
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={insertUnorderedList}
-        title="Bullet List"
-      >
-        <List size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={insertOrderedList}
-        title="Numbered List"
-      >
-        <ListOrdered size={16} />
-      </Button>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon-sm"
-        onClick={insertLink}
-        title="Insert Link"
-      >
-        <LinkIcon size={16} />
-      </Button>
+        <div className={styles.toolbarDivider} />
 
-      {/* Group 2: AI-Powered Features */}
-      <div className={styles.aiGroupContainer}>
+        {/* Text Formatting */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={formatBold}
+          title="Bold"
+        >
+          <Bold size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={formatItalic}
+          title="Italic"
+        >
+          <Italic size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={formatUnderline}
+          title="Underline"
+        >
+          <Underline size={16} />
+        </Button>
+
+        {/* Alignment */}
+        <div className={styles.toolbarDivider} />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatAlign('left')}
+          title="Align Left"
+        >
+          <AlignLeft size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatAlign('center')}
+          title="Align Center"
+        >
+          <AlignCenter size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatAlign('right')}
+          title="Align Right"
+        >
+          <AlignRight size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={() => formatAlign('justify')}
+          title="Justify"
+        >
+          <AlignJustify size={16} />
+        </Button>
+
+        {/* Lists & Links */}
+        <div className={styles.toolbarDivider} />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={insertUnorderedList}
+          title="Bullet List"
+        >
+          <List size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={insertOrderedList}
+          title="Numbered List"
+        >
+          <ListOrdered size={16} />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon-sm"
+          onClick={insertLink}
+          title="Insert Link"
+        >
+          <LinkIcon size={16} />
+        </Button>
+      </div>
+
+      {/* Row 2: AI-Powered Features */}
+      <div className={styles.toolbarRow}>
+        <div className={styles.aiGroupContainer}>
         <Tooltip>
           <TooltipTrigger asChild>
             <Dialog open={isAIPopoverOpen} onOpenChange={setIsAIPopoverOpen}>
@@ -684,6 +746,7 @@ export const WysiwygEditorToolbar = ({}: WysiwygEditorToolbarProps = {}) => {
             </Button>
           </TooltipTrigger>
         </Tooltip>
+        </div>
       </div>
     </div>
   );

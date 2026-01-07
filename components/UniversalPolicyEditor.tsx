@@ -83,6 +83,35 @@ export const UniversalPolicyEditor: React.FC<UniversalPolicyEditorProps> = ({
 
   return (
     <div className={`${styles.layout} ${className || ''}`}>
+      <div className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+          <h3 className={styles.sidebarTitle}>Policy Details</h3>
+        </div>
+        <PolicyMetadataSection
+          status={form.values.status || 'draft'}
+          onStatusChange={onStatusChange}
+          effectiveDate={form.values.effectiveDate}
+          onEffectiveDateChange={onEffectiveDateChange}
+          expirationDate={form.values.expirationDate}
+          onExpirationDateChange={onExpirationDateChange}
+          reviewDate={form.values.reviewDate}
+          onReviewDateChange={onReviewDateChange}
+          department={form.values.department || ''}
+          onDepartmentChange={onDepartmentChange}
+          category={form.values.category || ''}
+          onCategoryChange={onCategoryChange}
+          tags={form.values.tags || []}
+          onTagsChange={onTagsChange}
+          acknowledgmentMode={form.values.acknowledgmentMode}
+          onAcknowledgmentModeChange={onAcknowledgmentModeChange}
+          versionNotes={form.values.changeSummary || ''}
+          onVersionNotesChange={onVersionNotesChange}
+          portalIds={form.values.portalIds || []}
+          onPortalIdsChange={onPortalIdsChange}
+          assignedPortals={assignedPortals}
+        />
+      </div>
+
       <div className={styles.mainContent}>
         <FormItem name="title">
           <FormLabel>Title *</FormLabel>
@@ -110,35 +139,6 @@ export const UniversalPolicyEditor: React.FC<UniversalPolicyEditorProps> = ({
           </FormControl>
           <FormMessage />
         </FormItem>
-      </div>
-
-      <div className={styles.sidebar}>
-        <div className={styles.sidebarHeader}>
-          <h3 className={styles.sidebarTitle}>Policy Metadata</h3>
-        </div>
-        <PolicyMetadataSection
-          status={form.values.status || 'draft'}
-          onStatusChange={onStatusChange}
-          effectiveDate={form.values.effectiveDate}
-          onEffectiveDateChange={onEffectiveDateChange}
-          expirationDate={form.values.expirationDate}
-          onExpirationDateChange={onExpirationDateChange}
-          reviewDate={form.values.reviewDate}
-          onReviewDateChange={onReviewDateChange}
-          department={form.values.department || ''}
-          onDepartmentChange={onDepartmentChange}
-          category={form.values.category || ''}
-          onCategoryChange={onCategoryChange}
-          tags={form.values.tags || []}
-          onTagsChange={onTagsChange}
-          acknowledgmentMode={form.values.acknowledgmentMode}
-          onAcknowledgmentModeChange={onAcknowledgmentModeChange}
-          versionNotes={form.values.changeSummary || ''}
-          onVersionNotesChange={onVersionNotesChange}
-          portalIds={form.values.portalIds || []}
-          onPortalIdsChange={onPortalIdsChange}
-          assignedPortals={assignedPortals}
-        />
       </div>
     </div>
   );

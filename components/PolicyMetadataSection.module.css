@@ -157,3 +157,50 @@
   border-radius: var(--radius);
   margin-top: var(--spacing-2);
 }
+
+/* Collapsible Advanced Options */
+.advancedToggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  transition: all var(--animation-duration-fast) ease;
+  margin-top: var(--spacing-2);
+}
+
+.advancedToggle:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.advancedToggleIcon {
+  transition: transform var(--animation-duration-fast) ease;
+}
+
+.advancedToggleIcon.expanded {
+  transform: rotate(180deg);
+}
+
+.advancedContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height var(--animation-duration-normal) ease,
+              opacity var(--animation-duration-normal) ease;
+}
+
+.advancedContent.expanded {
+  max-height: 2000px;
+  opacity: 1;
+  margin-top: var(--spacing-4);
+}

@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { FormItem, FormLabel, FormControl, FormMessage, FormDescription } from './Form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './Select';
 import { Badge } from './Badge';
-import { Calendar as CalendarIcon, AlertTriangle } from 'lucide-react';
+import { Calendar as CalendarIcon, AlertTriangle, ChevronDown } from 'lucide-react';
 import { PolicyTaxonomyGroup } from './PolicyTaxonomyGroup';
 import { Textarea } from './Textarea';
 import { PortalSelector } from './PortalSelector';
@@ -88,6 +88,7 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
 
   const [expirationDateOption, setExpirationDateOption] = useState<DateDurationOption>('specific');
   const [reviewDateOption, setReviewDateOption] = useState<DateDurationOption>('specific');
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const showReviewDateWarning = !safeReviewDate;
 
@@ -345,112 +346,128 @@ export const PolicyMetadataSection: React.FC<PolicyMetadataSectionProps> = ({
         </FormItem>
       </div>
 
-      <PolicyTaxonomyGroup
-        department={department}
-        onDepartmentChange={onDepartmentChange}
-        category={category}
-        onCategoryChange={onCategoryChange}
-        tags={tags}
-        onTagsChange={onTagsChange}
-      />
+      {/* Advanced Options Toggle */}
+      <button
+        type="button"
+        className={styles.advancedToggle}
+        onClick={() => setShowAdvanced(!showAdvanced)}
+      >
+        <ChevronDown
+          size={16}
+          className={`${styles.advancedToggleIcon} ${showAdvanced ? styles.expanded : ''}`}
+        />
+        {showAdvanced ? 'Hide Advanced Options' : 'Show Advanced Options'}
+      </button>
 
-      {/* Acknowledgment Requirements - Read-only display */}
-      <div className={styles.acknowledgmentSection}>
-        <h4 className={styles.sectionTitle}>Acknowledgment Requirements</h4>
-        
-        {assignedPortals && assignedPortals.length > 0 ? (
-          <>
-            {assignedPortals.some(p => p.requiresAcknowledgment) ? (
-              <div className={styles.acknowledgmentDisplay}>
-                <p className={styles.infoText}>
-                  This policy requires acknowledgment through the following portals:
-                </p>
-                <div className={styles.portalBadges}>
-                  {assignedPortals
-                    .filter(p => p.requiresAcknowledgment)
-                    .map(portal => (
-                      <Badge key={portal.id} variant="default" className={styles.portalBadge}>
-                        {portal.name}
-                        {portal.acknowledgmentDueDays && (
-                          <span className={styles.dueDaysText}>
-                            {' '}(due in {portal.acknowledgmentDueDays} {portal.acknowledgmentDueDays === 1 ? 'day' : 'days'})
-                          </span>
-                        )}
-                      </Badge>
-                    ))}
+      {/* Collapsible Advanced Content */}
+      <div className={`${styles.advancedContent} ${showAdvanced ? styles.expanded : ''}`}>
+        <PolicyTaxonomyGroup
+          department={department}
+          onDepartmentChange={onDepartmentChange}
+          category={category}
+          onCategoryChange={onCategoryChange}
+          tags={tags}
+          onTagsChange={onTagsChange}
+        />
+
+        {/* Acknowledgment Requirements - Read-only display */}
+        <div className={styles.acknowledgmentSection}>
+          <h4 className={styles.sectionTitle}>Acknowledgment Requirements</h4>
+
+          {assignedPortals && assignedPortals.length > 0 ? (
+            <>
+              {assignedPortals.some(p => p.requiresAcknowledgment) ? (
+                <div className={styles.acknowledgmentDisplay}>
+                  <p className={styles.infoText}>
+                    This policy requires acknowledgment through the following portals:
+                  </p>
+                  <div className={styles.portalBadges}>
+                    {assignedPortals
+                      .filter(p => p.requiresAcknowledgment)
+                      .map(portal => (
+                        <Badge key={portal.id} variant="default" className={styles.portalBadge}>
+                          {portal.name}
+                          {portal.acknowledgmentDueDays && (
+                            <span className={styles.dueDaysText}>
+                              {' '}(due in {portal.acknowledgmentDueDays} {portal.acknowledgmentDueDays === 1 ? 'day' : 'days'})
+                            </span>
+                          )}
+                        </Badge>
+                      ))}
+                  </div>
+
+                  {acknowledgmentMode && (
+                    <FormItem name="acknowledgmentMode">
+                      <FormLabel>Acknowledgment Mode</FormLabel>
+                      <FormControl>
+                        <Select
+                          value={acknowledgmentMode || 'simple'}
+                          onValueChange={onAcknowledgmentModeChange}
+                        >
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="simple">Simple</SelectItem>
+                            <SelectItem value="quiz">Quiz</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormDescription>
+                        Simple: Users just click to acknowledge. Quiz: Users must answer questions to confirm understanding.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 </div>
-                
-                {acknowledgmentMode && (
-                  <FormItem name="acknowledgmentMode">
-                    <FormLabel>Acknowledgment Mode</FormLabel>
-                    <FormControl>
-                      <Select 
-                        value={acknowledgmentMode || 'simple'} 
-                        onValueChange={onAcknowledgmentModeChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="simple">Simple</SelectItem>
-                          <SelectItem value="quiz">Quiz</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription>
-                      Simple: Users just click to acknowledge. Quiz: Users must answer questions to confirm understanding.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              </div>
-            ) : (
-              <div className={styles.noAcknowledgment}>
-                <p className={styles.infoText}>
-                  No acknowledgment required. None of the assigned portals require acknowledgment.
-                </p>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={styles.noAcknowledgment}>
-            <p className={styles.infoText}>
-              No acknowledgment required. This policy is not assigned to any portals that require acknowledgment.
-            </p>
-          </div>
-        )}
-      </div>
+              ) : (
+                <div className={styles.noAcknowledgment}>
+                  <p className={styles.infoText}>
+                    No acknowledgment required. None of the assigned portals require acknowledgment.
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className={styles.noAcknowledgment}>
+              <p className={styles.infoText}>
+                No acknowledgment required. This policy is not assigned to any portals that require acknowledgment.
+              </p>
+            </div>
+          )}
+        </div>
 
-      <div className={styles.portalSection}>
-        <h4 className={styles.sectionTitle}>Portal Assignment</h4>
-        <FormItem name="portalIds">
-          <FormLabel>Assign to Portals</FormLabel>
+        <div className={styles.portalSection}>
+          <h4 className={styles.sectionTitle}>Portal Assignment</h4>
+          <FormItem name="portalIds">
+            <FormLabel>Assign to Portals</FormLabel>
+            <FormControl>
+              <PortalSelector
+                selectedPortalIds={portalIds}
+                onPortalIdsChange={onPortalIdsChange}
+              />
+            </FormControl>
+            <FormDescription>
+              Select which portals this policy should appear in
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        </div>
+
+        <FormItem name="versionNotes">
+          <FormLabel>Version Notes</FormLabel>
           <FormControl>
-            <PortalSelector
-              selectedPortalIds={portalIds}
-              onPortalIdsChange={onPortalIdsChange}
+            <Textarea
+              value={versionNotes}
+              onChange={(e) => onVersionNotesChange(e.target.value)}
+              placeholder="Describe what's new or changed in this version..."
+              rows={3}
+              aria-describedby="version-notes-description"
             />
           </FormControl>
-          <FormDescription>
-            Select which portals this policy should appear in
-          </FormDescription>
           <FormMessage />
         </FormItem>
       </div>
-
-      <FormItem name="versionNotes">
-        <FormLabel>Version Notes</FormLabel>
-        <FormControl>
-          <Textarea
-            value={versionNotes}
-            onChange={(e) => onVersionNotesChange(e.target.value)}
-            placeholder="Describe what's new or changed in this version..."
-            rows={3}
-            aria-describedby="version-notes-description"
-          />
-        </FormControl>
-        <FormMessage />
-      </FormItem>
     </div>
   );
 };

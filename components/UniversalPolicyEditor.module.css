@@ -1,7 +1,7 @@
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: var(--spacing-8);
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: var(--spacing-6);
   align-items: start;
   width: 100%;
 }
@@ -17,26 +17,28 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-  background-color: var(--muted);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--spacing-4);
+  padding: var(--spacing-5);
   position: sticky;
   top: var(--spacing-4);
   max-height: calc(100vh - var(--spacing-8));
   overflow-y: auto;
   align-self: flex-start;
+  box-shadow: var(--shadow);
 }
 
 .sidebarHeader {
-  padding-bottom: var(--spacing-3);
+  padding-bottom: var(--spacing-4);
   border-bottom: 1px solid var(--border);
-  margin-bottom: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
 }
 
 .sidebarTitle {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--surface-foreground);
+  color: var(--foreground);
   margin: 0;
 }
 
