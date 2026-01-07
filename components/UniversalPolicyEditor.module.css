@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 420px;
   gap: var(--spacing-6);
-  align-items: start;
+  align-items: stretch;
   width: 100%;
 }
 
@@ -11,6 +11,7 @@
   flex-direction: column;
   gap: var(--spacing-6);
   min-width: 0; /* Prevents grid overflow */
+  height: 100%;
 }
 
 .sidebar {
@@ -21,11 +22,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: var(--spacing-6);
-  position: sticky;
-  top: var(--spacing-4);
-  max-height: calc(100vh - var(--spacing-8));
-  overflow-y: auto;
-  align-self: flex-start;
+  height: fit-content;
   box-shadow: var(--shadow);
 }
 
