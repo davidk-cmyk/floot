@@ -9,7 +9,8 @@
       "Bash(curl:*)",
       "Bash(npx tsc:*)",
       "Bash(pnpm tsc:*)",
-      "Bash(pnpm tsx:*)"
+      "Bash(pnpm tsx:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
