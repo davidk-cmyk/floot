@@ -1,11 +1,15 @@
 .bar {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: color-mix(in srgb, var(--warning) 15%, var(--background));
-  border-top: 2px solid var(--warning);
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 12%, var(--background)) 0%,
+    color-mix(in srgb, var(--primary) 6%, var(--background)) 100%
+  );
+  border-top: 2px solid var(--primary);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
   z-index: var(--z-nav-sticky);
   padding: var(--spacing-4);
 }
@@ -21,21 +25,34 @@
 
 .messageSection {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-3);
   flex: 1;
 }
 
 .warningIcon {
-  color: var(--warning);
+  color: var(--primary);
   flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.messageContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.messageTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
 }
 
 .message {
   margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: var(--foreground);
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
 }
 
 .buttonGroup {
@@ -56,6 +73,13 @@
   border-color: color-mix(in srgb, var(--success), black 10%);
 }
 
+/* Show bar only on mobile/tablet when sidebar is hidden */
+@media (max-width: 1024px) {
+  .bar {
+    display: block;
+  }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .content {
@@ -65,7 +89,7 @@
   }
 
   .messageSection {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
     text-align: left;
   }

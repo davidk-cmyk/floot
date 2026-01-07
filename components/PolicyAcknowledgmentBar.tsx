@@ -4,6 +4,7 @@ import { Button } from './Button';
 import styles from './PolicyAcknowledgmentBar.module.css';
 
 interface PolicyAcknowledgmentBarProps {
+  policyTitle?: string;
   isVisible: boolean;
   isAcknowledging?: boolean;
   onAcknowledge: () => void;
@@ -12,6 +13,7 @@ interface PolicyAcknowledgmentBarProps {
 }
 
 export const PolicyAcknowledgmentBar: React.FC<PolicyAcknowledgmentBarProps> = ({
+  policyTitle,
   isVisible,
   isAcknowledging = false,
   onAcknowledge,
@@ -25,9 +27,14 @@ export const PolicyAcknowledgmentBar: React.FC<PolicyAcknowledgmentBarProps> = (
       <div className={styles.content}>
         <div className={styles.messageSection}>
           <AlertTriangle size={20} className={styles.warningIcon} />
-          <p className={styles.message}>
-            You are required to acknowledge that you have read and understood this policy.
-          </p>
+          <div className={styles.messageContent}>
+            <p className={styles.messageTitle}>Acknowledgment Required</p>
+            <p className={styles.message}>
+              {policyTitle 
+                ? `Confirm you have read and agree to comply with the ${policyTitle}.`
+                : 'Confirm you have read and agree to comply with this policy.'}
+            </p>
+          </div>
         </div>
         <div className={styles.buttonGroup}>
           {onRemindLater && (
@@ -36,7 +43,7 @@ export const PolicyAcknowledgmentBar: React.FC<PolicyAcknowledgmentBarProps> = (
               onClick={onRemindLater}
               disabled={isAcknowledging}
             >
-              Remind me later
+              Review Later
             </Button>
           )}
           <Button 
@@ -45,7 +52,7 @@ export const PolicyAcknowledgmentBar: React.FC<PolicyAcknowledgmentBarProps> = (
             disabled={isAcknowledging}
           >
             <Check size={18} />
-            I Acknowledge
+            Acknowledge Policy
           </Button>
         </div>
       </div>

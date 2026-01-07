@@ -12,6 +12,7 @@ import { PolicyActionsPanel } from '../components/PolicyActionsPanel';
 import { PortalPolicyHeader } from '../components/PortalPolicyHeader';
 import { PolicyViewTabs } from '../components/PolicyViewTabs';
 import { PolicyAcknowledgmentBar } from '../components/PolicyAcknowledgmentBar';
+import { PolicyAcknowledgmentCard } from '../components/PolicyAcknowledgmentCard';
 import { EmailAcknowledgmentModal } from '../components/EmailAcknowledgmentModal';
 import { PasswordPrompt } from '../components/PasswordPrompt';
 import { Skeleton } from '../components/Skeleton';
@@ -307,6 +308,13 @@ const PortalPolicyDetailPage: React.FC = () => {
 
           {/* Right Actions Panel */}
           <aside className={styles.rightPanel}>
+            <PolicyAcknowledgmentCard
+              policyTitle={policy.title}
+              isVisible={showAcknowledgmentBar}
+              isAcknowledging={false}
+              onAcknowledge={handleAcknowledge}
+              onReviewLater={handleRemindLater}
+            />
             <PolicyActionsPanel
               policyId={policy.id}
               policyTitle={policy.title}
@@ -317,8 +325,9 @@ const PortalPolicyDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky Acknowledgment Bar */}
+      {/* Sticky Acknowledgment Bar - Mobile Only */}
       <PolicyAcknowledgmentBar
+        policyTitle={policy.title}
         isVisible={showAcknowledgmentBar}
         isAcknowledging={false}
         onAcknowledge={handleAcknowledge}

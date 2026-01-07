@@ -1,0 +1,87 @@
+.card {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--primary) 8%, var(--background)) 0%,
+    color-mix(in srgb, var(--primary) 4%, var(--background)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border));
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
+
+.icon {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.description {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.description strong {
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.notice {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-4) 0;
+  padding-left: var(--spacing-3);
+  border-left: 2px solid var(--border);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.acknowledgeButton {
+  width: 100%;
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+  justify-content: center;
+}
+
+.acknowledgeButton:hover {
+  background-color: color-mix(in srgb, var(--primary), black 10%);
+  border-color: color-mix(in srgb, var(--primary), black 10%);
+}
+
+.reviewLaterButton {
+  width: 100%;
+  justify-content: center;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.reviewLaterButton:hover {
+  color: var(--foreground);
+  background-color: var(--muted);
+}
+
+@media print {
+  .card {
+    display: none !important;
+  }
+}
