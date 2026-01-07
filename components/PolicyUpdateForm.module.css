@@ -196,7 +196,34 @@
   background-color: var(--muted-foreground);
 }
 
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--spacing-4);
+}
+
+.headerBreadcrumbs {
+  flex: 1;
+  min-width: 0;
+}
+
 .headerActions {
   border-top: none !important;
   padding-top: 0 !important;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .headerRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+  }
+  
+  .headerActions {
+    width: 100%;
+  }
 }

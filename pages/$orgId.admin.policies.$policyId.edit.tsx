@@ -37,7 +37,31 @@ const EditPolicyPage = () => {
     navigate(buildUrl(`/admin/policies/${policyId}`));
   };
 
-  const renderContent = () => {
+  const policyTitle = policyDetails?.policy?.title || 'Policy';
+
+  const breadcrumbContent = (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to={buildUrl('/admin/dashboard')}>Dashboard</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link to={buildUrl(`/admin/policies/${policyId}`)}>{isFetching ? 'Loading...' : policyTitle}</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Edit</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+
+  const renderContentWithBreadcrumbs = () => {
     if (isNaN(policyId)) {
       return (
         <div className={styles.infoBox}>
@@ -86,10 +110,15 @@ const EditPolicyPage = () => {
       );
     }
 
-    return <PolicyUpdateForm key={policyDetails.policy.id} policy={policyDetails.policy} onSuccess={handleSuccess} />;
+    return (
+      <PolicyUpdateForm 
+        key={policyDetails.policy.id} 
+        policy={policyDetails.policy} 
+        onSuccess={handleSuccess}
+        headerBreadcrumbs={breadcrumbContent}
+      />
+    );
   };
-
-  const policyTitle = policyDetails?.policy?.title || 'Policy';
 
   return (
     <>
@@ -98,28 +127,7 @@ const EditPolicyPage = () => {
         <meta name="description" content={`Edit the policy: ${policyTitle}`} />
       </Helmet>
       <div className={styles.container}>
-        <header className={styles.header}>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to={buildUrl('/admin/dashboard')}>Dashboard</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to={buildUrl(`/admin/policies/${policyId}`)}>{isFetching ? 'Loading...' : policyTitle}</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Edit</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        <main className={styles.main}>{renderContent()}</main>
+        <main className={styles.main}>{renderContentWithBreadcrumbs()}</main>
       </div>
     </>
   );

@@ -1,21 +1,28 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-8);
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-8) var(--spacing-6);
+  gap: var(--spacing-6);
+  width: 100%;
+  padding: var(--spacing-6);
 }
 
 .header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-4);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
 }
 
 .main {
   display: flex;
-  justify-content: center;
+  width: 100%;
 }
 
 .infoBox {

@@ -15,6 +15,7 @@ interface PolicyUpdateFormProps {
   policy: PolicyWithAuthor;
   onSuccess?: () => void;
   className?: string;
+  headerBreadcrumbs?: React.ReactNode;
 }
 
 type AutosaveStatus = 'idle' | 'saving' | 'saved' | 'error' | 'offline';
@@ -22,7 +23,8 @@ type AutosaveStatus = 'idle' | 'saving' | 'saved' | 'error' | 'offline';
 export const PolicyUpdateForm: React.FC<PolicyUpdateFormProps> = ({ 
   policy, 
   onSuccess, 
-  className 
+  className,
+  headerBreadcrumbs,
 }) => {
   const titleInputRef = useRef<HTMLInputElement>(null!);
   const [showPortalModal, setShowPortalModal] = useState(false);
@@ -122,14 +124,19 @@ export const PolicyUpdateForm: React.FC<PolicyUpdateFormProps> = ({
   }, [form, handlePublishNow]);
 
   const headerContent = (
-    <PolicyFormActions
-      className={styles.headerActions}
-      onSaveDraft={handleSaveDraft}
-      onSubmitForApproval={handleSubmitForApproval}
-      onPublishNow={handlePublishNow}
-      isSubmitting={isSubmitting}
-      submitType={submitType}
-    />
+    <div className={styles.headerRow}>
+      {headerBreadcrumbs && (
+        <div className={styles.headerBreadcrumbs}>{headerBreadcrumbs}</div>
+      )}
+      <PolicyFormActions
+        className={styles.headerActions}
+        onSaveDraft={handleSaveDraft}
+        onSubmitForApproval={handleSubmitForApproval}
+        onPublishNow={handlePublishNow}
+        isSubmitting={isSubmitting}
+        submitType={submitType}
+      />
+    </div>
   );
 
   return (
