@@ -25,7 +25,7 @@ The application uses a modern web stack: React 19 with Vite and TypeScript for t
 
 **Feature Specifications:**
 - **Policy Templates:** "Legally Required" filter added to the Policy Template Library for quick access to legally mandated templates.
-- **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes.
+- **Policy Acknowledgment:** Fully enabled email acknowledgment and reminder system with 6-digit confirmation codes. Redesigned acknowledgment UI: desktop uses a sidebar card with clear copy including policy title and compliance notice; mobile uses a styled bottom bar. Updated labels: "Acknowledge Policy" and "Review Later" for clarity. Design distinct from cookie consent banners.
 - **Dynamic Portal Labels:** Portals have a configurable `label` field for customizable badge text.
 - **AI Edit/Format:** AI-generated content correctly renders markdown to HTML.
 - **Document Editor Toolbar:** Enhanced with improved AI feature discoverability - organized into Basic Formatting and AI-Powered Features groups with all four AI buttons styled consistently (secondary variant with gradient backgrounds and shadows).
