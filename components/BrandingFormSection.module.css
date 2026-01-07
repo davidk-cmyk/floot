@@ -74,6 +74,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  gap: var(--spacing-3);
 }
 
 .colorInput {
@@ -84,20 +85,21 @@
   height: 2.5rem;
   opacity: 0;
   cursor: pointer;
+  z-index: 1;
 }
 
 .colorPreview {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: var(--radius) 0 0 var(--radius);
-  border: 1px solid var(--border);
-  border-right: none;
+  border-radius: 50%;
+  border: 2px solid var(--border);
   pointer-events: none;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
 }
 
 .hexInput {
-  border-radius: 0 var(--radius) var(--radius) 0;
-  padding-left: var(--spacing-3);
+  flex: 1;
 }
 
 .dnsInstructions {

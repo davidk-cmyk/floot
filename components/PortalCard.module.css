@@ -28,6 +28,15 @@
   color: var(--foreground);
   margin: 0;
   word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.privateLabel {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
 }
 
 .statusToggle {
@@ -60,25 +69,29 @@
 
 .cardFooter {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--spacing-3);
   margin-top: auto;
 }
 
-.mainActions {
-  display: flex;
-  align-items: center;
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-2);
-  flex-wrap: wrap;
-  flex-grow: 1;
+}
+
+.actionButton {
+  width: 100%;
+  justify-content: center;
+}
+
+.deleteRow {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .deleteButton {
   color: var(--muted-foreground);
-  flex-shrink: 0;
-  margin-left: auto;
 }
 
 .deleteButton:hover {

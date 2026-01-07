@@ -1,7 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { CheckCircle, Circle, Edit, Calendar, User, Clock, ExternalLink } from "lucide-react";
+import {
+  CheckCircle,
+  Circle,
+  Edit,
+  Calendar,
+  User,
+  Clock,
+  ExternalLink,
+  Shield,
+  Users,
+  Lock,
+  Globe,
+  FileText,
+  Briefcase,
+  Heart,
+  Scale,
+} from "lucide-react";
 import { PolicyCardData } from "../helpers/policyCardData";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
@@ -11,6 +27,33 @@ import { useAuth } from "../helpers/useAuth";
 import { useOrgNavigation } from "../helpers/useOrgNavigation";
 import { PolicyDownloadButton } from "./PolicyDownloadButton";
 import styles from "./PolicyCard.module.css";
+
+type CategoryColor = "coral" | "blue" | "purple" | "green";
+
+const getCategoryColor = (category?: string): CategoryColor => {
+  if (!category) return "blue";
+  const lowerCategory = category.toLowerCase();
+  if (lowerCategory.includes("health") || lowerCategory.includes("safety")) return "coral";
+  if (lowerCategory.includes("employment") || lowerCategory.includes("hr")) return "blue";
+  if (lowerCategory.includes("data") || lowerCategory.includes("privacy") || lowerCategory.includes("gdpr")) return "purple";
+  if (lowerCategory.includes("communication") || lowerCategory.includes("social")) return "green";
+  if (lowerCategory.includes("compliance") || lowerCategory.includes("legal")) return "purple";
+  if (lowerCategory.includes("security")) return "coral";
+  return "blue";
+};
+
+const getCategoryIcon = (category?: string) => {
+  if (!category) return FileText;
+  const lowerCategory = category.toLowerCase();
+  if (lowerCategory.includes("health") || lowerCategory.includes("safety")) return Heart;
+  if (lowerCategory.includes("employment") || lowerCategory.includes("hr")) return Users;
+  if (lowerCategory.includes("data") || lowerCategory.includes("privacy") || lowerCategory.includes("gdpr")) return Lock;
+  if (lowerCategory.includes("communication") || lowerCategory.includes("social")) return Globe;
+  if (lowerCategory.includes("compliance") || lowerCategory.includes("legal")) return Scale;
+  if (lowerCategory.includes("security")) return Shield;
+  if (lowerCategory.includes("work") || lowerCategory.includes("remote")) return Briefcase;
+  return FileText;
+};
 
 interface PolicyCardProps {
   policy: PolicyCardData;
@@ -133,6 +176,16 @@ export const PolicyCard: React.FC<PolicyCardProps> = ({
             <Badge variant={getStatusVariant(policy.status)}>{policy.status}</Badge>
           </div>
         )}
+
+        {(() => {
+          const CategoryIcon = getCategoryIcon(policy.category);
+          const colorClass = getCategoryColor(policy.category);
+          return (
+            <div className={`${styles.categoryIcon} ${styles[colorClass]}`}>
+              <CategoryIcon size={24} />
+            </div>
+          );
+        })()}
 
         <div className={styles.cardHeader}>
           <h3 className={styles.title}>{policy.title}</h3>

@@ -48,7 +48,10 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
   return (
     <div className={`${styles.card} ${className || ''}`}>
       <div className={styles.cardHeader}>
-        <h3 className={styles.portalName}>{portal.name}</h3>
+        <h3 className={styles.portalName}>
+          {portal.name}
+          {portal.slug === 'internal' && <span className={styles.privateLabel}>(Private)</span>}
+        </h3>
         <div className={styles.statusToggle}>
           <Switch
             id={`status-${portal.id}`}
@@ -56,7 +59,6 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
             onCheckedChange={handleStatusToggle}
             disabled={updatePortalMutation.isPending}
           />
-          <label htmlFor={`status-${portal.id}`}>{portal.isActive ? 'Active' : 'Inactive'}</label>
         </div>
       </div>
       <p className={styles.description}>
@@ -72,10 +74,10 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
       </div>
 
       <div className={styles.cardFooter}>
-        <div className={styles.mainActions}>
+        <div className={styles.actionsGrid}>
           <Dialog open={isAssignModalOpen} onOpenChange={setAssignModalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className={styles.actionButton}>
                 <Settings size={14} /> Manage Policies
               </Button>
             </DialogTrigger>
@@ -89,7 +91,7 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
 
           <Dialog open={isEditModalOpen} onOpenChange={setEditModalOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className={styles.actionButton}>
                 <Edit size={14} /> Edit Portal
               </Button>
             </DialogTrigger>
@@ -104,6 +106,7 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
           <Button
             variant="outline"
             size="sm"
+            className={styles.actionButton}
             onClick={() => setEmbedDialogOpen(true)}
             title="Get embed code for this portal"
           >
@@ -111,7 +114,7 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
           </Button>
 
           {organizationId && (
-            <Button variant="outline" size="sm" asChild>
+            <Button variant="outline" size="sm" className={styles.actionButton} asChild>
               <Link to={`/${organizationId}/${portal.slug}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink size={14} /> View Portal
               </Link>
@@ -119,27 +122,29 @@ export const PortalCard: React.FC<PortalCardProps> = ({ portal, className }) => 
           )}
         </div>
 
-        <Dialog open={isDeleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-          <DialogTrigger asChild>
-            <Button variant="ghost" size="icon-sm" className={styles.deleteButton} title="Delete portal">
-              <Trash2 size={16} />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Confirm Deletion</DialogTitle>
-            </DialogHeader>
-            <p>Are you sure you want to delete the "{portal.name}" portal? This action cannot be undone.</p>
-            <div className={styles.dialogFooter}>
-              <DialogClose asChild>
-                <Button variant="secondary">Cancel</Button>
-              </DialogClose>
-              <Button variant="destructive" onClick={handleDelete} disabled={deletePortalMutation.isPending}>
-                {deletePortalMutation.isPending ? 'Deleting...' : 'Delete'}
+        <div className={styles.deleteRow}>
+          <Dialog open={isDeleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon-sm" className={styles.deleteButton} title="Delete portal">
+                <Trash2 size={16} />
               </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Confirm Deletion</DialogTitle>
+              </DialogHeader>
+              <p>Are you sure you want to delete the "{portal.name}" portal? This action cannot be undone.</p>
+              <div className={styles.dialogFooter}>
+                <DialogClose asChild>
+                  <Button variant="secondary">Cancel</Button>
+                </DialogClose>
+                <Button variant="destructive" onClick={handleDelete} disabled={deletePortalMutation.isPending}>
+                  {deletePortalMutation.isPending ? 'Deleting...' : 'Delete'}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
 
         <PortalEmbedDialog
           portal={portal}

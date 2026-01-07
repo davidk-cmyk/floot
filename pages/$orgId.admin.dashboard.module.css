@@ -7,6 +7,26 @@
   gap: var(--spacing-8);
 }
 
+.quickActionsSection,
+.portalsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.quickActionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-6);
+}
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -34,6 +54,11 @@
     gap: var(--spacing-6);
   }
 
+  .quickActionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-4);
+  }
+
   .statsGrid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-4);
@@ -44,5 +69,9 @@
   .container {
     padding: var(--spacing-4);
     gap: var(--spacing-4);
+  }
+
+  .quickActionsGrid {
+    grid-template-columns: 1fr;
   }
 }

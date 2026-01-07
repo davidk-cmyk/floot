@@ -48,11 +48,40 @@
   right: var(--spacing-4);
 }
 
+.categoryIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.categoryIcon.coral {
+  background-color: var(--icon-bg-coral);
+  color: var(--icon-coral);
+}
+
+.categoryIcon.blue {
+  background-color: var(--icon-bg-blue);
+  color: var(--icon-blue);
+}
+
+.categoryIcon.purple {
+  background-color: var(--icon-bg-purple);
+  color: var(--icon-purple);
+}
+
+.categoryIcon.green {
+  background-color: var(--icon-bg-green);
+  color: var(--icon-green);
+}
+
 .cardHeader {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-3);
-  margin-top: var(--spacing-2);
 }
 
 .icon {
