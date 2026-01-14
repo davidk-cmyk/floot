@@ -36,6 +36,16 @@ export interface AcknowledgmentConfirmationCodes {
   used: Generated<boolean>;
 }
 
+export interface PasswordResetCodes {
+  code: string;
+  createdAt: Generated<Timestamp>;
+  email: string;
+  expiresAt: Timestamp;
+  id: Generated<number>;
+  used: Generated<boolean>;
+  userId: number;
+}
+
 export interface EmailBasedAcknowledgments {
   acknowledgedAt: Generated<Timestamp | null>;
   email: string;
@@ -383,6 +393,7 @@ export interface DB {
   organizationDownloadSettings: OrganizationDownloadSettings;
   organizations: Organizations;
   organizationVariables: OrganizationVariables;
+  passwordResetCodes: PasswordResetCodes;
   policies: Policies;
   policyAcknowledgments: PolicyAcknowledgments;
   policyAssignments: PolicyAssignments;
