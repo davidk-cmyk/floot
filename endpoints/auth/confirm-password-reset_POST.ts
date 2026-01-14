@@ -1,6 +1,12 @@
 import { db } from "../../helpers/db";
 import { schema, OutputType } from "./confirm-password-reset_POST.schema";
 import { hash } from "bcryptjs";
+import {
+  checkRateLimit,
+  recordRateLimitAttempt,
+  clearRateLimitAttempts,
+} from "../../helpers/rateLimiter";
+import { logSecurityEvent } from "../../helpers/securityAuditLogger";
 
 export async function handle(request: Request) {
   try {
@@ -8,6 +14,25 @@ export async function handle(request: Request) {
     const { email, code, newPassword } = schema.parse(json);
 
     const normalizedEmail = email.toLowerCase().trim();
+
+    // Brute-force protection: check rate limit before validating code
+    const rateLimitResult = await checkRateLimit(normalizedEmail, 'codeVerification');
+    if (!rateLimitResult.allowed) {
+      // Log lockout event
+      await logSecurityEvent({
+        eventType: 'code_verification_locked',
+        email: normalizedEmail,
+        request,
+        details: { remainingMinutes: rateLimitResult.remainingMinutes },
+      });
+      return Response.json(
+        {
+          success: false,
+          message: `Too many failed attempts. Please try again in ${rateLimitResult.remainingMinutes} minutes.`,
+        } satisfies OutputType,
+        { status: 429 }
+      );
+    }
 
     const resetCode = await db
       .selectFrom("passwordResetCodes")
@@ -19,6 +44,15 @@ export async function handle(request: Request) {
       .executeTakeFirst();
 
     if (!resetCode) {
+      // Record failed attempt for brute-force protection
+      await recordRateLimitAttempt(normalizedEmail, 'codeVerification');
+      // Log failed verification attempt
+      await logSecurityEvent({
+        eventType: 'password_reset_failed',
+        email: normalizedEmail,
+        request,
+        details: { reason: 'invalid_code' },
+      });
       return Response.json(
         {
           success: false,
@@ -29,6 +63,15 @@ export async function handle(request: Request) {
     }
 
     if (new Date() > new Date(resetCode.expiresAt)) {
+      // Record failed attempt for brute-force protection
+      await recordRateLimitAttempt(normalizedEmail, 'codeVerification');
+      // Log failed verification attempt
+      await logSecurityEvent({
+        eventType: 'password_reset_failed',
+        email: normalizedEmail,
+        request,
+        details: { reason: 'code_expired' },
+      });
       return Response.json(
         {
           success: false,
@@ -52,6 +95,23 @@ export async function handle(request: Request) {
         .set({ passwordHash })
         .where("userId", "=", resetCode.userId)
         .execute();
+
+      // Invalidate all existing sessions for this user (force re-login on all devices)
+      await trx
+        .deleteFrom("sessions")
+        .where("userId", "=", resetCode.userId)
+        .execute();
+    });
+
+    // Clear rate limit attempts on successful password reset
+    await clearRateLimitAttempts(normalizedEmail, 'codeVerification');
+
+    // Log successful password reset
+    await logSecurityEvent({
+      eventType: 'password_reset_success',
+      email: normalizedEmail,
+      userId: resetCode.userId,
+      request,
     });
 
     return Response.json({

@@ -45,6 +45,12 @@ export const RATE_LIMIT_CONFIGS = {
     lockoutMinutes: 60,
     cleanupProbability: 0.1,
   },
+  codeVerification: {
+    maxAttempts: 5,
+    windowMinutes: 15,
+    lockoutMinutes: 15,
+    cleanupProbability: 0.1,
+  },
 } as const;
 
 /**
@@ -53,7 +59,7 @@ export const RATE_LIMIT_CONFIGS = {
  */
 export async function checkRateLimit(
   identifier: string,
-  type: 'registration' | 'aiRequest' | 'passwordReset',
+  type: 'registration' | 'aiRequest' | 'passwordReset' | 'codeVerification',
   config: RateLimitConfig = RATE_LIMIT_CONFIGS[type]
 ): Promise<RateLimitResult> {
   const now = new Date();
@@ -116,7 +122,7 @@ export async function checkRateLimit(
  */
 export async function recordRateLimitAttempt(
   identifier: string,
-  type: 'registration' | 'aiRequest' | 'passwordReset',
+  type: 'registration' | 'aiRequest' | 'passwordReset' | 'codeVerification',
   success: boolean = false
 ): Promise<void> {
   const normalizedIdentifier = identifier.toLowerCase();
@@ -137,7 +143,7 @@ export async function recordRateLimitAttempt(
  */
 export async function clearRateLimitAttempts(
   identifier: string,
-  type: 'registration' | 'aiRequest' | 'passwordReset'
+  type: 'registration' | 'aiRequest' | 'passwordReset' | 'codeVerification'
 ): Promise<void> {
   const normalizedIdentifier = identifier.toLowerCase();
   const attemptType = `rate_limit_${type}`;

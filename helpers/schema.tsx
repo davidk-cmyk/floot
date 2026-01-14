@@ -214,6 +214,17 @@ export interface PolicyAuditLog {
   userAgent: string | null;
 }
 
+export interface SecurityAuditLog {
+  id: Generated<number>;
+  eventType: string;
+  email: string | null;
+  userId: number | null;
+  ipAddress: string | null;
+  userAgent: string | null;
+  details: Json | null;
+  createdAt: Generated<Timestamp>;
+}
+
 export interface PolicyDownloads {
   downloadedAt: Generated<Timestamp | null>;
   fileSize: number | null;
@@ -406,6 +417,7 @@ export interface DB {
   portalLayoutOverrides: PortalLayoutOverrides;
   portals: Portals;
   portalSettings: PortalSettings;
+  securityAuditLog: SecurityAuditLog;
   sessions: Sessions;
   settings: Settings;
   unacknowledgedRequiredPolicies: UnacknowledgedRequiredPolicies;

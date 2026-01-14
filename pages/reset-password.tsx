@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Shield, ArrowLeft, CheckCircle2, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Shield, ArrowLeft, CheckCircle2, Loader2, Eye, EyeOff, Check, X } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { postConfirmPasswordReset } from '../endpoints/auth/confirm-password-reset_POST.schema';
@@ -21,9 +21,17 @@ const ResetPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  // Password validation checks
+  const passwordChecks = useMemo(() => ({
+    minLength: newPassword.length >= 8,
+    hasLowercase: /[a-z]/.test(newPassword),
+    hasUppercase: /[A-Z]/.test(newPassword),
+    hasNumber: /[0-9]/.test(newPassword),
+  }), [newPassword]);
+
   const passwordsMatch = newPassword === confirmPassword;
-  const passwordLongEnough = newPassword.length >= 8;
-  const isFormValid = email && code.length === 6 && passwordLongEnough && passwordsMatch;
+  const passwordValid = passwordChecks.minLength && passwordChecks.hasLowercase && passwordChecks.hasUppercase && passwordChecks.hasNumber;
+  const isFormValid = email && code.length === 6 && passwordValid && passwordsMatch;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,8 +42,8 @@ const ResetPasswordPage = () => {
       return;
     }
 
-    if (!passwordLongEnough) {
-      setError('Password must be at least 8 characters');
+    if (!passwordValid) {
+      setError('Password does not meet requirements');
       return;
     }
 
@@ -130,7 +138,7 @@ const ResetPasswordPage = () => {
                 <Input
                   id="newPassword"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="At least 8 characters"
+                  placeholder="Create a strong password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
@@ -155,10 +163,25 @@ const ResetPasswordPage = () => {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {newPassword && !passwordLongEnough && (
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.75rem', margin: 0 }}>
-                  Password must be at least 8 characters
-                </p>
+              {newPassword && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontSize: '0.75rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: passwordChecks.minLength ? 'var(--success, #22c55e)' : 'var(--muted-foreground)' }}>
+                    {passwordChecks.minLength ? <Check size={12} /> : <X size={12} />}
+                    <span>At least 8 characters</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: passwordChecks.hasLowercase ? 'var(--success, #22c55e)' : 'var(--muted-foreground)' }}>
+                    {passwordChecks.hasLowercase ? <Check size={12} /> : <X size={12} />}
+                    <span>One lowercase letter</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: passwordChecks.hasUppercase ? 'var(--success, #22c55e)' : 'var(--muted-foreground)' }}>
+                    {passwordChecks.hasUppercase ? <Check size={12} /> : <X size={12} />}
+                    <span>One uppercase letter</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: passwordChecks.hasNumber ? 'var(--success, #22c55e)' : 'var(--muted-foreground)' }}>
+                    {passwordChecks.hasNumber ? <Check size={12} /> : <X size={12} />}
+                    <span>One number</span>
+                  </div>
+                </div>
               )}
             </div>
 

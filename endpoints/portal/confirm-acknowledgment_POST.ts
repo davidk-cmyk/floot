@@ -1,6 +1,11 @@
 import { db } from "../../helpers/db";
 import { schema, OutputType } from "./confirm-acknowledgment_POST.schema";
 import superjson from "superjson";
+import {
+  checkRateLimit,
+  recordRateLimitAttempt,
+  clearRateLimitAttempts,
+} from "../../helpers/rateLimiter";
 
 export async function handle(request: Request) {
   try {
@@ -8,6 +13,18 @@ export async function handle(request: Request) {
     const { portalSlug, policyId, email, code } = schema.parse(json);
 
     const lowercasedEmail = email.toLowerCase().trim();
+
+    // Brute-force protection: check rate limit before validating code
+    const rateLimitResult = await checkRateLimit(lowercasedEmail, 'codeVerification');
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        superjson.stringify({
+          success: false,
+          message: `Too many failed attempts. Please try again in ${rateLimitResult.remainingMinutes} minutes.`,
+        } satisfies OutputType),
+        { status: 429 }
+      );
+    }
 
     const portal = await db
       .selectFrom("portals")
@@ -68,6 +85,8 @@ export async function handle(request: Request) {
       confirmationCode.used ||
       new Date() > new Date(confirmationCode.expiresAt)
     ) {
+      // Record failed attempt for brute-force protection
+      await recordRateLimitAttempt(lowercasedEmail, 'codeVerification');
       return new Response(
         superjson.stringify({
           success: false,
@@ -106,6 +125,9 @@ export async function handle(request: Request) {
         )
         .execute();
     });
+
+    // Clear rate limit attempts on successful acknowledgment
+    await clearRateLimitAttempts(lowercasedEmail, 'codeVerification');
 
     return new Response(
       superjson.stringify({

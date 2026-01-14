@@ -1,9 +1,16 @@
 import { z } from "zod";
 
+// Password validation with complexity requirements
+const passwordSchema = z.string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number");
+
 export const schema = z.object({
   email: z.string().email("Valid email is required"),
-  code: z.string().length(6, "Code must be 6 digits"),
-  newPassword: z.string().min(8, "Password must be at least 8 characters"),
+  code: z.string().length(6, "Code must be 6 digits").regex(/^\d{6}$/, "Code must be 6 digits"),
+  newPassword: passwordSchema,
 });
 
 export type OutputType = {

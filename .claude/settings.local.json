@@ -10,7 +10,8 @@
       "Bash(npx tsc:*)",
       "Bash(pnpm tsc:*)",
       "Bash(pnpm tsx:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(psql:*)"
     ],
     "deny": [],
     "ask": []

@@ -2,8 +2,13 @@ import { db } from "../../helpers/db";
 import { schema, OutputType } from "./request-acknowledgment-code_POST.schema";
 import { sendConfirmationCodeEmail } from "../../helpers/emailService";
 import superjson from "superjson";
-import { randomInt } from "crypto";
-import { addMinutes } from "date-fns";
+import { subHours } from "date-fns";
+import {
+  checkRateLimit,
+  recordRateLimitAttempt,
+  RATE_LIMIT_CONFIGS,
+} from "../../helpers/rateLimiter";
+import { generateConfirmationCode, getCodeExpiration } from "../../helpers/generateConfirmationCode";
 
 export async function handle(request: Request) {
   try {
@@ -11,6 +16,19 @@ export async function handle(request: Request) {
     const { portalSlug, policyId, email } = schema.parse(json);
 
     const lowercasedEmail = email.toLowerCase().trim();
+
+    // Rate limiting check to prevent email bombing
+    // Use passwordReset config as it has similar requirements (3 requests per 60 minutes)
+    const rateLimitResult = await checkRateLimit(lowercasedEmail, 'passwordReset', RATE_LIMIT_CONFIGS.passwordReset);
+    if (!rateLimitResult.allowed) {
+      return new Response(
+        superjson.stringify({
+          success: false,
+          message: `Too many code requests. Please try again in ${rateLimitResult.remainingMinutes} minutes.`,
+        } satisfies OutputType),
+        { status: 429 }
+      );
+    }
 
     const portal = await db
       .selectFrom("portals")
@@ -73,8 +91,18 @@ export async function handle(request: Request) {
       );
     }
 
-    const code = randomInt(100000, 999999).toString();
-    const expiresAt = addMinutes(new Date(), 15);
+    const code = generateConfirmationCode();
+    const expiresAt = getCodeExpiration();
+
+    // Invalidate any previous unused codes for this email/portal/policy combination
+    await db
+      .updateTable("acknowledgmentConfirmationCodes")
+      .set({ used: true })
+      .where("portalId", "=", portal.id)
+      .where("policyId", "=", policy.id)
+      .where("email", "ilike", lowercasedEmail)
+      .where("used", "=", false)
+      .execute();
 
     await db
       .insertInto("acknowledgmentConfirmationCodes")
@@ -87,7 +115,28 @@ export async function handle(request: Request) {
       })
       .execute();
 
-    await sendConfirmationCodeEmail(lowercasedEmail, code);
+    try {
+      await sendConfirmationCodeEmail(lowercasedEmail, code);
+    } catch (emailError) {
+      console.error("Failed to send acknowledgment code email:", emailError);
+      // Don't expose email error to client
+    }
+
+    // Record rate limit attempt after processing
+    await recordRateLimitAttempt(lowercasedEmail, 'passwordReset');
+
+    // Probabilistic cleanup of expired codes (10% chance)
+    if (Math.random() < 0.1) {
+      const cleanupBefore = subHours(new Date(), 24);
+      try {
+        await db
+          .deleteFrom("acknowledgmentConfirmationCodes")
+          .where("expiresAt", "<", cleanupBefore)
+          .execute();
+      } catch {
+        // Ignore cleanup errors
+      }
+    }
 
     return new Response(
       superjson.stringify({
