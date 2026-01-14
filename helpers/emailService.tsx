@@ -76,6 +76,56 @@ export async function sendConfirmationCodeEmail(
   }
 }
 
+export async function sendPasswordResetEmail(
+  to: string,
+  code: string
+): Promise<void> {
+  try {
+    const { client, fromEmail } = await getUncachableResendClient();
+    const from = fromEmail || "MyPolicyPortal <noreply@example.com>";
+
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Password Reset Request</h2>
+        <p style="color: #666; line-height: 1.6;">
+          You requested to reset your password. Use the code below to complete the process:
+        </p>
+        <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; text-align: center; margin: 24px 0;">
+          <span style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #333;">${code}</span>
+        </div>
+        <p style="color: #666; line-height: 1.6;">
+          This code will expire in <strong>15 minutes</strong>.
+        </p>
+        <p style="color: #888; font-size: 12px; margin-top: 24px;">
+          If you did not request a password reset, you can safely ignore this email. 
+          Your password will remain unchanged.
+        </p>
+      </div>
+    `;
+
+    const result = await client.emails.send({
+      from,
+      to,
+      subject: "Password Reset Code",
+      text: `Your password reset code is: ${code}. This code will expire in 15 minutes. If you did not request this, please ignore this email.`,
+      html: htmlContent,
+    });
+
+    if (result.error) {
+      console.error(
+        "Error sending password reset email via Resend:",
+        result.error
+      );
+      throw new Error("Failed to send password reset email.");
+    }
+
+    console.log(`Password reset email sent to ${to}`);
+  } catch (error) {
+    console.error("Error sending password reset email via Resend:", error);
+    throw new Error("Failed to send password reset email.");
+  }
+}
+
 export interface PolicyReminderEmailData {
   recipientEmail: string;
   policyTitle: string;
