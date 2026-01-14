@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import { Shield, ArrowLeft, Mail, Loader2 } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
-import { FormLabel as Label } from '../components/Form';
 import { postRequestPasswordReset } from '../endpoints/auth/request-password-reset_POST.schema';
 import styles from './login.module.css';
 
@@ -96,7 +95,7 @@ const ForgotPasswordPage = () => {
 
           <form onSubmit={handleSubmit} className={styles.formContent}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-              <Label htmlFor="email">Email Address</Label>
+              <label htmlFor="email" style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--foreground)' }}>Email Address</label>
               <Input
                 id="email"
                 type="email"

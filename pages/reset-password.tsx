@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet';
 import { Shield, ArrowLeft, CheckCircle2, Loader2, Eye, EyeOff } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
-import { FormLabel as Label } from '../components/Form';
 import { postConfirmPasswordReset } from '../endpoints/auth/confirm-password-reset_POST.schema';
 import styles from './login.module.css';
 
@@ -97,7 +96,7 @@ const ResetPasswordPage = () => {
 
           <form onSubmit={handleSubmit} className={styles.formContent}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-              <Label htmlFor="email">Email Address</Label>
+              <label htmlFor="email" style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--foreground)' }}>Email Address</label>
               <Input
                 id="email"
                 type="email"
@@ -110,7 +109,7 @@ const ResetPasswordPage = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-              <Label htmlFor="code">Reset Code</Label>
+              <label htmlFor="code" style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--foreground)' }}>Reset Code</label>
               <Input
                 id="code"
                 type="text"
@@ -126,7 +125,7 @@ const ResetPasswordPage = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-              <Label htmlFor="newPassword">New Password</Label>
+              <label htmlFor="newPassword" style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--foreground)' }}>New Password</label>
               <div style={{ position: 'relative' }}>
                 <Input
                   id="newPassword"
@@ -164,7 +163,7 @@ const ResetPasswordPage = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <label htmlFor="confirmPassword" style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--foreground)' }}>Confirm New Password</label>
               <Input
                 id="confirmPassword"
                 type={showPassword ? 'text' : 'password'}
