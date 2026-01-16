@@ -13,7 +13,13 @@ export type SecurityEventType =
   | 'code_verification_locked'
   | 'login_failed'
   | 'login_locked'
-  | 'account_locked';
+  | 'account_locked'
+  | 'superadmin_login'
+  | 'superadmin_login_failed'
+  | 'superadmin_logout'
+  | 'superadmin_impersonation_start'
+  | 'superadmin_impersonation_end'
+  | 'superadmin_impersonation_expired';
 
 /**
  * Parameters for logging a security audit event.

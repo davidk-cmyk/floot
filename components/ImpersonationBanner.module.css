@@ -1,0 +1,91 @@
+.banner {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  color: white;
+  padding: var(--spacing-2) var(--spacing-4);
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.icon {
+  opacity: 0.9;
+}
+
+.userIcon {
+  margin-left: var(--spacing-1);
+  margin-right: var(--spacing-1);
+}
+
+.userRole {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-left: var(--spacing-1);
+}
+
+.separator {
+  margin: 0 var(--spacing-2);
+  opacity: 0.5;
+}
+
+.orgIcon {
+  margin-right: var(--spacing-1);
+}
+
+.text {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+.text strong {
+  font-weight: 600;
+}
+
+.time {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.stopButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.stopButton:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.stopButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

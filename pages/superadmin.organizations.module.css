@@ -1,0 +1,454 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-foreground);
+}
+
+.search {
+  padding: var(--spacing-2) var(--spacing-3);
+  padding-left: var(--spacing-10);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  width: 280px;
+  background-color: var(--background);
+}
+
+.search:focus {
+  outline: none;
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px var(--ring-alpha);
+}
+
+.loading,
+.error {
+  padding: var(--spacing-8);
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.error {
+  color: var(--destructive);
+}
+
+.tableWrapper {
+  background-color: var(--card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--spacing-3) var(--spacing-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  background-color: var(--gray-2);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable:hover {
+  color: var(--foreground);
+}
+
+.table tbody tr:hover {
+  background-color: var(--gray-1);
+}
+
+.idCell {
+  font-family: monospace;
+  color: var(--muted-foreground);
+}
+
+.nameCell {
+  font-weight: 500;
+}
+
+.slugCell {
+  font-family: monospace;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.noAdmin {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: var(--spacing-8) !important;
+}
+
+.loginAsButton {
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.loginAsButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-4);
+}
+
+.pageButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.pageButton:hover:not(:disabled) {
+  background-color: var(--gray-2);
+  border-color: var(--gray-6);
+}
+
+.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-6);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-4);
+}
+
+.modalMessage {
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-2);
+}
+
+.modalOrgName {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin: 0 0 var(--spacing-4);
+  color: var(--foreground);
+}
+
+.modalWarning {
+  font-size: 0.875rem;
+  color: var(--warning);
+  margin: 0 0 var(--spacing-6);
+  padding: var(--spacing-3);
+  background-color: var(--warning-bg);
+  border-radius: var(--radius-md);
+}
+
+.modalButtons {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: var(--gray-2);
+}
+
+.confirmButton {
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.confirmButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Expandable rows */
+.expandHeader {
+  width: 40px;
+}
+
+.orgRow {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.orgRow:hover {
+  background-color: var(--gray-2);
+}
+
+.orgRow.expanded {
+  background-color: var(--gray-1);
+}
+
+.expandCell {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: var(--spacing-3) var(--spacing-2) !important;
+}
+
+/* Users section */
+.usersRow > td {
+  padding: 0 !important;
+  background-color: var(--gray-1);
+}
+
+.usersContainer {
+  padding: var(--spacing-4) var(--spacing-6);
+  border-top: 1px solid var(--border);
+}
+
+.usersTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin: 0 0 var(--spacing-3);
+}
+
+.usersLoading,
+.noUsers {
+  padding: var(--spacing-4);
+  text-align: center;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+.usersTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  background-color: var(--card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.usersTable th,
+.usersTable td {
+  padding: var(--spacing-2) var(--spacing-3);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.usersTable th {
+  background-color: var(--gray-2);
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.usersTable tbody tr:hover {
+  background-color: var(--gray-1);
+}
+
+.usersTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.userName {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  font-weight: 500;
+}
+
+.userIcon {
+  color: var(--muted-foreground);
+}
+
+.userEmail {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+
+/* Role badges */
+.roleBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.roleAdmin {
+  background-color: var(--purple-3);
+  color: var(--purple-11);
+}
+
+.roleEditor {
+  background-color: var(--blue-3);
+  color: var(--blue-11);
+}
+
+.roleApprover {
+  background-color: var(--green-3);
+  color: var(--green-11);
+}
+
+.roleUser {
+  background-color: var(--gray-3);
+  color: var(--gray-11);
+}
+
+/* Status badges */
+.statusActive {
+  color: var(--green-11);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.statusInactive {
+  color: var(--red-11);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.loginStatus {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+}
+
+/* Disabled login button */
+.loginAsButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Modal user info */
+.modalUserInfo {
+  background-color: var(--gray-1);
+  padding: var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+}
+
+.modalUserName {
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin: 0 0 var(--spacing-1);
+  color: var(--foreground);
+}
+
+.modalUserEmail {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin: 0 0 var(--spacing-2);
+}
+
+.modalUserRole {
+  margin: 0 0 var(--spacing-2);
+  font-size: 0.875rem;
+}
+
+.modalOrgName {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}

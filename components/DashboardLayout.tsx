@@ -10,6 +10,7 @@ import { UserAvatar } from './UserAvatar';
 import { OrganizationSwitcher } from './OrganizationSwitcher';
 import { NotificationBell } from './NotificationBell';
 import { Separator } from './Separator';
+import { ImpersonationBanner } from './ImpersonationBanner';
 import { LogOut, LayoutDashboard, BookOpen, Shield, Users, Settings, History, ChevronLeft, ChevronRight, CheckCircle, FileText, HelpCircle, MessageCircleQuestion, PanelsTopLeft } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 import {
@@ -86,8 +87,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
   };
 
   return (
-    <div className={styles.layout}>
-      <aside className={`${styles.sidebar} ${sidebarCollapsed ? styles.collapsedSidebar : ''}`}>
+    <>
+      <ImpersonationBanner />
+      <div className={styles.layout}>
+        <aside className={`${styles.sidebar} ${sidebarCollapsed ? styles.collapsedSidebar : ''}`}>
         <div className={styles.sidebarTop}>
           <div className={`${styles.logoContainer} ${sidebarCollapsed ? styles.collapsedLogoContainer : ''}`}>
             <Link to={buildUrl('/admin/dashboard')} className={`${styles.logo} ${sidebarCollapsed ? styles.collapsedLogo : ''}`}>
@@ -186,11 +189,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) =>
         </div>
 
       </aside>
-      <div className={styles.mainPanel}>
-        <main className={styles.content}>
-          {children}
-        </main>
+        <div className={styles.mainPanel}>
+          <main className={styles.content}>
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };

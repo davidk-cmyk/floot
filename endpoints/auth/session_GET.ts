@@ -9,6 +9,11 @@ export async function handle(request: Request) {
   try {
     const { user, session } = await getServerUserSession(request);
 
+    // For super admins impersonating, return the impersonated org ID
+    const effectiveOrgId = user.isSuperAdmin && user.impersonating
+      ? user.impersonating.organizationId
+      : user.organizationId;
+
     // Create response with user data
     const response = Response.json({
       user: {
@@ -17,9 +22,11 @@ export async function handle(request: Request) {
         displayName: user.displayName,
         avatarUrl: user.avatarUrl,
         role: user.role,
-        organizationId: user.organizationId,
+        organizationId: effectiveOrgId,
         oauthProvider: user.oauthProvider,
         hasLoggedIn: user.hasLoggedIn,
+        isSuperAdmin: user.isSuperAdmin,
+        impersonating: user.impersonating,
       } satisfies User,
     });
 

@@ -376,10 +376,23 @@ export interface Users {
   hasLoggedIn: Generated<boolean | null>;
   id: Generated<number>;
   isActive: Generated<boolean | null>;
+  isSuperAdmin: Generated<boolean>;
   lastName: string | null;
-  organizationId: number;
+  organizationId: number | null;
   role: Generated<UserRole>;
   updatedAt: Generated<Timestamp | null>;
+}
+
+export interface SuperAdminImpersonationLogs {
+  id: Generated<number>;
+  superAdminUserId: number;
+  targetOrganizationId: number;
+  targetUserId: number | null;
+  startedAt: Generated<Timestamp>;
+  endedAt: Timestamp | null;
+  endReason: 'manual' | 'logout' | 'expired' | 'org_deleted' | 'session_expired' | null;
+  ipAddress: string | null;
+  userAgent: string | null;
 }
 
 export interface UserGoogleDriveConnections {
@@ -420,6 +433,7 @@ export interface DB {
   securityAuditLog: SecurityAuditLog;
   sessions: Sessions;
   settings: Settings;
+  superAdminImpersonationLogs: SuperAdminImpersonationLogs;
   unacknowledgedRequiredPolicies: UnacknowledgedRequiredPolicies;
   userGoogleDriveConnections: UserGoogleDriveConnections;
   userPasswords: UserPasswords;

@@ -11,9 +11,20 @@ export interface User {
   email: string;
   displayName: string;
   avatarUrl: string | null;
-  organizationId: number;
+  organizationId: number | null;
   // adjust this as necessary
   role: "admin" | "editor" | "approver" | "user";
   oauthProvider: string | null;
   hasLoggedIn: boolean;
+  isSuperAdmin: boolean;
+  // Set when super admin is impersonating a user
+  impersonating?: {
+    organizationId: number;
+    organizationName: string;
+    userId: number;
+    userDisplayName: string;
+    userEmail: string;
+    userRole: "admin" | "editor" | "approver" | "user";
+    startedAt: string;
+  };
 }

@@ -11,7 +11,15 @@
       "Bash(pnpm tsc:*)",
       "Bash(pnpm tsx:*)",
       "Bash(cat:*)",
-      "Bash(psql:*)"
+      "Bash(psql:*)",
+      "Bash(node -e \"require\\(''./helpers/superAdmin.ts''\\)\")",
+      "Bash(node -e:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm vite dev:*)",
+      "Bash(pkill:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(killall node:*)",
+      "Bash(lsof:*)"
     ],
     "deny": [],
     "ask": []

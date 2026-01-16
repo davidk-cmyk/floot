@@ -43,6 +43,7 @@ export async function getServerUserSession(request: Request) {
       "users.avatarUrl",
       "users.organizationId",
       "users.hasLoggedIn",
+      "users.isSuperAdmin",
       "oauthAccounts.provider as oauthProvider",
     ])
     .where("sessions.id", "=", session.id)
@@ -54,15 +55,68 @@ export async function getServerUserSession(request: Request) {
   }
 
   const result = results[0];
+
+  // Check for active impersonation if user is super admin
+  let impersonating: User["impersonating"] | undefined;
+  let effectiveRole = result.role;
+  if (result.isSuperAdmin) {
+    const activeImpersonation = await db
+      .selectFrom("superAdminImpersonationLogs")
+      .innerJoin("organizations", "organizations.id", "superAdminImpersonationLogs.targetOrganizationId")
+      .leftJoin("users as targetUser", "targetUser.id", "superAdminImpersonationLogs.targetUserId")
+      .select([
+        "superAdminImpersonationLogs.targetOrganizationId",
+        "superAdminImpersonationLogs.targetUserId",
+        "organizations.name as organizationName",
+        "targetUser.displayName as userDisplayName",
+        "targetUser.email as userEmail",
+        "targetUser.role as userRole",
+        "superAdminImpersonationLogs.startedAt",
+      ])
+      .where("superAdminImpersonationLogs.superAdminUserId", "=", result.id)
+      .where("superAdminImpersonationLogs.endedAt", "is", null)
+      .executeTakeFirst();
+
+    if (activeImpersonation) {
+      // Check if impersonation has expired (8 hours)
+      const IMPERSONATION_TIMEOUT_MS = 8 * 60 * 60 * 1000;
+      const startedAt = new Date(activeImpersonation.startedAt);
+      if (Date.now() - startedAt.getTime() > IMPERSONATION_TIMEOUT_MS) {
+        // End expired impersonation
+        await db
+          .updateTable("superAdminImpersonationLogs")
+          .set({ endedAt: new Date(), endReason: "expired" })
+          .where("superAdminUserId", "=", result.id)
+          .where("endedAt", "is", null)
+          .execute();
+      } else if (activeImpersonation.targetUserId && activeImpersonation.userDisplayName && activeImpersonation.userEmail && activeImpersonation.userRole) {
+        // User-level impersonation with all required fields
+        impersonating = {
+          organizationId: activeImpersonation.targetOrganizationId,
+          organizationName: activeImpersonation.organizationName,
+          userId: activeImpersonation.targetUserId,
+          userDisplayName: activeImpersonation.userDisplayName,
+          userEmail: activeImpersonation.userEmail,
+          userRole: activeImpersonation.userRole as User["role"],
+          startedAt: startedAt.toISOString(),
+        };
+        // Use the impersonated user's role
+        effectiveRole = activeImpersonation.userRole as User["role"];
+      }
+    }
+  }
+
   const user = {
     id: result.id,
     email: result.email,
     displayName: result.displayName,
     avatarUrl: result.avatarUrl,
-    role: result.role,
+    role: effectiveRole,
     organizationId: result.organizationId,
     oauthProvider: result.oauthProvider,
     hasLoggedIn: result.hasLoggedIn || false,
+    isSuperAdmin: result.isSuperAdmin || false,
+    impersonating,
   };
 
   // Update the session's lastAccessed timestamp
